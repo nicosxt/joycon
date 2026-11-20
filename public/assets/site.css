@@ -1218,7 +1218,7 @@ h2{ line-height: 1; }
    TYPE: two fonts.
    PP Stylo (Pangram Pangram) for titles and the JoyCon wordmark,
    Arial for everything else. Stylo loads from the visitor's installed
-   copy first, then from assets/fonts/ (needs a PP web license to ship).
+   copy first, then from assets/fonts/ (web license from Pangram Pangram).
    ===================================================================== */
 @font-face{ font-family: "PP Stylo"; font-weight: 200; font-style: normal; font-display: swap;
   src: local("PP Stylo Thin"), local("PPStylo-Thin"), url("fonts/PPStylo-Thin.otf") format("opentype"); }

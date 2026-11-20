@@ -12,10 +12,10 @@
   function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]; }); }
   function $(sel, root){ return (root || document).querySelector(sel); }
   function $all(sel, root){ return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
-  function joyType(id){ return (J.joyTypes || []).filter(function(t){ return t.id === id; })[0] || { id: id, label: id || "Joy", color: "#e6d6b6" }; }
+  function joyType(id){ return (J.joyTypes || []).filter(function(t){ return t.id === id; })[0] || { id: id, label: id || "Joy", color: "#e6d1ad" }; }
   function tagHTML(id){ var t = joyType(id); return '<span class="tag" style="--tag:' + esc(t.color) + '">' + esc(t.label) + '</span>'; }
   function hash(str){ var h = 0; for (var i = 0; i < str.length; i++){ h = (h * 31 + str.charCodeAt(i)) | 0; } return Math.abs(h); }
-  var GLASS = ["#a5473a", "#3f5f86", "#3f7a6a", "#cf8f3c", "#c4767a", "#6b5a8c", "#e2b252"];
+  var GLASS = ["#e2562c", "#116890", "#317b51", "#f79c09", "#e9809c", "#e9809c", "#f79c09"];
 
   function initials(name){
     var clean = String(name || "").replace(/"[^"]*"/g, "").trim().split(/\s+/);
@@ -28,33 +28,33 @@
       var a1 = (i / n) * Math.PI * 2, a2 = ((i + 1) / n) * Math.PI * 2;
       var c = GLASS[(h + i) % GLASS.length];
       petals += '<path d="M50 50 L' + (50 + 50 * Math.cos(a1)).toFixed(1) + ' ' + (50 + 50 * Math.sin(a1)).toFixed(1) +
-        ' A50 50 0 0 1 ' + (50 + 50 * Math.cos(a2)).toFixed(1) + ' ' + (50 + 50 * Math.sin(a2)).toFixed(1) + ' Z" fill="' + c + '" stroke="#34302c" stroke-width="2"/>';
+        ' A50 50 0 0 1 ' + (50 + 50 * Math.cos(a2)).toFixed(1) + ' ' + (50 + 50 * Math.sin(a2)).toFixed(1) + ' Z" fill="' + c + '" stroke="#2a2420" stroke-width="2"/>';
     }
     return '<svg viewBox="0 0 100 100" role="img" aria-label="Illustrated placeholder for ' + esc(name) + '">' + petals +
-      '<circle cx="50" cy="50" r="27" fill="#faf1df" stroke="#34302c" stroke-width="2.5"/>' +
-      '<text x="50" y="58" text-anchor="middle" font-family="Patrick Hand SC, Patrick Hand, cursive" font-size="28" fill="#34302c">' + esc(initials(name)) + '</text></svg>';
+      '<circle cx="50" cy="50" r="27" fill="#faf3e4" stroke="#2a2420" stroke-width="2.5"/>' +
+      '<text x="50" y="58" text-anchor="middle" font-family="Agrave Pro, sans-serif" font-size="28" fill="#2a2420">' + esc(initials(name)) + '</text></svg>';
   }
   /* joyful animal avatars, drawn in the island's style. data/people.js picks one per person. */
-  var K = "#42434b";
-  function eyes(y, dx){ dx = dx || 9; return '<g fill="' + K + '"><circle cx="' + (50 - dx) + '" cy="' + y + '" r="3.4"/><circle cx="' + (50 + dx) + '" cy="' + y + '" r="3.4"/></g><g fill="#fff"><circle cx="' + (51 - dx) + '" cy="' + (y - 1.2) + '" r="1.1"/><circle cx="' + (51 + dx) + '" cy="' + (y - 1.2) + '" r="1.1"/></g>'; }
-  function cheeks(y, dx){ dx = dx || 15; return '<g fill="#f08c94" opacity=".55"><ellipse cx="' + (50 - dx) + '" cy="' + y + '" rx="5" ry="3"/><ellipse cx="' + (50 + dx) + '" cy="' + y + '" rx="5" ry="3"/></g>'; }
+  var K = "#2a2420";
+  function eyes(y, dx){ dx = dx || 9; return '<g fill="' + K + '"><circle cx="' + (50 - dx) + '" cy="' + y + '" r="3.4"/><circle cx="' + (50 + dx) + '" cy="' + y + '" r="3.4"/></g><g fill="#faf3e4"><circle cx="' + (51 - dx) + '" cy="' + (y - 1.2) + '" r="1.1"/><circle cx="' + (51 + dx) + '" cy="' + (y - 1.2) + '" r="1.1"/></g>'; }
+  function cheeks(y, dx){ dx = dx || 15; return '<g fill="#f3c3c6" opacity=".55"><ellipse cx="' + (50 - dx) + '" cy="' + y + '" rx="5" ry="3"/><ellipse cx="' + (50 + dx) + '" cy="' + y + '" rx="5" ry="3"/></g>'; }
   function smile(y, w){ w = w || 5; return '<path d="M' + (50 - w) + ' ' + y + ' q' + w + ' ' + (w * .9) + ' ' + (w * 2) + ' 0" fill="none" stroke="' + K + '" stroke-width="2.2" stroke-linecap="round"/>'; }
   var STK = ' stroke="' + K + '" stroke-width="2.4" stroke-linejoin="round"';
   var ANIMALS = {
-    otter: ["#bfe0dc", '<circle cx="28" cy="40" r="7" fill="#a9774f"' + STK + '/><circle cx="72" cy="40" r="7" fill="#a9774f"' + STK + '/><ellipse cx="50" cy="56" rx="28" ry="25" fill="#b98a63"' + STK + '/><ellipse cx="50" cy="66" rx="14" ry="9" fill="#f1dcc0"' + STK + '/>' + eyes(52) + '<ellipse cx="50" cy="61" rx="4.5" ry="3" fill="' + K + '"/>' + smile(66, 4) + '<path d="M30 64 h-10 M31 69 l-9 3 M70 64 h10 M69 69 l9 3" stroke="' + K + '" stroke-width="1.4" stroke-linecap="round"/>'],
-    unicorn: ["#e3dcf5", '<path d="M44 30 L50 6 L56 30Z" fill="#f6c86b"' + STK + '/><path d="M46 22 l8 -3 M47 15 l6 -2" stroke="' + K + '" stroke-width="1.4"/><path d="M33 36 l-4 -12 l12 7Z M67 36 l4 -12 l-12 7Z" fill="#fbf3df"' + STK + '/><circle cx="50" cy="56" r="26" fill="#fbf3df"' + STK + '/><path d="M26 50 q-6 -14 10 -20 q2 -8 12 -4 q-10 4 -8 14 q-8 2 -14 10Z" fill="#e98a9a"' + STK + '/><path d="M28 62 q-8 -6 -2 -14" fill="none" stroke="#a7a4e0" stroke-width="5" stroke-linecap="round"/>' + eyes(54) + cheeks(62) + smile(64)],
-    bunny: ["#fde3b6", '<ellipse cx="40" cy="24" rx="7" ry="19" fill="#fbf3df"' + STK + ' transform="rotate(-10 40 24)"/><ellipse cx="60" cy="24" rx="7" ry="19" fill="#fbf3df"' + STK + ' transform="rotate(10 60 24)"/><ellipse cx="40" cy="25" rx="3" ry="12" fill="#f4b6c2" transform="rotate(-10 40 25)"/><ellipse cx="60" cy="25" rx="3" ry="12" fill="#f4b6c2" transform="rotate(10 60 25)"/><circle cx="50" cy="60" r="25" fill="#fbf3df"' + STK + '/>' + eyes(57) + cheeks(65) + '<path d="M47 63 h6 l-3 3Z" fill="#e98a9a"/>' + smile(68, 3.5)],
-    fox: ["#fde3b6", '<path d="M26 44 L24 16 L44 32Z M74 44 L76 16 L56 32Z" fill="#f2a07b"' + STK + '/><path d="M24 40 Q26 28 50 28 Q74 28 76 40 Q76 64 50 80 Q24 64 24 40Z" fill="#f2a07b"' + STK + '/><path d="M28 50 Q40 56 50 66 Q60 56 72 50 Q70 66 50 80 Q30 66 28 50Z" fill="#fbf3df"' + STK + '/>' + eyes(48, 11) + '<ellipse cx="50" cy="68" rx="4" ry="3" fill="' + K + '"/>' + cheeks(58, 17)],
-    songbird: ["#cfe6e4", '<path d="M44 30 q-2 -10 6 -12 M50 29 q2 -10 10 -9" fill="none" stroke="' + K + '" stroke-width="2.2" stroke-linecap="round"/><circle cx="50" cy="56" r="27" fill="#f6c86b"' + STK + '/><path d="M60 60 q14 -2 12 12 q-12 0 -16 -6Z" fill="#e8a94a"' + STK + '/>' + eyes(50, 10) + '<path d="M45 58 L55 58 L50 66Z" fill="#f2a07b"' + STK + '/>' + cheeks(58, 17) + '<path d="M78 24 v14 a4 3 0 1 1 -2 -3 V26 l8 -2 v10" fill="none" stroke="' + K + '" stroke-width="2" stroke-linecap="round"/>'],
-    axolotl: ["#d7ecd9", '<g fill="none" stroke="#e98a9a" stroke-width="5" stroke-linecap="round"><path d="M24 44 l-12 -8 M22 52 l-14 0 M24 60 l-12 8 M76 44 l12 -8 M78 52 l14 0 M76 60 l12 8"/></g><ellipse cx="50" cy="56" rx="30" ry="23" fill="#f4b6c2"' + STK + '/>' + eyes(52, 13) + cheeks(60, 20) + '<path d="M38 62 q12 9 24 0" fill="none" stroke="' + K + '" stroke-width="2.2" stroke-linecap="round"/>'],
-    frog: ["#fbe0d0", '<circle cx="36" cy="38" r="11" fill="#9cc3a0"' + STK + '/><circle cx="64" cy="38" r="11" fill="#9cc3a0"' + STK + '/><ellipse cx="50" cy="60" rx="31" ry="21" fill="#9cc3a0"' + STK + '/><circle cx="36" cy="38" r="6" fill="#fbf3df"/><circle cx="64" cy="38" r="6" fill="#fbf3df"/>' + eyes(38, 14) + cheeks(62, 20) + '<path d="M34 62 q16 12 32 0" fill="none" stroke="' + K + '" stroke-width="2.2" stroke-linecap="round"/>'],
-    bear: ["#d9e7f0", '<circle cx="28" cy="36" r="10" fill="#c49a76"' + STK + '/><circle cx="72" cy="36" r="10" fill="#c49a76"' + STK + '/><circle cx="28" cy="36" r="4.5" fill="#f1dcc0"/><circle cx="72" cy="36" r="4.5" fill="#f1dcc0"/><circle cx="50" cy="58" r="27" fill="#c49a76"' + STK + '/><ellipse cx="50" cy="66" rx="12" ry="9" fill="#f1dcc0"' + STK + '/>' + eyes(53) + '<ellipse cx="50" cy="62" rx="4.5" ry="3" fill="' + K + '"/>' + smile(67, 3.5)],
-    penguin: ["#fde3b6", '<circle cx="50" cy="56" r="28" fill="#4f566e"' + STK + '/><path d="M50 40 q-14 -6 -18 8 q-4 18 18 26 q22 -8 18 -26 q-4 -14 -18 -8Z" fill="#fbf3df"' + STK + '/>' + eyes(52, 8) + '<path d="M45 59 L55 59 L50 65Z" fill="#f2a07b"' + STK + '/>' + cheeks(61, 14)],
-    hedgehog: ["#e3dcf5", '<path d="M18 62 l-4 -10 l8 -2 l-4 -10 l10 0 l-2 -11 l10 4 l2 -11 l9 7 l3 -10 l7 9 l6 -8 l4 11 l9 -5 l0 11 l10 -1 l-4 10 l9 3 l-6 9Z" fill="#a07a5e"' + STK + '/><ellipse cx="50" cy="62" rx="23" ry="20" fill="#f1dcc0"' + STK + '/>' + eyes(58, 8) + '<circle cx="50" cy="65" r="3.2" fill="' + K + '"/>' + cheeks(66, 14) + smile(70, 3)],
-    duck: ["#cfe6e4", '<path d="M48 30 q0 -8 8 -8 q-2 6 -6 9" fill="#f6d36b"' + STK + '/><circle cx="50" cy="56" r="26" fill="#f6d36b"' + STK + '/>' + eyes(51, 10) + '<ellipse cx="50" cy="64" rx="12" ry="6" fill="#f2a07b"' + STK + '/><path d="M40 64 h20" stroke="' + K + '" stroke-width="1.4"/>' + cheeks(58, 17)],
-    koala: ["#fde3b6", '<circle cx="26" cy="42" r="13" fill="#b9bcc6"' + STK + '/><circle cx="74" cy="42" r="13" fill="#b9bcc6"' + STK + '/><circle cx="26" cy="42" r="6" fill="#f4d6dc"/><circle cx="74" cy="42" r="6" fill="#f4d6dc"/><circle cx="50" cy="58" r="25" fill="#c9ccd5"' + STK + '/>' + eyes(53, 10) + '<ellipse cx="50" cy="62" rx="6" ry="8" fill="' + K + '"/>' + cheeks(64, 17)],
-    seal: ["#fbe0d0", '<ellipse cx="50" cy="58" rx="29" ry="25" fill="#c9d4dc"' + STK + '/>' + eyes(52, 11) + '<ellipse cx="50" cy="60" rx="3.6" ry="2.6" fill="' + K + '"/><path d="M45 64 q2.5 3 5 0 q2.5 3 5 0" fill="none" stroke="' + K + '" stroke-width="2" stroke-linecap="round"/><path d="M32 60 h-10 M33 65 l-9 3 M68 60 h10 M67 65 l9 3" stroke="' + K + '" stroke-width="1.4" stroke-linecap="round"/>' + cheeks(62, 18)],
-    cat: ["#d7ecd9", '<path d="M28 44 L27 20 L46 34Z M72 44 L73 20 L54 34Z" fill="#f6c86b"' + STK + '/><circle cx="50" cy="58" r="26" fill="#f6c86b"' + STK + '/><path d="M40 36 v8 M50 34 v8 M60 36 v8" stroke="#e8a94a" stroke-width="3" stroke-linecap="round"/>' + eyes(55) + '<path d="M47 61 h6 l-3 3Z" fill="#e98a9a"/><path d="M44 66 q3 3 6 0 q3 3 6 0" fill="none" stroke="' + K + '" stroke-width="2" stroke-linecap="round"/>' + cheeks(64, 17)]
+    otter: ["#93c6d7", '<circle cx="28" cy="40" r="7" fill="#716759"' + STK + '/><circle cx="72" cy="40" r="7" fill="#716759"' + STK + '/><ellipse cx="50" cy="56" rx="28" ry="25" fill="#e6d1ad"' + STK + '/><ellipse cx="50" cy="66" rx="14" ry="9" fill="#f9ce88"' + STK + '/>' + eyes(52) + '<ellipse cx="50" cy="61" rx="4.5" ry="3" fill="' + K + '"/>' + smile(66, 4) + '<path d="M30 64 h-10 M31 69 l-9 3 M70 64 h10 M69 69 l9 3" stroke="' + K + '" stroke-width="1.4" stroke-linecap="round"/>'],
+    unicorn: ["#faf3e4", '<path d="M44 30 L50 6 L56 30Z" fill="#f79c09"' + STK + '/><path d="M46 22 l8 -3 M47 15 l6 -2" stroke="' + K + '" stroke-width="1.4"/><path d="M33 36 l-4 -12 l12 7Z M67 36 l4 -12 l-12 7Z" fill="#faf3e4"' + STK + '/><circle cx="50" cy="56" r="26" fill="#faf3e4"' + STK + '/><path d="M26 50 q-6 -14 10 -20 q2 -8 12 -4 q-10 4 -8 14 q-8 2 -14 10Z" fill="#e9809c"' + STK + '/><path d="M28 62 q-8 -6 -2 -14" fill="none" stroke="#93c6d7" stroke-width="5" stroke-linecap="round"/>' + eyes(54) + cheeks(62) + smile(64)],
+    bunny: ["#f9ce88", '<ellipse cx="40" cy="24" rx="7" ry="19" fill="#faf3e4"' + STK + ' transform="rotate(-10 40 24)"/><ellipse cx="60" cy="24" rx="7" ry="19" fill="#faf3e4"' + STK + ' transform="rotate(10 60 24)"/><ellipse cx="40" cy="25" rx="3" ry="12" fill="#f3c3c6" transform="rotate(-10 40 25)"/><ellipse cx="60" cy="25" rx="3" ry="12" fill="#f3c3c6" transform="rotate(10 60 25)"/><circle cx="50" cy="60" r="25" fill="#faf3e4"' + STK + '/>' + eyes(57) + cheeks(65) + '<path d="M47 63 h6 l-3 3Z" fill="#e9809c"/>' + smile(68, 3.5)],
+    fox: ["#f9ce88", '<path d="M26 44 L24 16 L44 32Z M74 44 L76 16 L56 32Z" fill="#e2562c"' + STK + '/><path d="M24 40 Q26 28 50 28 Q74 28 76 40 Q76 64 50 80 Q24 64 24 40Z" fill="#e2562c"' + STK + '/><path d="M28 50 Q40 56 50 66 Q60 56 72 50 Q70 66 50 80 Q30 66 28 50Z" fill="#faf3e4"' + STK + '/>' + eyes(48, 11) + '<ellipse cx="50" cy="68" rx="4" ry="3" fill="' + K + '"/>' + cheeks(58, 17)],
+    songbird: ["#93c6d7", '<path d="M44 30 q-2 -10 6 -12 M50 29 q2 -10 10 -9" fill="none" stroke="' + K + '" stroke-width="2.2" stroke-linecap="round"/><circle cx="50" cy="56" r="27" fill="#f79c09"' + STK + '/><path d="M60 60 q14 -2 12 12 q-12 0 -16 -6Z" fill="#f79c09"' + STK + '/>' + eyes(50, 10) + '<path d="M45 58 L55 58 L50 66Z" fill="#e2562c"' + STK + '/>' + cheeks(58, 17) + '<path d="M78 24 v14 a4 3 0 1 1 -2 -3 V26 l8 -2 v10" fill="none" stroke="' + K + '" stroke-width="2" stroke-linecap="round"/>'],
+    axolotl: ["#a8d2b0", '<g fill="none" stroke="#e9809c" stroke-width="5" stroke-linecap="round"><path d="M24 44 l-12 -8 M22 52 l-14 0 M24 60 l-12 8 M76 44 l12 -8 M78 52 l14 0 M76 60 l12 8"/></g><ellipse cx="50" cy="56" rx="30" ry="23" fill="#f3c3c6"' + STK + '/>' + eyes(52, 13) + cheeks(60, 20) + '<path d="M38 62 q12 9 24 0" fill="none" stroke="' + K + '" stroke-width="2.2" stroke-linecap="round"/>'],
+    frog: ["#f0b197", '<circle cx="36" cy="38" r="11" fill="#35a468"' + STK + '/><circle cx="64" cy="38" r="11" fill="#35a468"' + STK + '/><ellipse cx="50" cy="60" rx="31" ry="21" fill="#35a468"' + STK + '/><circle cx="36" cy="38" r="6" fill="#faf3e4"/><circle cx="64" cy="38" r="6" fill="#faf3e4"/>' + eyes(38, 14) + cheeks(62, 20) + '<path d="M34 62 q16 12 32 0" fill="none" stroke="' + K + '" stroke-width="2.2" stroke-linecap="round"/>'],
+    bear: ["#93c6d7", '<circle cx="28" cy="36" r="10" fill="#e6d1ad"' + STK + '/><circle cx="72" cy="36" r="10" fill="#e6d1ad"' + STK + '/><circle cx="28" cy="36" r="4.5" fill="#f9ce88"/><circle cx="72" cy="36" r="4.5" fill="#f9ce88"/><circle cx="50" cy="58" r="27" fill="#e6d1ad"' + STK + '/><ellipse cx="50" cy="66" rx="12" ry="9" fill="#f9ce88"' + STK + '/>' + eyes(53) + '<ellipse cx="50" cy="62" rx="4.5" ry="3" fill="' + K + '"/>' + smile(67, 3.5)],
+    penguin: ["#f9ce88", '<circle cx="50" cy="56" r="28" fill="#716759"' + STK + '/><path d="M50 40 q-14 -6 -18 8 q-4 18 18 26 q22 -8 18 -26 q-4 -14 -18 -8Z" fill="#faf3e4"' + STK + '/>' + eyes(52, 8) + '<path d="M45 59 L55 59 L50 65Z" fill="#e2562c"' + STK + '/>' + cheeks(61, 14)],
+    hedgehog: ["#faf3e4", '<path d="M18 62 l-4 -10 l8 -2 l-4 -10 l10 0 l-2 -11 l10 4 l2 -11 l9 7 l3 -10 l7 9 l6 -8 l4 11 l9 -5 l0 11 l10 -1 l-4 10 l9 3 l-6 9Z" fill="#716759"' + STK + '/><ellipse cx="50" cy="62" rx="23" ry="20" fill="#f9ce88"' + STK + '/>' + eyes(58, 8) + '<circle cx="50" cy="65" r="3.2" fill="' + K + '"/>' + cheeks(66, 14) + smile(70, 3)],
+    duck: ["#93c6d7", '<path d="M48 30 q0 -8 8 -8 q-2 6 -6 9" fill="#f79c09"' + STK + '/><circle cx="50" cy="56" r="26" fill="#f79c09"' + STK + '/>' + eyes(51, 10) + '<ellipse cx="50" cy="64" rx="12" ry="6" fill="#e2562c"' + STK + '/><path d="M40 64 h20" stroke="' + K + '" stroke-width="1.4"/>' + cheeks(58, 17)],
+    koala: ["#f9ce88", '<circle cx="26" cy="42" r="13" fill="#e6d1ad"' + STK + '/><circle cx="74" cy="42" r="13" fill="#e6d1ad"' + STK + '/><circle cx="26" cy="42" r="6" fill="#f3c3c6"/><circle cx="74" cy="42" r="6" fill="#f3c3c6"/><circle cx="50" cy="58" r="25" fill="#e6d1ad"' + STK + '/>' + eyes(53, 10) + '<ellipse cx="50" cy="62" rx="6" ry="8" fill="' + K + '"/>' + cheeks(64, 17)],
+    seal: ["#f0b197", '<ellipse cx="50" cy="58" rx="29" ry="25" fill="#e6d1ad"' + STK + '/>' + eyes(52, 11) + '<ellipse cx="50" cy="60" rx="3.6" ry="2.6" fill="' + K + '"/><path d="M45 64 q2.5 3 5 0 q2.5 3 5 0" fill="none" stroke="' + K + '" stroke-width="2" stroke-linecap="round"/><path d="M32 60 h-10 M33 65 l-9 3 M68 60 h10 M67 65 l9 3" stroke="' + K + '" stroke-width="1.4" stroke-linecap="round"/>' + cheeks(62, 18)],
+    cat: ["#a8d2b0", '<path d="M28 44 L27 20 L46 34Z M72 44 L73 20 L54 34Z" fill="#f79c09"' + STK + '/><circle cx="50" cy="58" r="26" fill="#f79c09"' + STK + '/><path d="M40 36 v8 M50 34 v8 M60 36 v8" stroke="#f79c09" stroke-width="3" stroke-linecap="round"/>' + eyes(55) + '<path d="M47 61 h6 l-3 3Z" fill="#e9809c"/><path d="M44 66 q3 3 6 0 q3 3 6 0" fill="none" stroke="' + K + '" stroke-width="2" stroke-linecap="round"/>' + cheeks(64, 17)]
   };
   var ANIMAL_KEYS = Object.keys(ANIMALS);
   function animalSVG(kind, name){
@@ -66,18 +66,18 @@
   }
   /* illustrated placeholder snapshot for photos that haven't been added yet */
   function sceneSVG(seed, label){
-    var skies = [["#ebc797","#d9a8a0"],["#b3c3cf","#e6e1d3"],["#c3b8cf","#e8cfc6"],["#bfd1b8","#f3e3b8"],["#ecd49c","#e6b48d"],["#c4d3a2","#e3e4c8"]];
+    var skies = [["#f9ce88","#e9809c"],["#93c6d7","#f5e4c3"],["#e6d1ad","#f3c3c6"],["#e6d1ad","#f9ce88"],["#f9ce88","#e2562c"],["#35a468","#f9ce88"]];
     var s = skies[seed % skies.length], c1 = GLASS[seed % GLASS.length], c2 = GLASS[(seed + 3) % GLASS.length];
     return '<svg viewBox="0 0 300 300" role="img" aria-label="' + esc(label) + '">' +
       '<defs><linearGradient id="sky' + seed + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + s[0] + '"/><stop offset="1" stop-color="' + s[1] + '"/></linearGradient></defs>' +
       '<rect width="300" height="300" fill="url(#sky' + seed + ')"/>' +
-      '<circle cx="' + (70 + (seed * 37) % 160) + '" cy="80" r="30" fill="#f5e8c6" stroke="#34302c" stroke-width="2.5"/>' +
-      '<path d="M0 210 Q60 150 120 200 T240 185 T300 195 V300 H0Z" fill="' + c1 + '" opacity=".85" stroke="#34302c" stroke-width="2.5"/>' +
-      '<path d="M0 245 Q80 205 160 240 T300 230 V300 H0Z" fill="' + c2 + '" opacity=".9" stroke="#34302c" stroke-width="2.5"/>' +
-      '<g stroke="#34302c" stroke-width="2.5" fill="#faf1df"><circle cx="120" cy="232" r="9"/><path d="M120 241 v26 M110 252 h20 M120 267 l-8 14 M120 267 l8 14"/>' +
+      '<circle cx="' + (70 + (seed * 37) % 160) + '" cy="80" r="30" fill="#f9ce88" stroke="#2a2420" stroke-width="2.5"/>' +
+      '<path d="M0 210 Q60 150 120 200 T240 185 T300 195 V300 H0Z" fill="' + c1 + '" opacity=".85" stroke="#2a2420" stroke-width="2.5"/>' +
+      '<path d="M0 245 Q80 205 160 240 T300 230 V300 H0Z" fill="' + c2 + '" opacity=".9" stroke="#2a2420" stroke-width="2.5"/>' +
+      '<g stroke="#2a2420" stroke-width="2.5" fill="#faf3e4"><circle cx="120" cy="232" r="9"/><path d="M120 241 v26 M110 252 h20 M120 267 l-8 14 M120 267 l8 14"/>' +
       '<circle cx="168" cy="228" r="9"/><path d="M168 237 v26 M158 248 h20 M168 263 l-8 14 M168 263 l8 14"/></g>' +
-      '<path d="M140 226 q4 -8 8 0" stroke="#a5473a" stroke-width="3" fill="none"/>' +
-      '<text x="150" y="40" text-anchor="middle" font-family="DM Mono, monospace" font-size="12" letter-spacing="2" fill="#34302c">PHOTO COMING SOON</text></svg>';
+      '<path d="M140 226 q4 -8 8 0" stroke="#e2562c" stroke-width="3" fill="none"/>' +
+      '<text x="150" y="40" text-anchor="middle" font-family="Agrave Pro, sans-serif" font-size="12" letter-spacing="2" fill="#2a2420">PHOTO COMING SOON</text></svg>';
   }
 
   J.util = { esc: esc, $: $, $all: $all, joyType: joyType, tagHTML: tagHTML, avatarSVG: avatarSVG, reduced: reduced };
@@ -110,7 +110,7 @@
     document.body.appendChild(c);
     var ctx = c.getContext("2d"), dpr = window.devicePixelRatio || 1;
     c.width = innerWidth * dpr; c.height = innerHeight * dpr; ctx.scale(dpr, dpr);
-    var bits = [], cols = GLASS.concat(["#faf1df"]);
+    var bits = [], cols = GLASS.concat(["#faf3e4"]);
     for (var i = 0; i < 140; i++){
       bits.push({ x: innerWidth / 2 + (Math.random() - .5) * 120, y: innerHeight * .45, vx: (Math.random() - .5) * 14, vy: -Math.random() * 14 - 4,
         w: 6 + Math.random() * 6, h: 8 + Math.random() * 8, r: Math.random() * 6, vr: (Math.random() - .5) * .4, c: cols[i % cols.length], star: i % 7 === 0 });
@@ -137,8 +137,8 @@
   var cta = S.cta || { label: "Get tickets", url: "#" };
   var ctaAttrs = 'href="' + esc(cta.url) + '"' + (/^https?:/.test(cta.url) ? ' target="_blank" rel="noopener"' : "");
   /* "Save a seat" is a vintage ride ticket. Each one on a page is the next
-     ticket off the roll, so the paper color rotates: salmon, mint, lilac. */
-  var PAPERS = ["salmon", "mint", "lilac"], tixCount = 0;
+     ticket off the roll, so the paper color rotates through the brand palette. */
+  var PAPERS = ["orange", "carissma", "lochmara"], tixCount = 0;
   var ctaAria = function(label){ return esc(label + ", " + (S.dates || "") + (/^https?:/.test(cta.url) ? " (opens in a new tab)" : "")); };
   var tixHTML = function(cls, label){
     return '<a class="tix ' + cls + '" ' + ctaAttrs + ' aria-label="' + ctaAria(label) + '">' +
@@ -148,7 +148,7 @@
   };
   J.ctaHTML = function(cls, label){ return tixHTML("tix--" + PAPERS[tixCount++ % PAPERS.length], label || cta.label); };
   /* compact version for the nav bar */
-  J.ctaMiniHTML = function(extra){ return tixHTML("tix--mini tix--salmon " + (extra || ""), cta.label); };
+  J.ctaMiniHTML = function(extra){ return tixHTML("tix--mini tix--orange " + (extra || ""), cta.label); };
   /* SVG filters for the torn paper edge and slightly worn ink, defined once per page */
   if (!document.getElementById("tix-filters")){
     document.body.insertAdjacentHTML("beforeend",

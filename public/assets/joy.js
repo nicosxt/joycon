@@ -5,9 +5,9 @@
   var J = window.JOY || {}, root = document.getElementById("sorter");
   if (!root || !J.sort) return;
   var Q = J.sort, picks = [], step = 0;
-  var INK = "#34302c";
+  var INK = "#2a2420";
   function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
-  function joy(id){ return (J.joyTypes || []).filter(function(t){ return t.id === id; })[0] || { id: id, label: id, color: "#e6d6b6", blurb: "" }; }
+  function joy(id){ return (J.joyTypes || []).filter(function(t){ return t.id === id; })[0] || { id: id, label: id, color: "#e6d1ad", blurb: "" }; }
 
   function ask(){
     var q = Q[step];
@@ -55,7 +55,7 @@
 
     var cv = document.getElementById("ticket"), name = document.getElementById("t-name");
     function redraw(){ draw(cv, t, name.value.trim(), no); }
-    var fonts = document.fonts ? Promise.all(["150px 'Patrick Hand SC'", "100px 'Patrick Hand'", "40px 'Patrick Hand SC'"].map(function(f){ return document.fonts.load(f); })).catch(function(){}) : Promise.resolve();
+    var fonts = document.fonts ? Promise.all(["900 150px 'PP Stylo'", "400 100px 'Agrave Pro'", "400 40px 'Agrave Pro'"].map(function(f){ return document.fonts.load(f); })).catch(function(){}) : Promise.resolve();
     redraw(); fonts.then(redraw);
     name.addEventListener("input", redraw);
     document.getElementById("again").addEventListener("click", function(){ picks = []; step = 0; ask(); root.scrollIntoView({ behavior: "smooth", block: "start" }); });
@@ -82,9 +82,9 @@
   /* ---------- the ticket ---------- */
   function rr(c, x, y, w, h, r){ c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
   function balloon(c, x, y, r, col){
-    c.strokeStyle = "rgba(52,48,44,.55)"; c.lineWidth = 2; c.beginPath(); c.moveTo(x, y + r * 1.2); c.quadraticCurveTo(x - 12, y + r * 2.4, x + 4, y + r * 3.6); c.stroke();
+    c.strokeStyle = "rgba(42,36,32,.55)"; c.lineWidth = 2; c.beginPath(); c.moveTo(x, y + r * 1.2); c.quadraticCurveTo(x - 12, y + r * 2.4, x + 4, y + r * 3.6); c.stroke();
     c.fillStyle = col; c.strokeStyle = INK; c.lineWidth = 3.5; c.beginPath(); c.ellipse(x, y, r, r * 1.18, 0, 0, 7); c.fill(); c.stroke();
-    c.fillStyle = "rgba(255,248,232,.5)"; c.beginPath(); c.ellipse(x - r * .38, y - r * .45, r * .17, r * .3, -.5, 0, 7); c.fill();
+    c.fillStyle = "rgba(250,243,228,.5)"; c.beginPath(); c.ellipse(x - r * .38, y - r * .45, r * .17, r * .3, -.5, 0, 7); c.fill();
   }
   function wrap(c, text, x, y, maxW, lh){
     var words = text.split(" "), line = "";
@@ -93,41 +93,41 @@
   }
   function draw(cv, t, name, no){
     var c = cv.getContext("2d"), W = 1080, H = 1350;
-    var bg = c.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, "#d4ab74"); bg.addColorStop(.55, "#e6c896"); bg.addColorStop(1, "#4f8582");
+    var bg = c.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, "#f79c09"); bg.addColorStop(.55, "#e6d1ad"); bg.addColorStop(1, "#116890");
     c.fillStyle = bg; c.fillRect(0, 0, W, H);
-    c.fillStyle = "rgba(248,231,184,.55)"; c.beginPath(); c.arc(870, 170, 90, 0, 7); c.fill();
-    balloon(c, 120, 170, 46, "#c98a7e"); balloon(c, 210, 110, 34, "#8fa877"); balloon(c, 960, 360, 40, "#6f93b0");
+    c.fillStyle = "rgba(249,206,136,.55)"; c.beginPath(); c.arc(870, 170, 90, 0, 7); c.fill();
+    balloon(c, 120, 170, 46, "#e9809c"); balloon(c, 210, 110, 34, "#35a468"); balloon(c, 960, 360, 40, "#0588c4");
     /* hills */
-    c.fillStyle = "#a3b47f"; c.strokeStyle = INK; c.lineWidth = 4;
+    c.fillStyle = "#35a468"; c.strokeStyle = INK; c.lineWidth = 4;
     c.beginPath(); c.moveTo(0, 1180); c.quadraticCurveTo(300, 1090, 560, 1150); c.quadraticCurveTo(820, 1210, 1080, 1120); c.lineTo(1080, 1350); c.lineTo(0, 1350); c.closePath(); c.fill(); c.stroke();
-    c.fillStyle = "#7f9a62"; c.beginPath(); c.moveTo(0, 1270); c.quadraticCurveTo(360, 1210, 700, 1260); c.quadraticCurveTo(900, 1290, 1080, 1250); c.lineTo(1080, 1350); c.lineTo(0, 1350); c.closePath(); c.fill(); c.stroke();
+    c.fillStyle = "#35a468"; c.beginPath(); c.moveTo(0, 1270); c.quadraticCurveTo(360, 1210, 700, 1260); c.quadraticCurveTo(900, 1290, 1080, 1250); c.lineTo(1080, 1350); c.lineTo(0, 1350); c.closePath(); c.fill(); c.stroke();
 
     /* ticket body */
     var x = 110, y = 190, w = 860, h = 1000, stubY = y + 650;
     function sp(px){ try { c.letterSpacing = px + "px"; } catch (e) {} }
     c.save(); c.translate(540, 690); c.rotate(-.03); c.translate(-540, -690);
-    c.fillStyle = "rgba(52,48,44,.25)"; rr(c, x + 6, y + 22, w, h, 40); c.fill();
-    c.fillStyle = "#faf1df"; rr(c, x, y, w, h, 40); c.fill();
+    c.fillStyle = "rgba(42,36,32,.25)"; rr(c, x + 6, y + 22, w, h, 40); c.fill();
+    c.fillStyle = "#faf3e4"; rr(c, x, y, w, h, 40); c.fill();
     c.save(); rr(c, x, y, w, h, 40); c.clip(); c.fillStyle = t.color; c.fillRect(x, stubY, w, h); c.restore();
     c.strokeStyle = INK; c.lineWidth = 5; rr(c, x, y, w, h, 40); c.stroke();
     c.setLineDash([14, 14]); c.lineWidth = 4; c.beginPath(); c.moveTo(x + 40, stubY); c.lineTo(x + w - 40, stubY); c.stroke(); c.setLineDash([]);
-    [[x, stubY], [x + w, stubY]].forEach(function(p){ c.fillStyle = "#e3c58f"; c.beginPath(); c.arc(p[0], p[1], 28, 0, 7); c.fill(); c.lineWidth = 5; c.stroke(); });
-    c.strokeStyle = "rgba(196,98,63,.35)"; c.lineWidth = 3; rr(c, x + 28, y + 28, w - 56, stubY - y - 56, 24); c.stroke();
+    [[x, stubY], [x + w, stubY]].forEach(function(p){ c.fillStyle = "#f79c09"; c.beginPath(); c.arc(p[0], p[1], 28, 0, 7); c.fill(); c.lineWidth = 5; c.stroke(); });
+    c.strokeStyle = "rgba(226,86,44,.35)"; c.lineWidth = 3; rr(c, x + 28, y + 28, w - 56, stubY - y - 56, 24); c.stroke();
 
     c.textAlign = "center"; c.fillStyle = INK;
-    sp(8); c.font = "30px 'Patrick Hand SC', cursive"; c.fillText("ADMIT ONE · NO. " + no, 540, y + 92); sp(0);
-    c.font = "150px 'Patrick Hand SC', cursive"; sp(3);
+    sp(8); c.font = "30px 'Agrave Pro', sans-serif"; c.fillText("ADMIT ONE · NO. " + no, 540, y + 92); sp(0);
+    c.font = "900 150px 'PP Stylo', 'Agrave Pro', sans-serif"; sp(3);
     c.fillStyle = INK; c.fillText("JoyCon", 540, y + 262); sp(0);
-    c.fillStyle = INK; c.font = "42px 'Patrick Hand SC', cursive"; c.fillText("a theme park for connection", 540, y + 340);
-    c.font = (name.length > 14 ? 76 : 100) + "px 'Patrick Hand', cursive"; c.fillText(name || "You", 540, y + 470);
-    c.fillStyle = "#5e5850"; sp(5); c.font = "30px 'Patrick Hand SC', cursive"; c.fillText("JAN 16 TO 17, 2027 · SAN FRANCISCO", 540, y + 548);
+    c.fillStyle = INK; c.font = "42px 'Agrave Pro', sans-serif"; c.fillText("a theme park for connection", 540, y + 340);
+    c.font = (name.length > 14 ? 76 : 100) + "px 'Agrave Pro', sans-serif"; c.fillText(name || "You", 540, y + 470);
+    c.fillStyle = "#716759"; sp(5); c.font = "30px 'Agrave Pro', sans-serif"; c.fillText("JAN 16 TO 17, 2027 · SAN FRANCISCO", 540, y + 548);
     c.fillText("RIDES ALL WEEKEND", 540, y + 590); sp(0);
     /* stub */
-    c.fillStyle = INK; sp(8); c.font = "30px 'Patrick Hand SC', cursive"; c.fillText("MY JOY", 540, stubY + 76); sp(0);
-    c.font = "124px 'Patrick Hand SC', cursive"; c.fillText(t.label, 540, stubY + 196);
-    c.font = "38px 'Patrick Hand SC', cursive"; wrap(c, t.blurb, 540, stubY + 260, 680, 44);
+    c.fillStyle = INK; sp(8); c.font = "30px 'Agrave Pro', sans-serif"; c.fillText("MY JOY", 540, stubY + 76); sp(0);
+    c.font = "124px 'Agrave Pro', sans-serif"; c.fillText(t.label, 540, stubY + 196);
+    c.font = "38px 'Agrave Pro', sans-serif"; wrap(c, t.blurb, 540, stubY + 260, 680, 44);
     c.restore();
-    c.textAlign = "center"; c.fillStyle = "#faf1df"; sp(8); c.font = "30px 'Patrick Hand SC', cursive"; c.fillText("FIND YOURS AT JOYCON", 540, 1316); sp(0);
+    c.textAlign = "center"; c.fillStyle = "#faf3e4"; sp(8); c.font = "30px 'Agrave Pro', sans-serif"; c.fillText("FIND YOURS AT JOYCON", 540, 1316); sp(0);
   }
 
   root.addEventListener("click", function(e){

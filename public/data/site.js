@@ -35,16 +35,16 @@ JOY.site = {
 };
 
 /* Types of joy. Used for schedule tags, the ride form dropdown, and filters.
-   color is the tag background. Keep it light enough for dark text. */
+   color is the tag background, from the brand palette. Keep it light enough for dark text. */
 JOY.joyTypes = [
-  { id: "wonder",     label: "Wonder",     color: "#b3c3cf", blurb: "Seeing the ordinary like it's the first time." },
-  { id: "play",       label: "Play",       color: "#e4bb67", blurb: "Doing something for no reason except that it's fun." },
-  { id: "awe",        label: "Awe",        color: "#c3b8cf", blurb: "Feeling small next to something big, in a good way." },
-  { id: "belonging",  label: "Belonging",  color: "#d9a8a0", blurb: "Being known by name in a room full of people." },
-  { id: "presence",   label: "Presence",   color: "#bfd1b8", blurb: "Right here. Right now. Nowhere else to be." },
-  { id: "gratitude",  label: "Gratitude",  color: "#e6b48d", blurb: "Noticing what you already have and saying it out loud." },
-  { id: "mischief",   label: "Mischief",   color: "#ecd49c", blurb: "A little rule bending in the name of delight." },
-  { id: "generosity", label: "Generosity", color: "#c4d3a2", blurb: "Giving joy away and getting more back." }
+  { id: "wonder",     label: "Wonder",     color: "#93c6d7", blurb: "Seeing the ordinary like it's the first time." },
+  { id: "play",       label: "Play",       color: "#f79c09", blurb: "Doing something for no reason except that it's fun." },
+  { id: "awe",        label: "Awe",        color: "#f3c3c6", blurb: "Feeling small next to something big, in a good way." },
+  { id: "belonging",  label: "Belonging",  color: "#e9809c", blurb: "Being known by name in a room full of people." },
+  { id: "presence",   label: "Presence",   color: "#a8d2b0", blurb: "Right here. Right now. Nowhere else to be." },
+  { id: "gratitude",  label: "Gratitude",  color: "#f0b197", blurb: "Noticing what you already have and saying it out loud." },
+  { id: "mischief",   label: "Mischief",   color: "#f9ce88", blurb: "A little rule bending in the name of delight." },
+  { id: "generosity", label: "Generosity", color: "#35a468", blurb: "Giving joy away and getting more back." }
 ];
 
 /* "Rides we've prototyped" tickets on the home page.

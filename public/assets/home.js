@@ -172,26 +172,40 @@
     document.getElementById("bunting").innerHTML = '<svg viewBox="0 0 1000 70" preserveAspectRatio="none"><path d="M0 8 Q500 76 1000 8" fill="none" stroke="' + INK + '" stroke-width="1.6"/>' + f + '</svg>';
   })();
 
-  /* flagline: tilted pennants that roll left to right as you scroll */
+  /* flagline: a sagging, tilted string of pennants that rolls left to right as you scroll */
   (function(){
     var lines = [].slice.call(document.querySelectorAll(".flagline")); if (!lines.length) return;
-    var cols = ["#e2562c", "#f79c09", "#35a468", "#0588c4", "#e9809c"], STEP = 52, PERIOD = STEP * cols.length;
-    function flag(c, i){
-      return '<span class="flagline__flag"><svg viewBox="0 0 40 46" style="animation-delay:' + (-(i % 7) * .35).toFixed(2) + 's">' +
+    var cols = ["#e2562c", "#f79c09", "#35a468", "#0588c4", "#e9809c"], STEP = 54, SPEED = .3;
+    function flagSVG(c, i){
+      return '<svg viewBox="0 0 40 46" style="animation-delay:' + (-(i % 7) * .35).toFixed(2) + 's">' +
         '<path d="M2 1 L38 1 Q24 18 20 44 Q16 18 2 1Z" fill="' + c + '" stroke="' + INK + '" stroke-width="1.8" stroke-linejoin="round"/>' +
-        '<path d="M8 5 Q20 9 31 5" fill="none" stroke="#faf3e4" stroke-width="1.6" stroke-linecap="round" opacity=".55"/></svg></span>';
+        '<path d="M8 5 Q20 9 31 5" fill="none" stroke="#faf3e4" stroke-width="1.6" stroke-linecap="round" opacity=".55"/></svg>';
+    }
+    function curve(el){                       // string: higher on the right, sagging in the middle
+      var W = el.offsetWidth, yl = 34, yr = 8, sag = Math.min(34, W * .025);
+      return { W: W, y: function(x){ var t = x / W; return yl + (yr - yl) * t + sag * Math.sin(Math.PI * t); },
+               a: function(x){ var t = x / W; return Math.atan(((yr - yl) + sag * Math.PI * Math.cos(Math.PI * t)) / W) * 180 / Math.PI; } };
     }
     function build(){
       lines.forEach(function(el){
-        var n = Math.ceil((el.offsetWidth * 1.2 + PERIOD * 2) / STEP), html = "";
-        for (var i = 0; i < n; i++) html += flag(cols[i % cols.length], i);
-        el.innerHTML = '<div class="flagline__rig"><div class="flagline__track">' + html + '</div></div>';
+        var c = curve(el), n = Math.ceil((c.W + STEP * 2) / STEP / cols.length) * cols.length, html = "", d = "";
+        for (var x = 0; x <= c.W; x += 20) d += (x ? " L" : "M") + x + " " + c.y(x).toFixed(1);
+        d += " L" + c.W + " " + c.y(c.W).toFixed(1);
+        for (var i = 0; i < n; i++) html += '<span class="flagline__flag">' + flagSVG(cols[i % cols.length], i) + '</span>';
+        el.innerHTML = '<svg class="flagline__string" width="' + c.W + '" height="60" viewBox="0 0 ' + c.W + ' 60"><path d="' + d + '" fill="none" stroke="' + INK + '" stroke-width="2"/></svg>' + html;
+        el._c = c; el._n = n; el._flags = [].slice.call(el.querySelectorAll(".flagline__flag"));
       });
       roll();
     }
     function roll(){
-      var off = reduced ? 0 : (scrollY * .6) % PERIOD;
-      lines.forEach(function(el){ var t = el.querySelector(".flagline__track"); if (t) t.style.transform = "translateX(" + (off - PERIOD).toFixed(1) + "px)"; });
+      var off = reduced ? 0 : scrollY * SPEED;
+      lines.forEach(function(el){
+        var c = el._c, span = el._n * STEP; if (!c) return;
+        el._flags.forEach(function(f, i){
+          var x = ((i * STEP + off) % span + span) % span - STEP;
+          f.style.transform = "translate(" + (x - 20).toFixed(1) + "px," + c.y(x).toFixed(1) + "px) rotate(" + c.a(x).toFixed(2) + "deg)";
+        });
+      });
     }
     var ticking = false;
     addEventListener("scroll", function(){ if (!ticking){ ticking = true; requestAnimationFrame(function(){ ticking = false; roll(); }); } }, { passive: true });

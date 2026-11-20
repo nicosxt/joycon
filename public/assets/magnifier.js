@@ -66,16 +66,22 @@
     var px = x + LX, py = y + LY;                    // page point under the lens centre
     view.style.transform = "translate(" + (R - ZOOM * px) + "px," + (R - ZOOM * py) + "px) scale(" + ZOOM + ")";
   }
+  /* start with the lens over the word "you" in the heading */
   function home_(){
-    var r = home.getBoundingClientRect();
-    x = r.left + scrollX + (r.width - IMG_W) / 2; y = r.top + scrollY + (r.height - IMG_H) / 2; render();
+    var h = document.getElementById("jt-h"), cx, cy;
+    var tn = h && [].filter.call(h.childNodes, function(n){ return n.nodeType === 3 && /\byou\b/.test(n.textContent); })[0];
+    if (tn){
+      var i = tn.textContent.search(/\byou\b/), rg = document.createRange(); rg.setStart(tn, i); rg.setEnd(tn, i + 3);
+      var b = rg.getBoundingClientRect(); cx = b.left + b.width / 2 + scrollX; cy = b.top + b.height * .55 + scrollY;
+    } else { var r = home.getBoundingClientRect(); cx = r.left + r.width / 2 + scrollX; cy = r.top + r.height / 2 + scrollY; }
+    x = cx - LX; y = cy - LY; render();
   }
 
   /* drag */
   var drag = null;
   mag.addEventListener("pointerdown", function(e){
     if (e.button !== 0 && e.pointerType === "mouse") return;
-    if (Date.now() - lastClone > 1500) reclone();
+    reclone();                                        // always fresh: the page may have changed since
     drag = { ox: e.pageX - x, oy: e.pageY - y }; mag.setPointerCapture(e.pointerId); mag.classList.add("is-dragging"); e.preventDefault();
   });
   mag.addEventListener("pointermove", function(e){
@@ -88,6 +94,10 @@
   mag.addEventListener("pointerup", end); mag.addEventListener("pointercancel", end);
 
   function boot(){ reclone(); home_(); mag.classList.add("is-ready"); }
+  /* keep the copy in step when the page changes height (letter opening, images, fridge) */
+  if (window.ResizeObserver){
+    var ro; new ResizeObserver(function(){ clearTimeout(ro); ro = setTimeout(function(){ if (drag) return; reclone(); if (!moved) home_(); else render(); }, 250); }).observe(main);
+  }
   (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(function(){ setTimeout(boot, 300); });
   var rt; addEventListener("resize", function(){ clearTimeout(rt); rt = setTimeout(function(){ reclone(); if (!moved) home_(); else render(); }, 200); });
   addEventListener("load", function(){ reclone(); if (!moved) home_(); else render(); });

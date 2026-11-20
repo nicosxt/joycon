@@ -49,15 +49,38 @@
   var byId = {}; gallery.forEach(function(p){ byId[p.id] = ["p", p]; }); posts.forEach(function(p){ byId[p.id] = ["s", p]; });
   order.forEach(function(id){ var e = byId[id]; if (!e) return; html += e[0] === "p" ? polaroid(e[1], gi++) : note(e[1], si++); });
   quotes.forEach(function(q, i){ html += cookie(q, i); });
-  for (var k = 0; k < 12; k++) html += star(k);
+  for (var k = 0; k < 4; k++) html += star(k);
   board.innerHTML = html;
   var items = [].slice.call(board.querySelectorAll(".fz"));
 
   /* ---------- scatter without overlap ---------- */
   var seed = 7;
   function rnd(){ seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+  /* desktop: the hand-arranged composition (centres on a 2000-wide board, rotation) */
+  var PRESET = {
+    photo:  [[1190, 350, -3], [420, 315, -2], [1630, 965, -3], [1280, 920, -2], [442, 840, 1], [850, 990, 0]],   // p1..p6
+    note:   [[1500, 262, 4], [1695, 432, 2], [830, 582, 2], [810, 205, -4]],                                        // s1..s4
+    cookie: [[272, 595, -10], [950, 400, -15], [1412, 537, 10], [1792, 710, 5]],
+    star:   [[255, 78, -12], [172, 550, 8], [1745, 90, 14], [1080, 645, -6]]
+  };
+  function presetLayout(W){
+    var k = W / 2000, bottom = 0, seen = { photo: 0, note: 0, cookie: 0, star: 0 };
+    board.style.setProperty("--s", Math.min(1.12, W / 1180).toFixed(3));
+    items.forEach(function(el){ el.style.transform = "none"; });
+    items.forEach(function(el){
+      var kind = el.classList.contains("fz--photo") ? "photo" : el.classList.contains("fz--note") ? "note" : el.classList.contains("fz--cookie") ? "cookie" : "star";
+      var p = PRESET[kind][seen[kind]++ % PRESET[kind].length];
+      el._w = el.offsetWidth; el._h = el.offsetHeight;
+      el._x = p[0] * k - el._w / 2; el._y = p[1] * k - el._h / 2; el._r = p[2];
+      bottom = Math.max(bottom, el._y + el._h);
+    });
+    items.forEach(function(el){ el._y += 12; set(el); });
+    board.style.height = Math.ceil(bottom + 40) + "px";
+  }
   function layout(){
     seed = 7;
+    if (board.clientWidth >= 900){ presetLayout(board.clientWidth); return; }
+    board.style.removeProperty("--s");
     var W = board.clientWidth, pad = W < 600 ? 10 : 22, placed = [];
     items.forEach(function(el){ el.style.transform = "none"; el._w = el.offsetWidth; el._h = el.offsetHeight; });
     var big = items.filter(function(el){ return !el.classList.contains("fz--star") && !el.classList.contains("fz--cookie"); });

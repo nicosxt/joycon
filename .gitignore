@@ -1,3 +1,6 @@
 node_modules/
 .DS_Store
 .netlify/
+
+# PP Stylo is a commercial Pangram Pangram font. Kept out of git until a web license is confirmed.
+public/assets/fonts/PPStylo-*

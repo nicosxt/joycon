@@ -1213,3 +1213,41 @@ h2{ line-height: 1; }
 @media (prefers-reduced-motion: reduce){
   .tix, .tix:hover, .tix:focus-visible, .tix:active{ transition: none; transform: none; }
 }
+
+/* =====================================================================
+   TYPE: two fonts.
+   PP Stylo (Pangram Pangram) for titles and the JoyCon wordmark,
+   Arial for everything else. Stylo loads from the visitor's installed
+   copy first, then from assets/fonts/ (needs a PP web license to ship).
+   ===================================================================== */
+@font-face{ font-family: "PP Stylo"; font-weight: 200; font-style: normal; font-display: swap;
+  src: local("PP Stylo Thin"), local("PPStylo-Thin"), url("fonts/PPStylo-Thin.otf") format("opentype"); }
+@font-face{ font-family: "PP Stylo"; font-weight: 200; font-style: italic; font-display: swap;
+  src: local("PP Stylo Thin Italic"), local("PPStylo-ThinItalic"), url("fonts/PPStylo-ThinItalic.otf") format("opentype"); }
+@font-face{ font-family: "PP Stylo"; font-weight: 500; font-style: normal; font-display: swap;
+  src: local("PP Stylo Medium"), local("PPStylo-Medium"), url("fonts/PPStylo-Medium.otf") format("opentype"); }
+@font-face{ font-family: "PP Stylo"; font-weight: 500; font-style: italic; font-display: swap;
+  src: local("PP Stylo Medium Italic"), local("PPStylo-MediumItalic"), url("fonts/PPStylo-MediumItalic.otf") format("opentype"); }
+@font-face{ font-family: "PP Stylo"; font-weight: 900; font-style: normal; font-display: swap;
+  src: local("PP Stylo Super"), local("PPStylo-Super"), url("fonts/PPStylo-Super.otf") format("opentype"); }
+@font-face{ font-family: "PP Stylo"; font-weight: 900; font-style: italic; font-display: swap;
+  src: local("PP Stylo Super Italic"), local("PPStylo-SuperItalic"), url("fonts/PPStylo-SuperItalic.otf") format("opentype"); }
+
+:root{
+  --f-title: "PP Stylo", Georgia, "Times New Roman", serif;
+  --f-text: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --f-display: var(--f-title);
+  --f-mark: var(--f-title);
+  --f-label: var(--f-text);
+  --f-body: var(--f-text);
+  --f-mono: var(--f-text);
+  --f-serif: var(--f-text);
+}
+/* titles */
+h1, h2, h3, .brand, .brand:hover, .footer__mark, .finale h2, .finale__come, .proof__end p, .sorter__joy, .ticket__title{
+  font-family: var(--f-title); font-weight: 500; font-style: normal; font-variation-settings: normal; letter-spacing: 0; }
+.brand, .brand:hover{ font-weight: 900; }
+/* everything else */
+body, .btn, .nav__links a, .letter__dear, .letter__sig, .essay p.first::first-letter{ font-family: var(--f-text); }
+.letter__dear, .letter__sig{ font-family: var(--f-text) !important; }
+.tix{ --tix-sans: var(--f-text); }

@@ -1,0 +1,221 @@
+/* JoyCon home page: marquee bulbs, the SF park illustration, balloons and birds, bunting. */
+(function(){
+  "use strict";
+  var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var INK = "#34302c";
+
+  var bulbs = document.getElementById("bulbs"), hasSky = !!document.getElementById("skyline");
+  function placeBulbs(){
+    var w = bulbs.offsetWidth, h = bulbs.offsetHeight, per = 2 * (w + h), n = Math.floor(per / 30), html = "";
+    for (var i = 0; i < n; i++){
+      var d = i * per / n, x, y;
+      if (d < w){ x = d; y = 0; } else if (d < w + h){ x = w; y = d - w; } else if (d < 2 * w + h){ x = w - (d - w - h); y = h; } else { x = 0; y = h - (d - 2 * w - h); }
+      x = Math.min(Math.max(x, 14), w - 14); y = Math.min(Math.max(y, 14), h - 14);
+      html += '<i style="left:' + x.toFixed(1) + 'px;top:' + y.toFixed(1) + 'px"></i>';
+    }
+    bulbs.innerHTML = html;
+  }
+
+  /* SF as a storybook park: hand inked, stippled, dusk palette */
+  function skyline(){
+    var N = INK, SW = 2.2;
+    var G = ["#c98a7e","#e2b252","#8fa877","#6f93b0","#a99cc4","#c4623f"], petals = "", cx = 1130, cy = 146, R = 84;
+    function p(r, a){ return (cx + r * Math.cos(a)).toFixed(1) + " " + (cy + r * Math.sin(a)).toFixed(1); }
+    for (var i = 0; i < 12; i++){
+      var a1 = i / 12 * Math.PI * 2, a2 = (i + 1) / 12 * Math.PI * 2;
+      petals += '<path d="M' + p(R, a1) + ' A' + R + ' ' + R + ' 0 0 1 ' + p(R, a2) + ' L' + p(R * .38, a2) + ' A' + (R * .38) + ' ' + (R * .38) + ' 0 0 0 ' + p(R * .38, a1) + 'Z" fill="' + G[i % 6] + '" opacity=".92"/>';
+      petals += '<path d="M' + p(R * .38, a1) + ' L' + p(R, a1) + '" stroke="' + N + '" stroke-width="1.4"/>';
+      var gx = cx + (R + 11) * Math.cos(a1 + .26), gy = cy + (R + 11) * Math.sin(a1 + .26);
+      petals += '<g transform="translate(' + gx.toFixed(1) + ' ' + gy.toFixed(1) + ')"><path d="M-7 -2 h14 v8 a3 3 0 0 1 -3 3 h-8 a3 3 0 0 1 -3 -3Z" fill="' + G[(i + 2) % 6] + '" stroke="' + N + '" stroke-width="1.6"/><path d="M-8 -2 q8 -7 16 0" fill="#f3e6c8" stroke="' + N + '" stroke-width="1.6"/></g>';
+    }
+    /* painted ladies, muted */
+    var ladies = "", cols = ["#d9a99a","#bccaa4","#ead09a","#b8aecb","#a9c2c2","#e0b08a"];
+    for (var k = 0; k < 6; k++){
+      var x = 610 + k * 50, y = 240;
+      ladies += '<g stroke="' + N + '" stroke-width="' + SW + '" stroke-linejoin="round">' +
+        '<path d="M' + x + ' ' + (y + 124) + ' V' + y + ' l25 -28 l25 28 V' + (y + 124) + 'Z" fill="' + cols[k] + '"/>' +
+        '<path d="M' + (x - 3) + ' ' + y + ' h56" stroke-width="2.6"/>' +
+        '<rect x="' + (x + 8) + '" y="' + (y + 14) + '" width="11" height="19" rx="5.5" fill="#f6ead0"/><rect x="' + (x + 31) + '" y="' + (y + 14) + '" width="11" height="19" rx="5.5" fill="#f6ead0"/>' +
+        '<path d="M' + (x + 6) + ' ' + (y + 46) + ' h38 v20 h-38Z" fill="#f6ead0"/><path d="M' + (x + 25) + ' ' + (y + 46) + ' v20" stroke-width="1.4"/>' +
+        '<path d="M' + (x + 17) + ' ' + (y + 124) + ' v-28 a8 8 0 0 1 16 0 v28" fill="#6b5f57"/></g>';
+    }
+    /* lollipop trees and cypress cones, like the park map */
+    function tree(x, y, s, c){ c = c || "#7f9a62";
+      return '<g stroke="' + N + '" stroke-width="' + SW + '" stroke-linejoin="round" stroke-linecap="round"><path d="M' + x + ' ' + y + ' v' + (-14 * s) + '"/>' +
+        '<path d="M' + (x - 17 * s) + ' ' + (y - 24 * s) + ' a17 17 0 0 1 8 -22 a14 14 0 0 1 22 -6 a16 16 0 0 1 12 22 a14 14 0 0 1 -10 18 h-24 a10 10 0 0 1 -8 -12Z" fill="' + c + '"/>' +
+        '<path d="M' + (x - 4 * s) + ' ' + (y - 38 * s) + ' q6 -4 12 2" fill="none" stroke-width="1.3" opacity=".6"/></g>'; }
+    function cone(x, y, s){ return '<g stroke="' + N + '" stroke-width="' + SW + '" stroke-linejoin="round"><path d="M' + x + ' ' + y + ' l' + (-11 * s) + ' 0 l' + (11 * s) + ' ' + (-50 * s) + ' l' + (11 * s) + ' ' + (50 * s) + 'Z" fill="#5f7d55"/></g>'; }
+    function flowers(x0, x1, y, n){ var f = "", fc = ["#d39a8c","#e2b252","#b6a6cf","#f0dcc0","#c98a7e"];
+      for (var i = 0; i < n; i++){ var fx = x0 + (x1 - x0) * ((i * 37) % n) / n, fy = y + ((i * 13) % 9); f += '<circle cx="' + fx.toFixed(1) + '" cy="' + fy + '" r="' + (2.4 + (i % 3)) + '" fill="' + fc[i % 5] + '" stroke="' + N + '" stroke-width=".9"/>'; }
+      return f; }
+    var svg =
+    '<svg viewBox="0 0 1440 360" preserveAspectRatio="xMidYMax slice">' +
+      '<defs>' +
+        '<pattern id="stip" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r=".9" fill="' + N + '" opacity=".28"/><circle cx="6.5" cy="6" r=".7" fill="' + N + '" opacity=".2"/></pattern>' +
+        '<pattern id="stip2" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r=".8" fill="' + N + '" opacity=".35"/></pattern>' +
+        '<linearGradient id="bay" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7ea7a3"/><stop offset="1" stop-color="#4f8582"/></linearGradient>' +
+      '</defs>' +
+      /* bay */
+      '<path d="M0 238 H620 V360 H0Z" fill="url(#bay)"/>' +
+      '<g stroke="#e9dcc0" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".55"><path d="M40 262 q10 -5 20 0 t20 0"/><path d="M180 286 q10 -5 20 0 t20 0"/><path d="M330 258 q10 -5 20 0 t20 0"/><path d="M90 316 q10 -5 20 0 t20 0"/><path d="M450 300 q10 -5 20 0 t20 0"/></g>' +
+      /* marin headland */
+      '<path d="M-20 238 Q10 196 60 210 L70 238Z" fill="#a8a77a" stroke="' + N + '" stroke-width="' + SW + '" stroke-linejoin="round"/>' +
+      /* golden gate, terracotta */
+      '<g stroke="' + N + '" stroke-width="' + SW + '" stroke-linejoin="round">' +
+        '<path d="M74 238 V112 h14 V238 M244 238 V112 h14 V238" fill="#c4623f"/>' +
+        '<path d="M74 140 h14 M244 140 h14 M74 176 h14 M244 176 h14" stroke-width="1.5"/>' +
+      '</g>' +
+      '<g fill="none" stroke="#c4623f" stroke-width="3"><path d="M-20 128 Q81 214 166 210 T420 128"/></g>' +
+      '<g stroke="#c4623f" stroke-width="1.2" opacity=".85">' + (function(){ var s = ""; for (var x = 96; x < 244; x += 12){ var t = (x - 81) / 170, yy = 128 + 82 * (1 - Math.pow(2 * t - 1, 2)) * .98; s += '<path d="M' + x + ' ' + yy.toFixed(1) + ' V204"/>'; } return s; })() + '</g>' +
+      '<path d="M-20 204 H470" stroke="' + N + '" stroke-width="7" stroke-linecap="round"/><path d="M-20 204 H470" stroke="#c4623f" stroke-width="4.4" stroke-linecap="round"/>' +
+      '<g class="fog" fill="#f4ead6" opacity=".78"><ellipse cx="60" cy="230" rx="140" ry="16"/><ellipse cx="260" cy="236" rx="160" ry="14"/><ellipse cx="420" cy="230" rx="120" ry="12"/></g>' +
+      /* far hills, stippled */
+      '<path d="M380 270 Q520 172 680 222 T980 200 T1440 208 V360 H380Z" fill="#a9b486"/>' +
+      '<path d="M380 270 Q520 172 680 222 T980 200 T1440 208 V360 H380Z" fill="url(#stip)" stroke="' + N + '" stroke-width="' + SW + '"/>' +
+      /* coit tower */
+      '<g stroke="' + N + '" stroke-width="' + SW + '" stroke-linejoin="round"><path d="M470 360 V140 L496 62 L522 140 V360Z" fill="#ead9b6"/><path d="M548 232 Q575 198 602 232" fill="#7f9a62"/><rect x="566" y="142" width="22" height="94" rx="2" fill="#efe2c4"/><rect x="561" y="134" width="32" height="11" rx="4" fill="#efe2c4"/><path d="M571 152 v14 M577 152 v14 M583 152 v14" stroke-width="1.4"/></g>' +
+      cone(1010, 236, .9) + cone(1030, 232, 1.1) + cone(1250, 232, 1) + cone(1272, 236, .8) +
+      /* wheel */
+      '<g stroke="' + N + '" stroke-width="4" stroke-linecap="round"><path d="M1130 146 L1088 328 M1130 146 L1172 328"/></g>' +
+      '<g class="wheel"><circle cx="1130" cy="146" r="' + (R + 3) + '" fill="#f3e6c8" stroke="' + N + '" stroke-width="' + SW + '"/>' + petals +
+        '<circle cx="1130" cy="146" r="' + R + '" fill="none" stroke="' + N + '" stroke-width="' + SW + '"/><circle cx="1130" cy="146" r="' + (R * .38) + '" fill="none" stroke="' + N + '" stroke-width="1.4"/>' +
+        '<circle cx="1130" cy="146" r="24" fill="#e2b252" stroke="' + N + '" stroke-width="' + SW + '"/><circle cx="1130" cy="146" r="7" fill="#f3e6c8" stroke="' + N + '" stroke-width="1.4"/></g>' +
+      /* near hill */
+      '<path d="M-10 330 Q200 282 420 306 T900 300 T1450 290 V360 H-10Z" fill="#8fa877"/>' +
+      '<path d="M-10 330 Q200 282 420 306 T900 300 T1450 290 V360 H-10Z" fill="url(#stip2)" opacity=".55" stroke="' + N + '" stroke-width="' + SW + '"/>' +
+      ladies +
+      tree(960, 312, 1, "#7f9a62") + tree(1002, 316, .85, "#93a978") + tree(1300, 304, 1.1, "#7f9a62") + tree(1350, 310, .9, "#6d8a5a") + tree(1408, 306, 1, "#93a978") +
+      tree(420, 312, .9, "#6d8a5a") + tree(152, 326, .8, "#7f9a62") + tree(196, 330, .7, "#93a978") +
+      /* cable car */
+      '<g stroke="' + N + '" stroke-width="' + SW + '" stroke-linejoin="round"><path d="M240 304 L380 272" stroke-width="1.6"/><g transform="translate(272 270) rotate(-12)"><rect x="0" y="0" width="68" height="32" rx="7" fill="#c4623f"/><rect x="0" y="-5" width="68" height="7" rx="3" fill="#e9d4a8"/><rect x="7" y="7" width="54" height="11" rx="2" fill="#f3e6c8"/><path d="M20 7 v11 M34 7 v11 M48 7 v11" stroke-width="1.3"/><rect x="-4" y="29" width="76" height="6" rx="3" fill="#e2b252"/></g></g>' +
+      /* flower beds + path */
+      flowers(40, 440, 334, 26) + flowers(880, 1420, 324, 30) +
+      '<path d="M0 352 Q360 326 720 346 T1440 340 V360 H0Z" fill="#5f7d55" stroke="' + N + '" stroke-width="' + SW + '"/>' +
+      '<path d="M0 347 C240 332 420 351 720 342 S1200 328 1440 345" fill="none" stroke="#f0dfbd" stroke-width="3" stroke-dasharray="1 11" stroke-linecap="round"/>' +
+    '</svg>';
+    document.getElementById("skyline").innerHTML = svg;
+  }
+
+  /* balloons rising, birds crossing */
+  function air(canvas){
+    var ctx = canvas.getContext("2d"), dpr = Math.min(devicePixelRatio || 1, 2), W, H, birds = [], balloons = [];
+    var BC = ["#c98a7e","#e2b252","#8fa877","#6f93b0","#a99cc4","#4f8582","#d39a6a"];
+    function size(){ W = canvas.offsetWidth; H = canvas.offsetHeight; canvas.width = W * dpr; canvas.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+    size(); addEventListener("resize", size);
+    function flock(){ var y = H * (.12 + Math.random() * .22), n = 3 + Math.floor(Math.random() * 3); for (var i = 0; i < n; i++) birds.push({ x: -40 - i * 30, y: y + (i % 2) * 14 - i * 4, v: 1.1 + Math.random() * .3, ph: Math.random() * 6 }); }
+    function spawn(initial){
+      var side = Math.random() < .5 ? Math.random() * .26 : .74 + Math.random() * .24;
+      var gold = !initial && Math.random() < .12;
+      balloons.push({ x: side * W, y: initial ? H * (.2 + Math.random() * .8) : H + 40, v: .22 + Math.random() * .28, r: 13 + Math.random() * 9, c: gold ? "#e8c45a" : BC[Math.floor(Math.random() * BC.length)], gold: gold, ph: Math.random() * 6 });
+    }
+    function drawBird(b, t){
+      var flap = Math.sin(t / 110 + b.ph) * 5;
+      ctx.save(); ctx.translate(b.x, b.y); ctx.strokeStyle = INK; ctx.lineWidth = 1.7; ctx.lineCap = "round";
+      ctx.beginPath(); ctx.moveTo(-9, -flap * .6); ctx.quadraticCurveTo(-4, -4 - flap, 0, 0); ctx.quadraticCurveTo(4, -4 - flap, 9, -flap * .6); ctx.stroke();
+      ctx.restore();
+    }
+    function drawBalloon(b, t){
+      var x = b.x + Math.sin(t / 1600 + b.ph) * 10, y = b.y, r = b.r;
+      ctx.save(); ctx.translate(x, y);
+      ctx.strokeStyle = "rgba(52,48,44,.55)"; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(0, r * 1.2 + 4); for (var i = 1; i < 6; i++) ctx.lineTo(Math.sin(t / 700 + i + b.ph) * 3, r * 1.2 + 4 + i * 9); ctx.stroke();
+      ctx.fillStyle = b.c; ctx.strokeStyle = INK; ctx.lineWidth = 1.8;
+      ctx.beginPath(); ctx.ellipse(0, 0, r, r * 1.18, 0, 0, 7); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(-3, r * 1.18); ctx.lineTo(3, r * 1.18); ctx.lineTo(0, r * 1.18 + 5); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "rgba(255,248,232,.55)"; ctx.beginPath(); ctx.ellipse(-r * .38, -r * .45, r * .18, r * .32, -.5, 0, 7); ctx.fill();
+      if (b.gold){ var tw = .5 + .5 * Math.sin(t / 180 + b.ph); ctx.fillStyle = "rgba(255,250,225," + tw.toFixed(2) + ")"; ctx.font = "14px serif"; ctx.fillText("\u2726", r * .5, -r * .7); }
+      ctx.restore();
+      b.sx = x;
+    }
+    var count = W < 760 ? 3 : 6, pops = [];
+    /* tap a balloon to pop it. Gold ones are lucky. */
+    canvas.parentNode.addEventListener("click", function(e){
+      if (e.target.closest("a, button")) return;
+      var rc = canvas.getBoundingClientRect(), px = e.clientX - rc.left, py = e.clientY - rc.top;
+      for (var i = balloons.length - 1; i >= 0; i--){
+        var b = balloons[i], bx = b.sx == null ? b.x : b.sx;
+        if (Math.pow((px - bx) / (b.r + 8), 2) + Math.pow((py - b.y) / (b.r * 1.18 + 8), 2) <= 1){
+          balloons.splice(i, 1);
+          for (var k = 0; k < 10; k++){ var a = k / 10 * Math.PI * 2; pops.push({ x: bx, y: b.y, vx: Math.cos(a) * 2.6, vy: Math.sin(a) * 2.6, c: b.c, life: 1 }); }
+          if (b.gold && window.JOY && window.JOY.confetti) window.JOY.confetti();
+          return;
+        }
+      }
+    });
+    canvas.parentNode.addEventListener("mousemove", function(e){
+      var rc = canvas.getBoundingClientRect(), px = e.clientX - rc.left, py = e.clientY - rc.top, over = false;
+      balloons.forEach(function(b){ var bx = b.sx == null ? b.x : b.sx; if (Math.pow((px - bx) / (b.r + 8), 2) + Math.pow((py - b.y) / (b.r * 1.18 + 8), 2) <= 1) over = true; });
+      canvas.parentNode.style.cursor = over ? "pointer" : "";
+    });
+    for (var i = 0; i < count; i++) spawn(true);
+    if (reduced){ balloons.forEach(function(b){ drawBalloon(b, 0); }); return; }
+    var visible = true, next = 800, last = 0;
+    new IntersectionObserver(function(e){ visible = e[0].isIntersecting; }).observe(canvas);
+    (function frame(t){
+      requestAnimationFrame(frame); if (!visible) return;
+      var dt = Math.min(t - last, 60); last = t; ctx.clearRect(0, 0, W, H);
+      balloons.forEach(function(b){ b.y -= b.v * dt / 16; drawBalloon(b, t); });
+      pops = pops.filter(function(p){ return p.life > 0; });
+      pops.forEach(function(p){ p.x += p.vx; p.y += p.vy; p.vy += .08; p.life -= .035; ctx.globalAlpha = Math.max(0, p.life); ctx.fillStyle = p.c; ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(p.x, p.y, 3.2, 0, 7); ctx.fill(); ctx.stroke(); ctx.globalAlpha = 1; });
+      balloons = balloons.filter(function(b){ return b.y > -80; });
+      while (balloons.length < count) spawn(false);
+      next -= dt; if (next < 0){ flock(); next = 10000 + Math.random() * 7000; }
+      birds = birds.filter(function(b){ return b.x < W + 60; });
+      birds.forEach(function(b){ b.x += b.v * dt / 16; b.y += Math.sin(t / 500 + b.ph) * .2; drawBird(b, t); });
+    })(0);
+  }
+
+  /* bunting */
+  if (document.getElementById("bunting")) (function(){
+    var n = 18, f = "", cols = ["#c4623f","#e2b252","#8fa877","#6f93b0","#c98a7e","#a99cc4"];
+    for (var i = 0; i < n; i++){ var x = (i + .5) / n * 1000, y = 10 + Math.sin((i + .5) / n * Math.PI) * 30; f += '<path d="M' + (x - 20) + ' ' + (y - 2) + ' L' + (x + 20) + ' ' + (y + 2) + ' Q' + (x + 4) + ' ' + (y + 24) + ' ' + x + ' ' + (y + 36) + ' Q' + (x - 4) + ' ' + (y + 24) + ' ' + (x - 20) + ' ' + (y - 2) + 'Z" fill="' + cols[i % 6] + '" stroke="' + INK + '" stroke-width="1.6" stroke-linejoin="round"/>'; }
+    document.getElementById("bunting").innerHTML = '<svg viewBox="0 0 1000 70" preserveAspectRatio="none"><path d="M0 8 Q500 76 1000 8" fill="none" stroke="' + INK + '" stroke-width="1.6"/>' + f + '</svg>';
+  })();
+
+  /* nav appears once the island scrolls away */
+  (function(){
+    var isl = document.getElementById("island"), hdr = document.getElementById("site-header");
+    if (!isl || !hdr) return;
+    function check(){ hdr.classList.toggle("show", isl.getBoundingClientRect().bottom < 140); }
+    addEventListener("scroll", check, { passive: true }); addEventListener("resize", check); check();
+  })();
+
+  /* countdown to the gates */
+  (function(){
+    var el = document.getElementById("countdown"); if (!el) return;
+    var open = new Date("2027-01-16T08:45:00-08:00"), end = new Date("2027-01-17T17:00:00-08:00"), now = new Date();
+    var days = Math.ceil((open - now) / 864e5);
+    el.textContent = now > end ? "Thanks for riding. See you next year." : now >= open ? "The park is open." : days === 1 ? "Gates open tomorrow." : "Gates open in " + days + " days";
+    el.hidden = false;
+  })();
+
+  if (hasSky){
+    skyline(); air(document.getElementById("air"));
+    placeBulbs(); addEventListener("resize", placeBulbs);
+    if (document.fonts) document.fonts.ready.then(placeBulbs);
+  }
+
+  /* wish balloons: write a wish, let it float away. Nothing is stored or sent. */
+  (function(){
+    var form = document.getElementById("wish"), air = document.getElementById("wish-air"), input = document.getElementById("wish-text"), count = document.getElementById("wish-count");
+    if (!form) return;
+    var cols = ["#e98a9a","#9cc3a0","#a7a4e0","#f6c86b","#7cc4cc","#f2a07b"], n = 0;
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      var text = input.value.trim(); if (!text) return;
+      var b = document.createElement("div"); b.className = "wish__balloon";
+      b.style.setProperty("--c", cols[n % cols.length]); b.style.setProperty("--x", (30 + Math.random() * 40) + "%"); b.style.setProperty("--sway", (Math.random() * 60 - 30) + "px");
+      var body = document.createElement("span"); body.className = "wish__body";
+      var tag = document.createElement("span"); tag.className = "wish__tag"; tag.textContent = text;
+      b.appendChild(body); b.appendChild(tag); air.appendChild(b);
+      n++; input.value = "";
+      count.textContent = n === 1 ? "Your wish is on its way. Make another?" : n + " wishes floating up. The park is listening.";
+      setTimeout(function(){ b.remove(); }, reduced ? 2500 : 9000);
+    });
+  })();
+
+  var fin = document.getElementById("finale"), fired = false;
+  if (fin) fin.addEventListener("mouseover", function(e){
+    if (fired || !e.target.closest(".btn")) return; fired = true; window.JOY.confetti(); setTimeout(function(){ fired = false; }, 3000);
+  });
+})();

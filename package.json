@@ -1,0 +1,11 @@
+{
+  "name": "joycon",
+  "version": "1.0.0",
+  "private": true,
+  "description": "JoyCon, a festival of joy and human connection. San Francisco, January 16 to 17, 2027.",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": { "node": ">=18" }
+}

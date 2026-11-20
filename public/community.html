@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Community Schedule · JoyCon</title>
+<meta name="description" content="Sunday, January 17. Rides made by the JoyCon community all across San Francisco. Find one, or add your own.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="JoyCon">
+<meta property="og:title" content="Community Schedule · JoyCon">
+<meta property="og:description" content="Sunday, January 17. Rides made by the JoyCon community all across San Francisco. Find one, or add your own.">
+<meta property="og:image" content="/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="JoyCon, January 16 to 17, 2027, San Francisco. A stained glass ferris wheel over the city.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#d4ab74">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..900,0..100,0..1;1,9..144,400..900,0..100,0..1&family=Figtree:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=Caveat:wght@600&family=Patrick+Hand&family=Patrick+Hand+SC&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body data-page="community">
+<a class="skip" href="#main">Skip to content</a>
+<header id="site-header"></header>
+<main id="main">
+
+<header class="page-head"><div class="wrap">
+  <p class="eyebrow">Sunday, January 17 · 8:00 AM to 2:00 PM</p>
+  <h1>Community Schedule</h1>
+  <p class="lede">On Sunday, the park is everywhere. These rides are made by the people who come. Pick a few, hop between them, or build your own.</p>
+  <p style="margin-top:22px;display:flex;gap:12px;flex-wrap:wrap"><a class="btn" href="#add">Add your ride</a><a class='btn btn--ghost' href='/weekend#sunday'>How Sunday works</a></p>
+</div></header>
+
+<section class="section" style="padding-top:8px" aria-labelledby="sched-h">
+  <div class="wrap">
+    <h2 id="sched-h" class="sr-only">Rides on Sunday</h2>
+    <form class="filters" id="filters" role="search" aria-label="Filter rides" onsubmit="return false">
+      <div class="field"><label for="f-q">Search</label><input class="input" id="f-q" type="search" placeholder="Picnic, karaoke, North Beach..."></div>
+      <div class="field"><label for="f-time">Time of day</label><select class="select" id="f-time">
+        <option value="">Any time</option><option value="morning">Morning (8 to 12)</option><option value="afternoon">Afternoon (12 to 2)</option></select></div>
+      <div class="field"><label for="f-hood">Neighborhood</label><select class="select" id="f-hood"><option value="">Anywhere</option></select></div>
+      <div class="field"><label for="f-joy">Type of joy</label><select class="select" id="f-joy"><option value="">Any joy</option></select></div>
+    </form>
+    <div class="results-bar"><span id="results-count" aria-live="polite"></span><button class="linkish" type="button" id="f-clear" hidden>Clear filters</button></div>
+    <div id="rides"></div>
+  </div>
+</section>
+
+<section class="section" id="add" aria-labelledby="add-h" style="padding-top:20px">
+  <div class="wrap" style="max-width:860px">
+    <p class="eyebrow">Open to everyone</p>
+    <h2 id="add-h">Add your ride</h2>
+    <p class="lede">Got an idea for Sunday? Make an event on Luma or Partiful, then drop it here. Small and strange is welcome. A ten minute ride counts.</p>
+    <ol class="how">
+      <li><strong>Make your event</strong>Create it on Luma or Partiful so people can RSVP.</li>
+      <li><strong>Add it here</strong>Fill out the form below. Takes two minutes.</li>
+      <li><strong>We take a look</strong>A human reviews it, then it shows up on the schedule.</li>
+    </ol>
+    <div class="form-panel" id="ride-panel" style="margin-top:28px">
+      <div class="notice" id="api-notice" hidden>Heads up: submissions aren't connected yet. Paste the Apps Script URL into <code>data/site.js</code> (see README).</div>
+      <form class="form" id="ride-form" name="ride-submission" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+        <input type="hidden" name="form-name" value="ride-submission">
+        <p class="hp"><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+        <div class="field"><label for="r-name">Experience name</label><input class="input" id="r-name" name="name" required maxlength="80" aria-describedby="r-name-err"><span class="err" id="r-name-err"></span></div>
+        <div class="field"><label for="r-host">Host name(s) or team name</label><input class="input" id="r-host" name="host" required maxlength="80" aria-describedby="r-host-err"><span class="err" id="r-host-err"></span></div>
+        <div class="form-row">
+          <div class="field"><label for="r-start">Starts</label><select class="select" id="r-start" name="start" required aria-describedby="r-time-hint r-start-err"></select><span class="err" id="r-start-err"></span></div>
+          <div class="field"><label for="r-end">Ends</label><select class="select" id="r-end" name="end" required aria-describedby="r-time-hint r-end-err"></select><span class="err" id="r-end-err"></span></div>
+        </div>
+        <p class="hint muted" id="r-time-hint" style="margin:-10px 0 0;font-size:.88rem">Sunday, January 17, anytime between 8:00 AM and 2:00 PM.</p>
+        <div class="form-row">
+          <div class="field"><label for="r-hood">Neighborhood</label><select class="select" id="r-hood" name="neighborhood" required aria-describedby="r-hood-err"><option value="">Pick one</option></select><span class="err" id="r-hood-err"></span></div>
+          <div class="field"><label for="r-joy">Type of joy</label><select class="select" id="r-joy" name="joyType" required aria-describedby="r-joy-err"><option value="">Pick one</option></select><span class="err" id="r-joy-err"></span></div>
+        </div>
+        <div class="field"><label for="r-spot">Address or meeting spot <span class="opt">(optional)</span></label><input class="input" id="r-spot" name="spot" maxlength="140" placeholder="Washington Square Park, by the big tree. Or: revealed on RSVP"></div>
+        <div class="field"><label for="r-desc">Short description</label><textarea class="textarea" id="r-desc" name="description" required maxlength="280" aria-describedby="r-desc-count r-desc-err"></textarea>
+          <span class="counter" id="r-desc-count">0 / 280</span><span class="err" id="r-desc-err"></span></div>
+        <div class="form-row">
+          <div class="field"><label for="r-link">Luma or Partiful link</label><input class="input" id="r-link" name="link" type="url" required inputmode="url" placeholder="https://lu.ma/..." aria-describedby="r-link-err"><span class="err" id="r-link-err"></span></div>
+          <div class="field"><label for="r-cap">Capacity <span class="opt">(optional)</span></label><input class="input" id="r-cap" name="capacity" type="number" min="1" max="10000" inputmode="numeric" placeholder="e.g. 12"></div>
+        </div>
+        <div class="field"><label for="r-img">Image <span class="opt">(optional)</span></label>
+          <div class="file-drop"><input id="r-img" name="image" type="file" accept="image/*"><img id="r-img-preview" alt="" hidden></div>
+          <span class="hint">Square-ish works best. We'll shrink it for you.</span></div>
+        <div class="field"><label for="r-email">Your email</label><input class="input" id="r-email" name="email" type="email" required autocomplete="email" aria-describedby="r-email-hint r-email-err">
+          <span class="hint" id="r-email-hint">Private. Only the JoyCon team sees it, in case we have a question. Never shown on the site.</span><span class="err" id="r-email-err"></span></div>
+        <p class="form-status" id="ride-status" role="alert"></p>
+        <div><button class="btn btn--big" type="submit">Add my ride</button></div>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+<footer id="site-footer"></footer>
+<script src="data/site.js"></script>
+<script src="data/schedule.js"></script>
+<script src="data/proof.js"></script>
+<script src="data/people.js"></script>
+<script src="assets/site.js"></script>
+<script src="assets/community.js"></script>
+</body>
+</html>

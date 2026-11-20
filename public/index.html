@@ -127,9 +127,10 @@
         <p>Dispatches from rides we've already run</p>
       </div>
       <div class="bunting" id="bunting" aria-hidden="true"></div>
-      <div class="marquee" id="marquee" aria-label="Things people said"></div>
-      <p class="swipe-hint" aria-hidden="true">swipe for more &rarr;</p>
-      <div class="collage" id="collage"></div>
+      <p class="fridge__hint">Drag anything around. Crack open a fortune cookie.</p>
+    </div>
+    <div class="fridge" id="fridge" aria-label="Photos, notes and fortunes from rides we've run"></div>
+    <div class="wrap">
       <div class="proof__end">
         <p>Your turn.</p>
         <span data-cta="btn--big btn--ticket"></span>
@@ -141,34 +142,30 @@
 
   <!-- TWO DAYS -->
   <section class="section days" aria-labelledby="days-h">
-    <div class="days__map" aria-hidden="true">
-      <svg viewBox="0 0 1000 600" preserveAspectRatio="none">
-        <path class="days__path" d="M180 160 C 260 320, 80 380, 300 430 S 600 250, 700 360 S 860 520, 820 590" vector-effect="non-scaling-stroke"/>
-      </svg>
-    </div>
     <div class="wrap">
       <div class="center"><p class="eyebrow">Two days, two doors</p><h2 id="days-h">Fill up. Then give it away.</h2></div>
-      <div class="days__grid">
-        <a class='door reveal' href='/weekend#saturday' style='--door:#f9ce88'>
-          <span class="day">Day 1 · Saturday, Jan 16</span>
-          <h3>Find the joy within</h3>
-          <p>One group, a historic church in North Beach, and a day of rides built around specific kinds of joy. Then out into the city with no map and no phone, and a concert at SF Foundry to close the day.</p>
-          <span class="go">See Saturday →</span>
-        </a>
-        <a class='door reveal' href='/weekend#sunday' style='--door:#a8d2b0'>
-          <span class="day">Day 2 · Sunday, Jan 17</span>
-          <h3>Give it away</h3>
-          <p>Teams spread across San Francisco and run the rides they dreamed up. Anyone can host. Then we all meet at SF Foundry for the closing ceremony and tea rave.</p>
-          <span class="go">See Sunday →</span>
-        </a>
-      </div>
+    </div>
+    <div class="facade">
+      <img class="facade__art" src="assets/img/two-doors.webp" alt="" width="1376" height="768" loading="lazy" decoding="async">
+      <a class="door2 door2--sat" href="/weekend#saturday">
+        <span class="door2__date">Sat. Jan 16</span>
+        <h3 class="door2__title">Find the joy within</h3>
+        <p class="door2__text">One group, a historic church in North Beach, and a day of rides built around specific kinds of joy. Then out into the city with no map and no phone, and a concert at SF Foundry to close the day.</p>
+        <span class="door2__go">See Saturday →</span>
+      </a>
+      <a class="door2 door2--sun" href="/weekend#sunday">
+        <span class="door2__date">Sun. Jan 17</span>
+        <h3 class="door2__title">Give it away</h3>
+        <p class="door2__text">Teams spread across San Francisco and run the rides they dreamed up. Anyone can host. Then we all meet at SF Foundry for the closing ceremony and tea rave.</p>
+        <span class="door2__go">See Sunday →</span>
+      </a>
     </div>
   </section>
 
   <!-- JOY SORT TEASER -->
   <section class="section joy-teaser" aria-labelledby="jt-h">
     <div class="wrap jt">
-      <div class="jt__ticket" aria-hidden="true"><span>Admit one</span><strong>?</strong><span>Your joy</span></div>
+      <div class="jt__mag" id="mag-home" aria-hidden="true"></div>
       <div>
         <p class="eyebrow">Sixty seconds</p>
         <h2 id="jt-h">What joy are you missing?</h2>
@@ -210,5 +207,7 @@
 <script src="data/people.js"></script>
 <script src="assets/site.js"></script>
 <script src="assets/home.js"></script>
+<script src="assets/fridge.js"></script>
+<script src="assets/magnifier.js"></script>
 </body>
 </html>

@@ -1,5 +1,7 @@
 /* Proof of Joy. Photos and social posts for the home page collage.
 
+   The six photos below are AI-generated stand-ins (Krea). Swap in real ones when you have them.
+
    PHOTOS: drop image files into assets/photos/ and point "image" at them.
    Leave image empty ("") to show an illustrated placeholder print.
    Optional: "srcset" for responsive sizes, e.g. "assets/photos/safari-1-600.webp 600w, assets/photos/safari-1-1200.webp 1200w"
@@ -15,24 +17,24 @@
 window.JOY = window.JOY || {};
 
 JOY.gallery = [
-  { id: "p1", image: "", ride: "Joy Safari", date: "[Month Year]",
+  { id: "p1", image: "assets/photos/proof-1.webp", ride: "Joy Safari", date: "[Month Year]",
     caption: "No map. No phone. [one-line memory]",
-    alt: "[Describe the photo: who, where, what's happening]" },
-  { id: "p2", image: "", ride: "Joy Safari", date: "[Month Year]",
+    alt: "Five friends laughing as they walk down a steep San Francisco street lined with pastel Victorian houses." },
+  { id: "p2", image: "assets/photos/proof-2.webp", ride: "Joy Safari", date: "[Month Year]",
     caption: "[one-line memory]",
-    alt: "[Describe the photo]" },
-  { id: "p3", image: "", ride: "Stonefruit Omakase", date: "[Month Year]",
+    alt: "Two friends outside a neighborhood bakery, one holding a croissant up to the camera mid-laugh." },
+  { id: "p3", image: "assets/photos/proof-3.webp", ride: "Stonefruit Omakase", date: "[Month Year]",
     caption: "[one-line memory]",
-    alt: "[Describe the photo]" },
-  { id: "p4", image: "", ride: "Joy Safari", date: "[Month Year]",
+    alt: "Hands passing a single halved peach on a small ceramic plate across a candlelit dinner table." },
+  { id: "p4", image: "assets/photos/proof-4.webp", ride: "Joy Safari", date: "[Month Year]",
     caption: "[one-line memory]",
-    alt: "[Describe the photo]" },
-  { id: "p5", image: "", ride: "Magic Glasses Dinner", date: "[Month Year]",
+    alt: "A small group doing a secret handshake in a foggy San Francisco park, everyone laughing." },
+  { id: "p5", image: "assets/photos/proof-5.webp", ride: "Magic Glasses Dinner", date: "[Month Year]",
     caption: "[one-line memory]",
-    alt: "[Describe the photo]" },
-  { id: "p6", image: "", ride: "Joy Safari", date: "[Month Year]",
+    alt: "Dinner guests in kaleidoscope novelty glasses toasting under string lights." },
+  { id: "p6", image: "assets/photos/proof-6.webp", ride: "Joy Safari", date: "[Month Year]",
     caption: "[one-line memory]",
-    alt: "[Describe the photo]" }
+    alt: "Two guests holding a hand-drawn map, welcomed by kids in paper crowns at a backyard birthday party." }
 ];
 
 JOY.posts = [

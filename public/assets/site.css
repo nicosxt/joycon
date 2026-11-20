@@ -1243,3 +1243,112 @@ body{ font-family: var(--f-text); background: var(--c-dutch); }
 h1, h2, h3, h4{ font-family: var(--f-text); font-weight: 700; font-style: normal; font-variation-settings: normal; letter-spacing: 0; }
 .brand, .brand:hover, .footer__mark{ font-family: var(--f-title); font-weight: 900; font-style: normal; font-variation-settings: normal; letter-spacing: 0; }
 .letter__dear, .letter__sig{ font-family: var(--f-text) !important; }
+
+/* =====================================================================
+   HOME HERO: ticket front and center, "Find your joy" as a speech bubble
+   ===================================================================== */
+.hero__actions--stage{ position: relative; display: flex; justify-content: center; align-items: center; margin-top: 8px; }
+.joy-bubble{
+  position: absolute; left: calc(50% + 13rem); top: -2.4rem;
+  display: inline-block; text-decoration: none; color: var(--c-ink);
+  animation: joy-bob 3.6s ease-in-out infinite; transform-origin: 0% 100%;
+}
+.joy-bubble__text{
+  position: relative; display: block; white-space: nowrap;
+  font-family: var(--f-text); font-weight: 600; font-size: 1.3rem; line-height: 1;
+  padding: .85em 1.3em; background: var(--c-dutch-light);
+  border: 2px solid var(--c-ink); border-radius: 50% / 46%;
+  box-shadow: 3px 4px 0 var(--c-ink);
+  transition: background .2s, transform .2s;
+}
+/* tail pointing back at the ticket */
+.joy-bubble__text::before, .joy-bubble__text::after{ content: ""; position: absolute; left: 12%; top: 100%; width: 0; height: 0; border-style: solid; }
+.joy-bubble__text::before{ margin-top: 0; border-width: 18px 0 0 22px; border-color: var(--c-ink) transparent transparent transparent; transform: translate(-6px, -1px) skewX(18deg); }
+.joy-bubble__text::after{ border-width: 13px 0 0 16px; border-color: var(--c-dutch-light) transparent transparent transparent; transform: translate(-3px, -3px) skewX(18deg); }
+.joy-bubble:hover .joy-bubble__text, .joy-bubble:focus-visible .joy-bubble__text{ background: var(--c-carissma-tint); transform: scale(1.06) rotate(-2deg); }
+.joy-bubble:hover .joy-bubble__text::after, .joy-bubble:focus-visible .joy-bubble__text::after{ border-top-color: var(--c-carissma-tint); }
+.joy-bubble:focus-visible{ outline: none; }
+.joy-bubble:focus-visible .joy-bubble__text{ outline: 3px solid var(--c-lochmara); outline-offset: 4px; }
+@keyframes joy-bob{
+  0%, 100%{ transform: translate(0, 0) rotate(-4deg); }
+  30%{ transform: translate(3px, -7px) rotate(-1deg); }
+  60%{ transform: translate(-2px, -3px) rotate(-6deg); }
+}
+@media (max-width: 760px){
+  .hero__actions--stage{ flex-direction: column; gap: 30px; }
+  .joy-bubble{ position: relative; left: auto; top: auto; order: -1; margin-left: 5rem; }
+}
+
+/* =====================================================================
+   FLAGLINE: tilted string of colorful pennants that roll as you scroll
+   ===================================================================== */
+.flagline{ position: relative; height: 92px; overflow: hidden; pointer-events: none; }
+.flagline__rig{ position: absolute; left: -6%; right: -6%; top: 50%; height: 0; transform: rotate(-2.2deg); }
+.flagline__rig::before{ content: ""; position: absolute; left: 0; right: 0; top: -1px; border-top: 2px solid var(--c-ink); }
+.flagline__track{ position: absolute; left: 0; top: 0; display: flex; will-change: transform; }
+.flagline__flag{ flex: 0 0 auto; width: 52px; display: flex; justify-content: center; }
+.flagline__flag svg{ display: block; width: 40px; height: 46px; transform-origin: 50% 0; animation: flag-flutter 2.4s ease-in-out infinite; }
+@keyframes flag-flutter{ 0%, 100%{ transform: rotate(-5deg); } 50%{ transform: rotate(5deg); } }
+@media (prefers-reduced-motion: reduce){
+  .joy-bubble, .flagline__flag svg{ animation: none; }
+}
+
+/* =====================================================================
+   LETTER: a real sheet of ruled writing paper, handwritten, stamped
+   ===================================================================== */
+:root{ --f-letter: "Caveat", "Agrave Pro", cursive; }
+.letter-sec{ padding-block: clamp(28px, 5vw, 56px); }
+.letter{
+  --lh: 1.9rem; --margin: clamp(40px, 7vw, 76px);
+  max-width: 880px; margin: 0 auto; position: relative; border: 0; border-radius: 2px;
+  padding: calc(var(--lh) * 3) clamp(20px, 5vw, 56px) calc(var(--lh) * 1.5) calc(var(--margin) + clamp(12px, 2vw, 22px));
+  color: #1f3e5a; transform: rotate(-.6deg);
+  background-color: #fbf6ea;
+  background-image:
+    /* fold creases */
+    linear-gradient(180deg, transparent 32.8%, rgba(42,36,32,.07) 33.2%, rgba(255,255,255,.55) 33.6%, transparent 34.4%, transparent 65.8%, rgba(42,36,32,.07) 66.2%, rgba(255,255,255,.55) 66.6%, transparent 67.4%),
+    /* red margin rule */
+    linear-gradient(90deg, transparent calc(var(--margin) - 1px), rgba(226,86,44,.5) calc(var(--margin) - 1px), rgba(226,86,44,.5) calc(var(--margin) + 1px), transparent calc(var(--margin) + 1px)),
+    /* paper fibre */
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .38  0 0 0 0 .28  0 0 0 .09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),
+    /* blue ruled lines */
+    repeating-linear-gradient(180deg, transparent 0 calc(var(--lh) - 1px), rgba(5,136,196,.26) calc(var(--lh) - 1px) var(--lh)),
+    /* faint age at the edges */
+    radial-gradient(120% 90% at 50% 45%, transparent 60%, rgba(181,118,16,.12) 100%);
+  background-position: 0 0, 0 0, 0 0, 0 calc(var(--lh) * -.18), 0 0;
+  box-shadow: 0 1px 0 rgba(42,36,32,.12), 0 2px 3px rgba(42,36,32,.12), 0 22px 40px -18px rgba(42,36,32,.45);
+}
+.letter::after{ display: none; }
+/* binder holes down the left edge */
+.letter::before{ content: ""; position: absolute; left: calc(var(--margin) * .38); top: 12%; bottom: 12%; width: 14px;
+  background: radial-gradient(circle 6px at 7px 50%, var(--c-dutch) 5.5px, rgba(42,36,32,.18) 6.5px, transparent 7px) 0 0 / 14px 33.33% repeat-y; }
+.letter p, .letter .letter__dear, .letter .letter__sig, .letter .with{
+  font-family: var(--f-letter) !important; font-weight: 500; font-size: 1.42rem !important; line-height: var(--lh);
+  margin: 0; color: inherit; font-style: normal; letter-spacing: .005em; font-variation-settings: normal;
+}
+.letter p + p{ text-indent: 1.6em; }
+.letter .letter__dear{ font-size: 1.75rem !important; font-weight: 700; color: inherit !important; margin-bottom: 0; }
+.letter .letter__sign{ margin-top: var(--lh); padding-left: 45%; text-indent: 0; }
+.letter .letter__sign p{ text-indent: 0; }
+.letter .letter__sig{ font-weight: 700; font-size: 1.6rem !important; color: inherit; }
+.letter .letter__sig span{ font-weight: 500; }
+/* ink: tiny wobble so it doesn't read as type */
+.letter p:nth-child(odd){ transform: rotate(-.25deg); }
+.letter p:nth-child(even){ transform: rotate(.2deg) translateX(1px); }
+.letter .seal{ width: 78px; height: 78px; bottom: -22px; right: 6%; }
+
+/* the stamp, with a postmark over it */
+.lstamp{ position: absolute; top: 18px; right: 22px; width: 90px; height: 110px; transform: rotate(3.5deg); z-index: 1; }
+.lstamp__paper{ display: block; width: 90px; height: 110px; filter: drop-shadow(0 1px 1px rgba(42,36,32,.35)) drop-shadow(0 3px 4px rgba(42,36,32,.15)); }
+.lstamp__art{ display: block; width: 100%; height: 100%; }
+.lpostmark{ position: absolute; left: -96px; top: 34px; width: 170px; height: 80px; color: rgba(31,62,90,.62); transform: rotate(-9deg); pointer-events: none; }
+@media (max-width: 600px){
+  .letter{ --lh: 1.5rem; --margin: 30px; transform: none; padding: calc(var(--lh) * 4) 14px var(--lh) 40px; }
+  .letter p, .letter .with{ font-size: 1.14rem !important; }
+  .letter .letter__dear{ font-size: 1.4rem !important; }
+  .letter .letter__sig{ font-size: 1.3rem !important; }
+  .letter .seal{ width: 60px; height: 60px; bottom: -16px; right: auto; left: 8px; }
+  .letter .letter__sign{ padding-left: 20%; }
+  .lstamp{ top: 10px; right: 12px; transform: rotate(3.5deg) scale(.72); transform-origin: top right; }
+  .letter::before{ display: none; }
+}

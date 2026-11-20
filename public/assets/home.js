@@ -172,6 +172,33 @@
     document.getElementById("bunting").innerHTML = '<svg viewBox="0 0 1000 70" preserveAspectRatio="none"><path d="M0 8 Q500 76 1000 8" fill="none" stroke="' + INK + '" stroke-width="1.6"/>' + f + '</svg>';
   })();
 
+  /* flagline: tilted pennants that roll left to right as you scroll */
+  (function(){
+    var lines = [].slice.call(document.querySelectorAll(".flagline")); if (!lines.length) return;
+    var cols = ["#e2562c", "#f79c09", "#35a468", "#0588c4", "#e9809c"], STEP = 52, PERIOD = STEP * cols.length;
+    function flag(c, i){
+      return '<span class="flagline__flag"><svg viewBox="0 0 40 46" style="animation-delay:' + (-(i % 7) * .35).toFixed(2) + 's">' +
+        '<path d="M2 1 L38 1 Q24 18 20 44 Q16 18 2 1Z" fill="' + c + '" stroke="' + INK + '" stroke-width="1.8" stroke-linejoin="round"/>' +
+        '<path d="M8 5 Q20 9 31 5" fill="none" stroke="#faf3e4" stroke-width="1.6" stroke-linecap="round" opacity=".55"/></svg></span>';
+    }
+    function build(){
+      lines.forEach(function(el){
+        var n = Math.ceil((el.offsetWidth * 1.2 + PERIOD * 2) / STEP), html = "";
+        for (var i = 0; i < n; i++) html += flag(cols[i % cols.length], i);
+        el.innerHTML = '<div class="flagline__rig"><div class="flagline__track">' + html + '</div></div>';
+      });
+      roll();
+    }
+    function roll(){
+      var off = reduced ? 0 : (scrollY * .6) % PERIOD;
+      lines.forEach(function(el){ var t = el.querySelector(".flagline__track"); if (t) t.style.transform = "translateX(" + (off - PERIOD).toFixed(1) + "px)"; });
+    }
+    var ticking = false;
+    addEventListener("scroll", function(){ if (!ticking){ ticking = true; requestAnimationFrame(function(){ ticking = false; roll(); }); } }, { passive: true });
+    var rt; addEventListener("resize", function(){ clearTimeout(rt); rt = setTimeout(build, 150); });
+    build();
+  })();
+
   /* nav appears once the island scrolls away */
   (function(){
     var isl = document.getElementById("island"), hdr = document.getElementById("site-header");

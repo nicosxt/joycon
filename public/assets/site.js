@@ -136,7 +136,52 @@
   if (page.indexOf(".") === -1) page = (page ? page + ".html" : "index.html");
   var cta = S.cta || { label: "Get tickets", url: "#" };
   var ctaAttrs = 'href="' + esc(cta.url) + '"' + (/^https?:/.test(cta.url) ? ' target="_blank" rel="noopener"' : "");
-  J.ctaHTML = function(cls, label){ return '<a class="btn btn--gold ' + (cls || "") + '" ' + ctaAttrs + '>' + esc(label || cta.label) + '</a>'; };
+  /* "Save a seat" is a vintage ride ticket. Each one on a page is the next ticket
+     off the roll: paper color, series letter, and serial number advance. */
+  var TIX = [
+    { paper: "salmon", series: "J" },
+    { paper: "mint",   series: "O" },
+    { paper: "lilac",  series: "Y" }
+  ];
+  var tixCount = 0;
+  var ctaAria = function(label){ return esc(label + ", " + (S.dates || "") + (/^https?:/.test(cta.url) ? " (opens in a new tab)" : "")); };
+  J.ctaHTML = function(cls, label){
+    var t = TIX[tixCount % TIX.length], serial = String(11627 + tixCount).padStart(6, "0");
+    tixCount++;
+    label = label || cta.label;
+    return '<a class="tix tix--' + t.paper + '" ' + ctaAttrs + ' aria-label="' + ctaAria(label) + '">' +
+      '<span class="tix__paper" aria-hidden="true"><span class="tix__sheet"></span></span>' +
+      '<span class="tix__print" aria-hidden="true">' +
+        '<span class="tix__face">' +
+          '<span class="tix__good">Good for</span>' +
+          '<span class="tix__label">' + esc(label) + '</span>' +
+          '<span class="tix__fine">Admit one · ' + esc(S.datesShort || "") + '</span>' +
+          '<span class="tix__note">(no refunds on joy)</span>' +
+        '</span>' +
+        '<span class="tix__foot">' + esc(S.name || "JoyCon") + ' at the Bay, S. F.</span>' +
+        '<span class="tix__serial"><b>' + t.series + '</b>' + serial + '</span>' +
+      '</span>' +
+      '<span class="tix__sig" aria-hidden="true">Wonka</span>' +
+    '</a>';
+  };
+  /* compact version for the nav bar */
+  J.ctaMiniHTML = function(extra, showDates){
+    return '<a class="tix tix--mini tix--salmon ' + (extra || "") + '" ' + ctaAttrs + ' aria-label="' + ctaAria(cta.label) + '">' +
+      '<span class="tix__paper" aria-hidden="true"><span class="tix__sheet"></span></span>' +
+      '<span class="tix__print" aria-hidden="true">' +
+        '<span class="tix__label">' + esc(cta.label) + '</span>' +
+        (showDates ? '<span class="tix__stub">' + esc(S.datesChip || "Jan 16 to 17") + '</span>' : '') +
+      '</span>' +
+    '</a>';
+  };
+  /* SVG filters for the torn paper edge and slightly worn ink, defined once per page */
+  if (!document.getElementById("tix-filters")){
+    document.body.insertAdjacentHTML("beforeend",
+      '<svg id="tix-filters" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">' +
+        '<filter id="tix-edge" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="R" yChannelSelector="G"/></filter>' +
+        '<filter id="tix-ink"><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="1" seed="9" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="1.1" xChannelSelector="R" yChannelSelector="G"/></filter>' +
+      '</svg>');
+  }
 
   var header = $("#site-header");
   if (header){
@@ -144,12 +189,12 @@
     header.innerHTML =
       '<div class="wrap nav">' +
         '<a class="brand" href="index.html" aria-label="JoyCon home">JoyCon<span class="brand__sub">a festival of joy · San Francisco</span></a>' +
-        '<a class="nav__chip nav__cta-mobile" ' + ctaAttrs + '>' + esc(cta.label) + ' <span aria-hidden="true">↗</span></a>' +
+        J.ctaMiniHTML("nav__cta-mobile", false) +
         '<button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-links">Menu <span aria-hidden="true">✦</span></button>' +
         '<ul class="nav__links" id="nav-links">' +
           NAV.map(function(n){ return '<li><a href="' + n[0] + '"' + (page === n[0] ? ' aria-current="page"' : "") + '>' + n[1] + '</a></li>'; }).join("") +
         '</ul>' +
-        '<a class="nav__chip nav__cta" ' + ctaAttrs + '>' + esc(S.datesChip || "Jan 16 to 17") + ' · ' + esc(cta.label) + ' <span aria-hidden="true">↗</span></a>' +
+        J.ctaMiniHTML("nav__cta", true) +
       '</div>';
     var tog = $(".nav__toggle", header), links = $("#nav-links");
     tog.addEventListener("click", function(){

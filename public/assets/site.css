@@ -1539,7 +1539,7 @@ h1, h2, h3, h4{ font-family: var(--f-text); font-weight: 700; font-style: normal
 .mail .letter{
   --lh: 1.72rem;
   position: absolute; left: 50%; top: 0; z-index: 2; width: min(470px, 92vw); margin: 0 0 0 calc(min(470px, 92vw) / -2); max-width: none;
-  min-height: calc(min(470px, 92vw) * 575 / 374);
+  min-height: calc(min(470px, 92vw) * 573 / 438);
   padding: 30px 34px 34px; border: 0; border-radius: 4px; color: #1f3e5a;
   background: url("img/postcard.webp") center / 100% 100% no-repeat; background-color: transparent;
   box-shadow: 0 2px 3px rgba(42,36,32,.18), 0 24px 40px -20px rgba(42,36,32,.55);

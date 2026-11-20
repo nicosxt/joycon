@@ -53,7 +53,7 @@
   function open(){
     if (state !== "closed") return;
     state = "opening"; btn.setAttribute("aria-expanded", "true"); btn.disabled = true;
-    var T = reduced ? [0, 0, 0, 0] : [0, 650, 1650, 2500];
+    var T = reduced ? [0, 0, 0, 0] : [0, 330, 830, 1100];
     mail.classList.add("is-flap");
     burst();
     setTimeout(function(){                                   // slide out of the envelope
@@ -72,8 +72,6 @@
     }, T[2]);
     setTimeout(function(){                                   // write the words
       state = "open"; mail.classList.add("is-open");
-      var per = reduced ? 0 : Math.min(38, 5200 / words.length);
-      words.forEach(function(w, i){ w.style.transitionDelay = (i * per / 1000).toFixed(3) + "s"; });
       setTimeout(function(){ mail.classList.add("is-writing"); }, 30);
       setTimeout(function(){ letter.style.clipPath = ""; }, 100);
     }, T[3]);

@@ -165,24 +165,17 @@
     })(0);
   }
 
-  /* bunting */
-  if (document.getElementById("bunting")) (function(){
-    var n = 18, f = "", cols = ["#e2562c","#f79c09","#35a468","#0588c4","#e9809c","#e9809c"];
-    for (var i = 0; i < n; i++){ var x = (i + .5) / n * 1000, y = 10 + Math.sin((i + .5) / n * Math.PI) * 30; f += '<path d="M' + (x - 20) + ' ' + (y - 2) + ' L' + (x + 20) + ' ' + (y + 2) + ' Q' + (x + 4) + ' ' + (y + 24) + ' ' + x + ' ' + (y + 36) + ' Q' + (x - 4) + ' ' + (y + 24) + ' ' + (x - 20) + ' ' + (y - 2) + 'Z" fill="' + cols[i % 6] + '" stroke="' + INK + '" stroke-width="1.6" stroke-linejoin="round"/>'; }
-    document.getElementById("bunting").innerHTML = '<svg viewBox="0 0 1000 70" preserveAspectRatio="none"><path d="M0 8 Q500 76 1000 8" fill="none" stroke="' + INK + '" stroke-width="1.6"/>' + f + '</svg>';
-  })();
-
   /* flagline: a sagging, tilted string of pennants that rolls left to right as you scroll */
   (function(){
     var lines = [].slice.call(document.querySelectorAll(".flagline")); if (!lines.length) return;
-    var cols = ["#e2562c", "#f79c09", "#35a468", "#0588c4", "#e9809c"], STEP = 54, SPEED = .3;
+    var cols = ["#e2562c", "#f79c09", "#35a468", "#0588c4", "#e9809c"], STEP = 66, SPEED = .3, FW = 48, FH = 46;
     function flagSVG(c, i){
-      return '<svg viewBox="0 0 40 46" style="animation-delay:' + (-(i % 7) * .35).toFixed(2) + 's">' +
-        '<path d="M2 1 L38 1 Q24 18 20 44 Q16 18 2 1Z" fill="' + c + '" stroke="' + INK + '" stroke-width="1.8" stroke-linejoin="round"/>' +
-        '<path d="M8 5 Q20 9 31 5" fill="none" stroke="#faf3e4" stroke-width="1.6" stroke-linecap="round" opacity=".55"/></svg>';
+      // the Proof of Joy bunting shape: a plain pennant with softly bowed sides
+      return '<svg viewBox="0 0 48 46" style="animation-delay:' + (-(i % 7) * .35).toFixed(2) + 's">' +
+        '<path d="M2 2 L46 4 Q31 20 24 43 Q18 21 2 2Z" fill="' + c + '" stroke="' + INK + '" stroke-width="1.8" stroke-linejoin="round"/></svg>';
     }
     function curve(el){                       // string: higher on the right, sagging in the middle
-      var W = el.offsetWidth, yl = 34, yr = 8, sag = Math.min(34, W * .025);
+      var W = el.offsetWidth, yl = 10, yr = 18, sag = Math.min(46, W * .035);
       return { W: W, y: function(x){ var t = x / W; return yl + (yr - yl) * t + sag * Math.sin(Math.PI * t); },
                a: function(x){ var t = x / W; return Math.atan(((yr - yl) + sag * Math.PI * Math.cos(Math.PI * t)) / W) * 180 / Math.PI; } };
     }
@@ -203,7 +196,7 @@
         var c = el._c, span = el._n * STEP; if (!c) return;
         el._flags.forEach(function(f, i){
           var x = ((i * STEP + off) % span + span) % span - STEP;
-          f.style.transform = "translate(" + (x - 20).toFixed(1) + "px," + c.y(x).toFixed(1) + "px) rotate(" + c.a(x).toFixed(2) + "deg)";
+          f.style.transform = "translate(" + (x - FW / 2).toFixed(1) + "px," + c.y(x).toFixed(1) + "px) rotate(" + c.a(x).toFixed(2) + "deg)";
         });
       });
     }

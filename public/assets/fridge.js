@@ -52,6 +52,12 @@
   for (var k = 0; k < 4; k++) html += star(k);
   board.innerHTML = html;
   var items = [].slice.call(board.querySelectorAll(".fz"));
+  /* every visit, each cookie lands at a different angle (and sometimes face the other way) */
+  items.forEach(function(el){
+    if (!el.classList.contains("fz--cookie")) return;
+    el._spin = Math.round(Math.random() * 100 - 50);
+    if (Math.random() < .5) el.classList.add("is-flipped");
+  });
 
   /* ---------- scatter without overlap ---------- */
   var seed = 7;
@@ -71,7 +77,7 @@
       var kind = el.classList.contains("fz--photo") ? "photo" : el.classList.contains("fz--note") ? "note" : el.classList.contains("fz--cookie") ? "cookie" : "star";
       var p = PRESET[kind][seen[kind]++ % PRESET[kind].length];
       el._w = el.offsetWidth; el._h = el.offsetHeight;
-      el._x = p[0] * k - el._w / 2; el._y = p[1] * k - el._h / 2; el._r = p[2];
+      el._x = p[0] * k - el._w / 2; el._y = p[1] * k - el._h / 2; el._r = kind === "cookie" ? el._spin : p[2];
       bottom = Math.max(bottom, el._y + el._h);
     });
     items.forEach(function(el){ el._y += 12; set(el); });
@@ -115,13 +121,13 @@
       }
     }
     big.forEach(function(el){ place(el, el.classList.contains("fz--note") ? 6 : 5); });
-    items.filter(function(el){ return el.classList.contains("fz--cookie"); }).forEach(function(el){ place(el, 18); });
+    items.filter(function(el){ return el.classList.contains("fz--cookie"); }).forEach(function(el){ place(el, 0); el._r = el._spin; });
     items.filter(function(el){ return el.classList.contains("fz--star"); }).forEach(function(el){ place(el, 30); });
     var bottom = placed.reduce(function(m, b){ return Math.max(m, b.y + b.h); }, 0);
     board.style.height = Math.ceil(bottom + 16) + "px";
     items.forEach(set);
   }
-  function set(el){ el.style.left = el._x + "px"; el.style.top = el._y + "px"; el.style.transform = "rotate(" + el._r.toFixed(2) + "deg)"; }
+  function set(el){ el.style.left = el._x + "px"; el.style.top = el._y + "px"; el.style.transform = "rotate(" + el._r.toFixed(2) + "deg)"; el.style.setProperty("--unspin", (-el._r).toFixed(2) + "deg"); }
 
   /* ---------- drag and drop ---------- */
   var z = 10;

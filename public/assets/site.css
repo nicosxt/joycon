@@ -1276,10 +1276,10 @@ h1, h2, h3, h4{ font-family: var(--f-text); font-weight: 700; font-style: normal
 /* =====================================================================
    FLAGLINE: tilted string of colorful pennants that roll as you scroll
    ===================================================================== */
-.flagline{ position: relative; z-index: 35; height: 64px; margin: -6px 0 -30px; overflow-x: clip; overflow-y: visible; pointer-events: none; }
+.flagline{ position: relative; z-index: 35; height: 70px; margin: -6px 0 -36px; overflow-x: clip; overflow-y: visible; pointer-events: none; }
 .flagline__string{ position: absolute; left: 0; top: 0; overflow: visible; }
-.flagline__flag{ position: absolute; left: 0; top: 0; width: 40px; height: 46px; transform-origin: 20px 0; will-change: transform; }
-.flagline__flag svg{ display: block; width: 40px; height: 46px; transform-origin: 50% 0; animation: flag-flutter 2.4s ease-in-out infinite; }
+.flagline__flag{ position: absolute; left: 0; top: 0; width: 48px; height: 46px; transform-origin: 24px 0; will-change: transform; }
+.flagline__flag svg{ display: block; width: 48px; height: 46px; transform-origin: 50% 0; animation: flag-flutter 2.4s ease-in-out infinite; }
 @keyframes flag-flutter{ 0%, 100%{ transform: rotate(-5deg); } 50%{ transform: rotate(5deg); } }
 @media (prefers-reduced-motion: reduce){
   .joy-bubble, .flagline__flag svg{ animation: none; }
@@ -1434,9 +1434,9 @@ h1, h2, h3, h4{ font-family: var(--f-text); font-weight: 700; font-style: normal
 .fortune{ position: absolute; left: 50%; top: 44%; z-index: 2; width: calc(230px * var(--s)); margin: 0; padding: .55em .9em .5em; text-align: center;
   background: #fffef9; color: var(--c-ink); border-radius: 1px; pointer-events: none;
   box-shadow: 0 1px 1px rgba(42,36,32,.2), 0 6px 10px -4px rgba(42,36,32,.3);
-  transform: translate(calc(-50% + var(--nudge, 0px)), -50%) scaleX(0) scaleY(.6); opacity: 0;
+  transform: translate(calc(-50% + var(--nudge, 0px)), -50%) rotate(var(--unspin, 0deg)) scaleX(0) scaleY(.6); opacity: 0;
   transition: transform .45s cubic-bezier(.3,1.4,.5,1) .12s, opacity .2s .12s; }
-.fz--cookie.is-open .fortune{ transform: translate(calc(-50% + var(--nudge, 0px)), -50%) rotate(-2deg); opacity: 1; }
+.fz--cookie.is-open .fortune{ transform: translate(calc(-50% + var(--nudge, 0px)), -50%) rotate(calc(var(--unspin, 0deg) - 2deg)); opacity: 1; }
 .fz--cookie:not(.is-open) .fortune{ transition: transform .25s ease-in, opacity .2s; }
 .fortune__q{ display: block; font-family: var(--f-text); font-size: calc(1rem * var(--s)); line-height: 1.25; }
 .fortune__lucky{ display: block; margin-top: .35em; font-family: var(--f-text); font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; color: var(--c-cinnabar); }
@@ -1503,16 +1503,16 @@ h1, h2, h3, h4{ font-family: var(--f-text); font-weight: 700; font-style: normal
    LETTER IN AN ENVELOPE: tap to open, the postcard slides out
    ===================================================================== */
 .letter-sec{ overflow: hidden; }
-.mail{ position: relative; max-width: 900px; margin: 0 auto; height: 460px; transition: height .9s cubic-bezier(.5,0,.2,1); }
+.mail{ position: relative; max-width: 900px; margin: 0 auto; height: 460px; transition: height .45s cubic-bezier(.5,0,.2,1); }
 .env{ position: absolute; left: 50%; top: 36px; width: min(520px, 88vw); aspect-ratio: 592 / 442; margin-left: calc(min(520px, 88vw) / -2); }
-.env > *{ position: absolute; inset: 0; transition: transform .8s cubic-bezier(.5,0,.75,0), opacity .6s ease .1s; }
+.env > *{ position: absolute; inset: 0; transition: transform .4s cubic-bezier(.5,0,.75,0), opacity .3s ease .05s; }
 .env__inside{ z-index: 1; background: linear-gradient(180deg, #b98a52, #d9b27c 60%); border-radius: 4px;
   clip-path: inset(3% 2% 2% 2% round 4px); }
 .env__front{ z-index: 3; background: url("img/envelope.webp") center / 100% 100% no-repeat;
   clip-path: polygon(0 8%, 41% 66%, 49% 76%, 52% 76%, 56% 72%, 100% 6%, 100% 100%, 0 100%);
   filter: drop-shadow(0 14px 18px rgba(42,36,32,.28)); }
 .env__flap{ z-index: 4; transform-origin: 50% 2%; transform-style: preserve-3d;
-  transition: transform .65s cubic-bezier(.4,.1,.3,1), opacity .6s ease .1s; }
+  transition: transform .33s cubic-bezier(.4,.1,.3,1), opacity .3s ease .05s; }
 .env__flap > span{ position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
   clip-path: polygon(0 0, 100% 0, 100% 6%, 56% 72%, 52% 76%, 49% 76%, 41% 66%, 0 8%); }
 .env__flap-out{ background: url("img/envelope.webp") center / 100% 100% no-repeat; }
@@ -1543,7 +1543,7 @@ h1, h2, h3, h4{ font-family: var(--f-text); font-weight: 700; font-style: normal
   padding: 30px 34px 34px; border: 0; border-radius: 4px; color: #1f3e5a;
   background: url("img/postcard.webp") center / 100% 100% no-repeat; background-color: transparent;
   box-shadow: 0 2px 3px rgba(42,36,32,.18), 0 24px 40px -20px rgba(42,36,32,.55);
-  transform-origin: 50% 0; transition: transform .9s cubic-bezier(.45,0,.2,1), clip-path .9s cubic-bezier(.45,0,.2,1);
+  transform-origin: 50% 0; transition: transform .45s cubic-bezier(.45,0,.2,1), clip-path .45s cubic-bezier(.45,0,.2,1);
 }
 .mail .letter::before, .mail .letter::after{ display: none; }
 .mail .letter p, .mail .letter .with{ font-size: 1.36rem !important; line-height: var(--lh); transform: none !important; }
@@ -1554,8 +1554,8 @@ h1, h2, h3, h4{ font-family: var(--f-text); font-weight: 700; font-style: normal
 .rstamp{ position: absolute; top: 14px; right: 16px; width: 104px; height: 104px; color: #c4322a; opacity: .92; mix-blend-mode: multiply; transform: rotate(-11deg); }
 
 /* the writing */
-.mail .letter .w{ opacity: 0; filter: blur(2px); transition: opacity .5s ease, filter .5s ease; }
-.mail.is-writing .letter .w{ opacity: 1; filter: none; }
+.mail .letter .w{ opacity: 0; transition: opacity .5s ease; }
+.mail.is-writing .letter .w{ opacity: 1; }
 
 /* sparkles */
 .mail__sparks{ position: absolute; inset: 0; pointer-events: none; z-index: 7; }
@@ -1585,3 +1585,7 @@ h1, h2, h3, h4{ font-family: var(--f-text); font-weight: 700; font-style: normal
 .jt .eyebrow{ justify-content: center; }
 .jt .lede{ margin-left: auto; margin-right: auto; }
 .jt__mag{ display: none; }
+
+.flagline--proof{ margin: 18px 0 34px; }
+.fz--cookie.is-flipped .cookie{ transform: scaleX(-1); }
+.fz--cookie.is-flipped:not(.is-open):hover .cookie{ animation: none; }

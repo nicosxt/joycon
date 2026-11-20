@@ -13,7 +13,7 @@ JOY.site = {
   city: "San Francisco",
 
   // Primary call to action, shown in the nav and all over the site.
-  cta: { label: "Save a seat", url: "https://luma.com/joycon" },
+  cta: { label: "Save a Seat", url: "https://luma.com/joycon" },
 
   // Leave contactEmail empty to show "Write to us" (links to the contact page) instead.
   contactEmail: "mikeyexperiences@gmail.com",

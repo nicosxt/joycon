@@ -136,19 +136,28 @@
   if (page.indexOf(".") === -1) page = (page ? page + ".html" : "index.html");
   var cta = S.cta || { label: "Get tickets", url: "#" };
   var ctaAttrs = 'href="' + esc(cta.url) + '"' + (/^https?:/.test(cta.url) ? ' target="_blank" rel="noopener"' : "");
-  /* "Save a seat" is a vintage ride ticket. Each one on a page is the next
-     ticket off the roll, so the paper color rotates through the brand palette. */
-  var PAPERS = ["orange", "carissma", "lochmara"], tixCount = 0;
+  /* "Save a seat" is a pink admit-one stub: keyline following the notched corners,
+     dashed tear lines, the dates down the left and the city down the right. */
   var ctaAria = function(label){ return esc(label + ", " + (S.dates || "") + (/^https?:/.test(cta.url) ? " (opens in a new tab)" : "")); };
-  var tixHTML = function(cls, label){
+  var sideDates = (S.datesShort || S.dates || "").replace(/ to /, " – ");
+  // keyline: inset 9 from a 336 x 152 stub, concave quarter-circle corners of radius 15
+  var FRAME = '<svg class="tix__frame" viewBox="0 0 336 152" preserveAspectRatio="none" aria-hidden="true">' +
+    '<path d="M24 9 L312 9 A15 15 0 0 0 327 24 L327 128 A15 15 0 0 0 312 143 L24 143 A15 15 0 0 0 9 128 L9 24 A15 15 0 0 0 24 9 Z" vector-effect="non-scaling-stroke"/>' +
+    '<path class="tix__tear" d="M44 24 L44 128 M292 24 L292 128" vector-effect="non-scaling-stroke"/></svg>';
+  var tixHTML = function(cls, label, mini){
     return '<a class="tix ' + cls + '" ' + ctaAttrs + ' aria-label="' + ctaAria(label) + '">' +
       '<span class="tix__paper" aria-hidden="true"><span class="tix__sheet"></span></span>' +
-      '<span class="tix__print" aria-hidden="true"><span class="tix__label">' + esc(label) + '</span></span>' +
+      (mini ? "" : FRAME) +
+      '<span class="tix__print" aria-hidden="true">' +
+        (mini ? "" : '<span class="tix__side tix__side--l">' + esc(sideDates) + '</span>') +
+        '<span class="tix__label">' + esc(label) + '</span>' +
+        (mini ? "" : '<span class="tix__side tix__side--r">San Francisco</span>') +
+      '</span>' +
     '</a>';
   };
-  J.ctaHTML = function(cls, label){ return tixHTML("tix--" + PAPERS[tixCount++ % PAPERS.length], label || cta.label); };
+  J.ctaHTML = function(cls, label){ return tixHTML("", label || cta.label); };
   /* compact version for the nav bar */
-  J.ctaMiniHTML = function(extra){ return tixHTML("tix--mini tix--orange " + (extra || ""), cta.label); };
+  J.ctaMiniHTML = function(extra){ return tixHTML("tix--mini " + (extra || ""), cta.label, true); };
   /* SVG filters for the torn paper edge and slightly worn ink, defined once per page */
   if (!document.getElementById("tix-filters")){
     document.body.insertAdjacentHTML("beforeend",

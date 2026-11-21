@@ -1589,3 +1589,28 @@ h1, h2, h3, h4{ font-family: var(--f-text); font-weight: 700; font-style: normal
 .flagline--proof{ margin: 18px 0 34px; }
 .fz--cookie.is-flipped .cookie{ transform: scaleX(-1); }
 .fz--cookie.is-flipped:not(.is-open):hover .cookie{ animation: none; }
+
+/* =====================================================================
+   SAVE A SEAT, take two: a pink admit-one stub in Arial
+   ===================================================================== */
+.tix{ --paper: var(--c-carissma); --paper-edge: rgba(140,50,80,.16); --notch-r: 15px;
+  width: min(21rem, 100%); min-height: 9.5rem; font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; transform: rotate(-.6deg); }
+.tix--orange, .tix--carissma, .tix--lochmara{ --paper: var(--c-carissma); }
+.tix__frame{ position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; overflow: visible;
+  fill: none; stroke: var(--tix-ink); stroke-width: 2.2; filter: url(#tix-ink); }
+.tix__frame .tix__tear{ stroke-width: 1.6; stroke-dasharray: 4 4; }
+.tix__print{ position: relative; z-index: 1; margin: 0; padding: 0; border: 0; display: grid; grid-template-columns: 13% 1fr 13%; align-items: center; justify-items: center; }
+.tix__label{ font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-weight: 900; font-size: 2rem; letter-spacing: -.01em; text-transform: uppercase; line-height: 1; }
+.tix__side{ font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-weight: 700; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap;
+  writing-mode: vertical-rl; line-height: 1; }
+.tix__side--r{ transform: rotate(180deg); }
+.tix:focus-visible .tix__print{ outline-offset: 4px; }
+/* nav mini: just the label in a simple keyline */
+.tix--mini{ --notch-r: 6px; width: auto; min-height: 0; }
+.tix--mini .tix__print{ display: flex; margin: 5px 6px; padding: 6px 12px 5px; border: 1.3px solid var(--tix-ink); }
+.tix--mini .tix__label{ font-size: .82rem; letter-spacing: .02em; }
+@media (max-width: 420px){
+  .tix:not(.tix--mini){ width: min(19rem, 100%); min-height: 8.6rem; }
+  .tix:not(.tix--mini) .tix__label{ font-size: 1.5rem; }
+  .tix__side{ font-size: .55rem; }
+}

@@ -1614,3 +1614,45 @@ h1, h2, h3, h4{ font-family: var(--f-text); font-weight: 700; font-style: normal
   .tix:not(.tix--mini) .tix__label{ font-size: 1.5rem; }
   .tix__side{ font-size: .55rem; }
 }
+
+/* =====================================================================
+   PAPER: the whole site sits on handmade paper, and its grain shows
+   through every graphic and line of text
+   ===================================================================== */
+html{ background: #f4f1ea; }
+body{ position: relative; background: #f4f1ea url("img/paper-bg.jpg") 0 0 / 800px 800px repeat; }
+body::after{ content: ""; position: absolute; inset: 0; z-index: 9990; pointer-events: none;
+  background: url("img/paper-grain.jpg") 0 0 / 800px 800px repeat; mix-blend-mode: multiply; opacity: .45; }
+/* sections stop painting their own flat beige so the paper carries through */
+.island-hero, .intro-strip, .section, .letter-sec, .proof, .rides, .days, .joy-teaser, .site-header.solid{ background: transparent !important; }
+body[data-page="home"] .site-header.solid{ background: rgba(244,241,234,.88) !important; }
+/* letter: the deckled handmade sheet */
+.mail .letter{ background: url("img/letter-paper.webp") center / 100% 100% no-repeat; box-shadow: none; border-radius: 0;
+  filter: drop-shadow(0 2px 2px rgba(42,36,32,.16)) drop-shadow(0 18px 22px rgba(42,36,32,.22));
+  min-height: calc(min(470px, 92vw) * 1402 / 1100); padding: 44px 42px 44px; }
+.mail.is-open .letter{ cursor: pointer; }
+.mail .letter{ transition: transform .24s cubic-bezier(.4,0,.2,1), clip-path .24s cubic-bezier(.4,0,.2,1); }
+.mail{ transition: height .24s cubic-bezier(.4,0,.2,1); }
+.env > *{ transition: transform .22s cubic-bezier(.4,0,.2,1), opacity .18s ease; }
+.env__flap{ transition: transform .18s cubic-bezier(.4,0,.2,1), opacity .18s ease; }
+.mail .letter .w{ transition: opacity .2s ease; }
+/* Proof of Joy now carries the rides line */
+.proof__head .proof__sub{ font-family: var(--f-text); text-transform: none; letter-spacing: 0; font-size: 1.15rem; color: var(--c-ink-soft); margin-top: .2em; }
+.proof__sub a{ color: var(--c-cinnabar); text-decoration: underline; text-underline-offset: 3px; }
+
+/* speech bubbles: the painted cloud, text laid on top */
+.joy-bubble__text{ display: flex; align-items: center; justify-content: center; width: 220px; aspect-ratio: 1340 / 750; padding: 0 0 18px 8px;
+  background: url("img/bubble.webp") center / 100% 100% no-repeat; border: 0; border-radius: 0; box-shadow: none;
+  color: var(--c-ink); text-shadow: none; filter: drop-shadow(0 8px 10px rgba(42,36,32,.16)); }
+.joy-bubble__text::before, .joy-bubble__text::after{ display: none; }
+.joy-bubble:hover .joy-bubble__text, .joy-bubble:focus-visible .joy-bubble__text{ background: url("img/bubble.webp") center / 100% 100% no-repeat; transform: scale(1.06) rotate(-2deg); }
+.joy-bubble--say{ margin: 0; pointer-events: none; }
+.joy-bubble--say .joy-bubble__text{ font-size: 1.45rem; }
+.proof__end.hero__actions--stage{ margin-top: 64px; }
+.proof__end.hero__actions--stage p.joy-bubble{ font-size: inherit; color: inherit; text-shadow: none; line-height: 1; }
+
+/* painted pennants on the flag strings */
+.flagline__flag{ width: 44px; height: 58px; transform-origin: 22px 0; }
+.flagline__flag img{ display: block; width: 44px; height: auto; transform-origin: 50% 0; animation: flag-flutter 2.4s ease-in-out infinite;
+  filter: drop-shadow(0 2px 2px rgba(42,36,32,.18)); user-select: none; pointer-events: none; }
+@media (prefers-reduced-motion: reduce){ .flagline__flag img{ animation: none; } }

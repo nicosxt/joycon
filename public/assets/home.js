@@ -168,11 +168,9 @@
   /* flagline: a sagging, tilted string of pennants that rolls left to right as you scroll */
   (function(){
     var lines = [].slice.call(document.querySelectorAll(".flagline")); if (!lines.length) return;
-    var cols = ["#e2562c", "#f79c09", "#35a468", "#0588c4", "#e9809c"], STEP = 66, SPEED = .3, FW = 48, FH = 46;
-    function flagSVG(c, i){
-      // the Proof of Joy bunting shape: a plain pennant with softly bowed sides
-      return '<svg viewBox="0 0 48 46" style="animation-delay:' + (-(i % 7) * .35).toFixed(2) + 's">' +
-        '<path d="M2 2 L46 4 Q31 20 24 43 Q18 21 2 2Z" fill="' + c + '" stroke="' + INK + '" stroke-width="1.8" stroke-linejoin="round"/></svg>';
+    var cols = ["#e2562c", "#f79c09", "#35a468", "#0588c4", "#e9809c"], STEP = 62, SPEED = .3, FW = 44, FH = 58;
+    function flagSVG(c, i){                // painted pennant sprites, one per palette colour
+      return '<img src="assets/img/pennant-' + (cols.indexOf(c) + 1) + '.webp" alt="" draggable="false" style="animation-delay:' + (-(i % 7) * .35).toFixed(2) + 's">';
     }
     function curve(el){                       // string: higher on the right, sagging in the middle
       var W = el.offsetWidth, yl = 10, yr = 18, sag = Math.min(46, W * .035);

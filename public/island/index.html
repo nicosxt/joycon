@@ -65,16 +65,32 @@
         box-shadow: 0 28px 0 var(--cap-deep), 0 30px 0 rgba(0,0,0,.18), 0 38px 18px -4px rgba(0,0,0,.25), 0 0 34px 8px var(--glow),
                     inset 0 3px 4px rgba(255,255,255,.9), inset 0 -5px 8px rgba(0,0,0,.14), inset 0 0 0 1.5px rgba(255,255,255,.45); }
       .jc-bar{ padding-top: 34px !important; }
+      /* buttons only: no housing, no soft shadows; a solid stepped side makes each cap a chunky 3D block */
+      .jc-bar{ gap: clamp(14px, 1.8vw, 26px) !important; padding: 42px 16px 18px !important; }
+      .jc-bar .jc-slot, .jc-bar .jc-slot.is-active{ background: none !important; border: 0 !important; box-shadow: none !important;
+        -webkit-backdrop-filter: none; backdrop-filter: none; padding: 0 !important; overflow: visible; }
+      .jc-bar .jc-slot::before{ display: none; }
+      .jc-bar .jc-slot-art{ border-radius: 14px;
+        background: radial-gradient(75% 65% at 44% 36%, #fffdf6 0%, rgba(255,251,240,.92) 34%, var(--cap) 72%, var(--cap-deep) 100%);
+        --side: 0 1px 0 var(--cap-deep), 0 2px 0 var(--cap-deep), 0 3px 0 var(--cap-deep), 0 4px 0 var(--cap-deep), 0 5px 0 var(--cap-deep),
+                0 6px 0 var(--cap-deep), 0 7px 0 var(--cap-deep), 0 8px 0 var(--cap-deep), 0 9px 0 var(--cap-deep), 0 10px 0 var(--cap-deep),
+                0 11px 0 var(--cap-deep), 0 12px 0 var(--cap-deep), 0 13px 0 rgba(0,0,0,.35);
+        box-shadow: var(--side), inset 0 4px 3px rgba(255,255,255,.85), inset 0 -6px 0 rgba(0,0,0,.12), inset 4px 0 4px rgba(255,255,255,.3), inset -4px 0 6px rgba(0,0,0,.1) !important;
+        transform: translateY(-12px); }
+      .jc-bar .jc-slot-art::after{ inset: 4px 7px auto; height: 30%; opacity: .9; }
+      .jc-bar .jc-slot:hover .jc-slot-art{ transform: translateY(-16px); }
+      .jc-bar .jc-slot:active .jc-slot-art{ transform: translateY(-3px);
+        box-shadow: 0 1px 0 var(--cap-deep), 0 2px 0 var(--cap-deep), 0 3px 0 var(--cap-deep), 0 4px 0 rgba(0,0,0,.35), inset 0 4px 3px rgba(255,255,255,.7), inset 0 -4px 0 rgba(0,0,0,.12) !important; }
+      .jc-bar .jc-slot.is-active .jc-slot-art{ transform: translateY(-30px);
+        box-shadow: 0 1px 0 var(--cap-deep), 0 2px 0 var(--cap-deep), 0 3px 0 var(--cap-deep), 0 4px 0 var(--cap-deep), 0 5px 0 var(--cap-deep), 0 6px 0 var(--cap-deep), 0 7px 0 var(--cap-deep), 0 8px 0 var(--cap-deep), 0 9px 0 var(--cap-deep), 0 10px 0 var(--cap-deep), 0 11px 0 var(--cap-deep), 0 12px 0 var(--cap-deep), 0 13px 0 var(--cap-deep), 0 14px 0 var(--cap-deep), 0 15px 0 var(--cap-deep), 0 16px 0 var(--cap-deep), 0 17px 0 var(--cap-deep), 0 18px 0 var(--cap-deep), 0 19px 0 var(--cap-deep), 0 20px 0 var(--cap-deep), 0 21px 0 var(--cap-deep), 0 22px 0 var(--cap-deep), 0 23px 0 var(--cap-deep), 0 24px 0 var(--cap-deep), 0 25px 0 var(--cap-deep), 0 26px 0 var(--cap-deep), 0 27px 0 var(--cap-deep), 0 28px 0 var(--cap-deep), 0 29px 0 var(--cap-deep), 0 30px 0 var(--cap-deep), 0 31px 0 rgba(0,0,0,.35), inset 0 4px 3px rgba(255,255,255,.9), inset 0 -6px 0 rgba(0,0,0,.1) !important; }
       @media (prefers-reduced-motion: reduce){ .jc-bar .jc-slot-art{ transition: none; } }
       /* the coaster is clickable: hovering the painted track or the cart glows the loop */
-      /* no sticker outline on the coaster layer (it would wrap the wide hit strip); a warm glow on the painted rails instead */
-      .jc-ride:has(.jc-track-hit) .jc-art{ filter: none !important; opacity: 1 !important; transform: none !important; }
+      /* the coaster gets the same sticker outline as every ride (the bundle's filter on .jc-art);
+         it just must not shift, or the cut-out rails would slide off the painted ones */
+      .jc-ride:has(.jc-track-hit) .jc-art{ transform: none !important; }
       .jc-track-hit{ stroke: transparent !important; }
-      .jc-track-glow{ stroke: rgba(255,232,160,.85); opacity: 0; filter: blur(3px); transition: opacity .18s; pointer-events: none; }
-      html.jc-coaster-hover .jc-track-glow, .jc-ride[aria-pressed="true"] .jc-track-glow{ opacity: .75; }
-      html.jc-coaster-hover .jc-cart image, .jc-ride[aria-pressed="true"] .jc-cart image{ filter: drop-shadow(0 0 6px rgba(255,240,200,.95)); }
     </style>
-    <script src="./coaster.js?v=6"></script>
+    <script src="./coaster.js?v=8"></script>
     <script type="module" crossorigin src="./assets/index-CZZgIBHB.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-ED7igGhC.css">
   </head>

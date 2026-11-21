@@ -7,6 +7,7 @@
   var W = 1600, H = 893, NS = "http://www.w3.org/2000/svg";
   var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   var CART_SRC = new URL("./images/coaster-cart.webp?v=1", document.baseURI).href;
+  var TRACK_SRC = new URL("./images/track-layer.webp?v=1", document.baseURI).href;
   var CART_W = 58;                       // cart width on the board, in px
 
   /* centre line of the painted rails, traced from island.webp */
@@ -40,18 +41,14 @@
     part = part ? 1 : 0; sample();
     el.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" height="100%" style="display:block;overflow:visible" aria-hidden="true">' +
       // invisible hit strip over the painted rails, so the track opens the Joy Ride card
-      '<path class="jc-track-glow" d="' + D + '" fill="none" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>' +
+      // the painted rails, cut out of island.webp, so the ride gets the same sticker outline as the others
+      (part ? "" : '<image class="jc-track-art" href="' + TRACK_SRC + '" x="0" y="0" width="' + W + '" height="' + H + '" preserveAspectRatio="none"/>') +
       '<path class="jc-track-hit" d="' + D + '" fill="none" stroke="transparent" stroke-width="36" stroke-linecap="round" stroke-linejoin="round"/>' +
       '<g class="jc-cart"><image href="' + CART_SRC + '" x="' + (-CART_W / 2) + '" y="' + (-CART_W * .92) + '" width="' + CART_W + '" height="' + CART_W + '" preserveAspectRatio="xMidYMax meet"/></g>' +
       '</svg>';
     var hit = el.querySelector(".jc-track-hit"); if (hit){ hit.style.pointerEvents = "stroke"; hit.style.cursor = "pointer"; }
     carEls[part] = el.querySelector(".jc-cart");
     carEls[part].style.pointerEvents = "auto"; carEls[part].style.cursor = "pointer";
-    // hovering the track or the cart lights up the whole loop, like the other rides
-    [hit, carEls[part]].forEach(function(t){
-      t.addEventListener("mouseenter", function(){ document.documentElement.classList.add("jc-coaster-hover"); });
-      t.addEventListener("mouseleave", function(){ document.documentElement.classList.remove("jc-coaster-hover"); });
-    });
     if (!running){ running = true; requestAnimationFrame(tick); }
   };
 

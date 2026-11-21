@@ -1656,3 +1656,16 @@ body[data-page="home"] .site-header.solid{ background: rgba(244,241,234,.88) !im
 .flagline__flag img{ display: block; width: 44px; height: auto; transform-origin: 50% 0; animation: flag-flutter 2.4s ease-in-out infinite;
   filter: drop-shadow(0 2px 2px rgba(42,36,32,.18)); user-select: none; pointer-events: none; }
 @media (prefers-reduced-motion: reduce){ .flagline__flag img{ animation: none; } }
+/* bubble text stays put on hover: the cloud lives on its own layer behind the words */
+.joy-bubble__text, .joy-bubble:hover .joy-bubble__text, .joy-bubble:focus-visible .joy-bubble__text{
+  background: none !important; filter: none; position: relative; isolation: isolate; }
+.joy-bubble .joy-bubble__text::before{ display: block !important; content: ""; position: absolute; inset: 0; z-index: -1; margin: 0; border: 0; width: auto; height: auto; transform: none;
+  background: url("img/bubble.webp") center / 100% 100% no-repeat; filter: drop-shadow(0 8px 10px rgba(42,36,32,.16)); }
+.joy-bubble:hover .joy-bubble__text, .joy-bubble:focus-visible .joy-bubble__text{ color: var(--c-ink); }
+
+/* =====================================================================
+   NO CUT-OFFS (site rule): graphics may spill past their section into the
+   next one; only the page itself refuses sideways scrolling
+   ===================================================================== */
+html, body{ overflow-x: clip; }
+.letter-sec, .fridge, .finale, .hero, .wish__air, .proof, .days, .joy-teaser, .intro-strip, .section{ overflow: visible !important; }

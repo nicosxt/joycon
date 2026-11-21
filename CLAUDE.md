@@ -24,6 +24,10 @@ Photos (Proof of Joy polaroids) are the exception: realistic candid instant-film
 - The whole site sits on handmade paper: `assets/img/paper-bg.jpg` (tiled background) plus `assets/img/paper-grain.jpg` as a multiply overlay over everything, so the grain shows through graphics and text. Sections stay transparent; don't give them flat background colors.
 - The letter uses the deckled sheet `assets/img/letter-paper.webp`.
 
+## Layout rule: no cut-offs
+
+Never crop graphics at a section edge. Sections use `overflow: visible`; art that runs past a section should spill over into the next one. Only the page itself blocks sideways scroll (`overflow-x: clip` on html/body). The island scales to fit (never cover), so the whole island always shows.
+
 ## Type and color
 
 - Fonts: Agrave Pro for everything; PP Stylo only for the "JoyCon" wordmark; Arial for the Save a Seat ticket; Caveat for handwriting (letter, notes).

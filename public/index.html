@@ -28,6 +28,20 @@
 
 <main id="main">
 
+  <!-- JOY SORT TEASER -->
+  <section class="section joy-teaser" aria-labelledby="jt-h">
+    <div class="wrap jt">
+      <div class="jt__mag" id="mag-home" aria-hidden="true"></div>
+      <div>
+        <p class="eyebrow">Sixty seconds</p>
+        <h2 id="jt-h">What joy are you missing?</h2>
+        <p class="lede">Six quick questions. You'll get your type of joy, the rides made for it, and a ticket with your name on it to share.</p>
+        <a class='btn btn--gold btn--big' href='/joy'>Find your joy</a>
+      </div>
+    </div>
+  </section>
+
+
   <!-- HERO: the interactive island (island/ is Nico Shi's build, served untouched) -->
   <section class="island-hero" id="island" aria-labelledby="hero-h">
     <h1 class="sr-only" id="hero-h">JoyCon, a festival of joy in San Francisco</h1>
@@ -147,41 +161,30 @@
     </div>
   </section>
 
-  <!-- JOY SORT TEASER -->
-  <section class="section joy-teaser" aria-labelledby="jt-h">
-    <div class="wrap jt">
-      <div class="jt__mag" id="mag-home" aria-hidden="true"></div>
-      <div>
-        <p class="eyebrow">Sixty seconds</p>
-        <h2 id="jt-h">What joy are you missing?</h2>
-        <p class="lede">Six quick questions. You'll get your type of joy, the rides made for it, and a ticket with your name on it to share.</p>
-        <a class='btn btn--gold btn--big' href='/joy'>Find your joy</a>
-      </div>
-    </div>
-  </section>
-
-
   <section class="finale" id="finale" aria-labelledby="fin-h">
-    <div class="finale__sky" aria-hidden="true">
-      <i style="--x:8%;--d:0s;--c:#e9809c"></i><i style="--x:20%;--d:-3s;--c:#35a468"></i><i style="--x:78%;--d:-1.5s;--c:#93c6d7"></i><i style="--x:90%;--d:-4s;--c:#f79c09"></i><i style="--x:66%;--d:-6s;--c:#0588c4"></i>
-    </div>
     <div class="wrap">
       <p class="eyebrow">A small ritual before you go</p>
       <h2 id="fin-h">Make a wish for the weekend.</h2>
-      <p class="lede" style="margin:0 auto 26px">What joy do you want to find? Write it down, then let it go. We never see it. It's just yours, floating up ahead of you.</p>
+      <p class="lede" style="margin:0 auto 26px">What joy do you want to find? Write it down, then blow out the candles. We never see it. It's just yours.</p>
       <form class="wish" id="wish" autocomplete="off">
         <label class="sr-only" for="wish-text">Your wish</label>
         <input class="input wish__input" id="wish-text" maxlength="60" placeholder="I want to laugh with strangers" required>
-        <button class="btn btn--gold" type="submit">Let it go</button>
+        <button class="btn btn--gold" type="submit">Make the wish</button>
       </form>
       <p class="wish__count" id="wish-count" aria-live="polite"></p>
+      <div class="cake" id="cake">
+        <div class="cake__stage">
+          <img class="cake__art" src="assets/img/cake.webp" alt="A birthday cake with candles" width="900" height="900" loading="lazy" decoding="async">
+          <div class="cake__candles" id="cake-candles"></div>
+        </div>
+        <p class="cake__hint" id="cake-hint">Move across the candles to blow them out.</p>
+      </div>
       <div class="finale__cta">
         <h3 class="finale__come">Come play.</h3>
         <p style="margin:0 0 18px">January 16 to 17, 2027. San Francisco.</p>
         <span data-cta="btn--big btn--ticket"></span>
       </div>
     </div>
-    <div class="wish__air" id="wish-air" aria-hidden="true"></div>
   </section>
 
 </main>
@@ -195,5 +198,6 @@
 <script src="assets/fridge.js"></script>
 <script src="assets/magnifier.js"></script>
 <script src="assets/letter.js"></script>
+<script src="assets/cake.js"></script>
 </body>
 </html>

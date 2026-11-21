@@ -227,22 +227,16 @@
     if (document.fonts) document.fonts.ready.then(placeBulbs);
   }
 
-  /* wish balloons: write a wish, let it float away. Nothing is stored or sent. */
+  /* make a wish: write it, then blow out the candles (see cake.js). Nothing is stored or sent. */
   (function(){
-    var form = document.getElementById("wish"), air = document.getElementById("wish-air"), input = document.getElementById("wish-text"), count = document.getElementById("wish-count");
+    var form = document.getElementById("wish"), input = document.getElementById("wish-text"), count = document.getElementById("wish-count");
     if (!form) return;
-    var cols = ["#e9809c","#35a468","#93c6d7","#f79c09","#0588c4","#e2562c"], n = 0;
     form.addEventListener("submit", function(e){
       e.preventDefault();
-      var text = input.value.trim(); if (!text) return;
-      var b = document.createElement("div"); b.className = "wish__balloon";
-      b.style.setProperty("--c", cols[n % cols.length]); b.style.setProperty("--x", (30 + Math.random() * 40) + "%"); b.style.setProperty("--sway", (Math.random() * 60 - 30) + "px");
-      var body = document.createElement("span"); body.className = "wish__body";
-      var tag = document.createElement("span"); tag.className = "wish__tag"; tag.textContent = text;
-      b.appendChild(body); b.appendChild(tag); air.appendChild(b);
-      n++; input.value = "";
-      count.textContent = n === 1 ? "Your wish is on its way. Make another?" : n + " wishes floating up. The park is listening.";
-      setTimeout(function(){ b.remove(); }, reduced ? 2500 : 9000);
+      if (!input.value.trim()) return;
+      input.value = "";
+      count.textContent = "Wish made. Now blow out the candles.";
+      if (window.JOY && window.JOY.relightCake) window.JOY.relightCake();
     });
   })();
 

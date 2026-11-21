@@ -40,6 +40,7 @@
     part = part ? 1 : 0; sample();
     el.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" height="100%" style="display:block;overflow:visible" aria-hidden="true">' +
       // invisible hit strip over the painted rails, so the track opens the Joy Ride card
+      '<path class="jc-track-glow" d="' + D + '" fill="none" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>' +
       '<path class="jc-track-hit" d="' + D + '" fill="none" stroke="transparent" stroke-width="36" stroke-linecap="round" stroke-linejoin="round"/>' +
       '<g class="jc-cart"><image href="' + CART_SRC + '" x="' + (-CART_W / 2) + '" y="' + (-CART_W * .92) + '" width="' + CART_W + '" height="' + CART_W + '" preserveAspectRatio="xMidYMax meet"/></g>' +
       '</svg>';

@@ -174,6 +174,26 @@
     el.addEventListener("contextmenu", function(e){ if (tdrag || el.classList.contains("is-lifted")) e.preventDefault(); });
   });
 
+  /* cracking: a flash of hairline cracks and a spray of crumbs from the break */
+  function crack(wrap){
+    if (reduced) return;
+    var fx = document.createElement("span"); fx.className = "crack-fx"; fx.setAttribute("aria-hidden", "true");
+    var html = '<svg class="crack-fx__lines" viewBox="-50 -50 100 100">';
+    for (var i = 0; i < 6; i++){
+      var a = (i / 6) * Math.PI * 2 + Math.random() * .6, r = 18 + Math.random() * 22, d = "M0 0", x = 0, y = 0;
+      for (var k = 1; k <= 3; k++){ x = Math.cos(a + (Math.random() - .5) * .7) * r * k / 3; y = Math.sin(a + (Math.random() - .5) * .7) * r * k / 3; d += " L" + x.toFixed(1) + " " + y.toFixed(1); }
+      html += '<path d="' + d + '"/>';
+    }
+    html += '</svg>';
+    var cols = ["#d9a35c", "#c98a3e", "#f1cf93", "#b8742e", "#fff4dc"];
+    for (var j = 0; j < 16; j++){
+      var ang = Math.random() * Math.PI * 2, dist = 28 + Math.random() * 46, sz = 3 + Math.random() * 5;
+      html += '<i style="--dx:' + (Math.cos(ang) * dist).toFixed(0) + 'px;--dy:' + (Math.sin(ang) * dist - 10).toFixed(0) + 'px;--s:' + sz.toFixed(1) + 'px;--r:' + (Math.random() * 360).toFixed(0) + 'deg;--c:' + cols[j % cols.length] + ';--t:' + (Math.random() * .08).toFixed(2) + 's"></i>';
+    }
+    fx.innerHTML = html; wrap.appendChild(fx);
+    setTimeout(function(){ fx.remove(); }, 900);
+  }
+
   /* ---------- fortune cookies ---------- */
   board.querySelectorAll(".fz--cookie").forEach(function(wrap){
     var btn = wrap.querySelector(".cookie"), slip = wrap.querySelector(".fortune");
@@ -185,6 +205,7 @@
       btn.setAttribute("aria-expanded", open); btn.setAttribute("aria-label", open ? "Fortune cookie, open. Close it." : "Fortune cookie. Open it.");
       if (open){
         wrap.style.zIndex = ++z;
+        crack(wrap);
         // keep the slip inside the board
         slip.style.setProperty("--nudge", "0px");
         var bw = board.clientWidth, sw = slip.offsetWidth, cx = wrap._x + wrap._w / 2;

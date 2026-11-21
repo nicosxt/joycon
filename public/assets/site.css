@@ -1713,3 +1713,35 @@ html, body{ overflow-x: clip; }
 @keyframes cloud-drift{ 0%{ transform: translate(-4vw, 0); } 50%{ transform: translate(1vw, -8px); } 100%{ transform: translate(5vw, 4px); } }
 .sky-clouds.is-still .sky-cloud{ animation: none; }
 @media (prefers-reduced-motion: reduce){ .sky-cloud{ animation: none; } }
+
+/* magnifier tilts 10° straighter while held, settles back when let go */
+.magnifier__img{ transform-origin: 27.1% 27.4%; transition: transform .22s cubic-bezier(.3,1.4,.5,1); }
+.magnifier.is-dragging .magnifier__img{ transform: rotate(-10deg); }
+/* misty clouds: softened, feathered edges, a touch translucent */
+.sky-cloud img{ filter: blur(1.6px) drop-shadow(0 10px 18px rgba(140,130,150,.10)); opacity: .86;
+  -webkit-mask-image: radial-gradient(ellipse 52% 50% at 50% 52%, #000 55%, rgba(0,0,0,.55) 78%, transparent 100%);
+          mask-image: radial-gradient(ellipse 52% 50% at 50% 52%, #000 55%, rgba(0,0,0,.55) 78%, transparent 100%); }
+.sky-cloud.is-dragging img{ filter: blur(1.2px) drop-shadow(0 18px 22px rgba(140,130,150,.16)); opacity: .92; }
+/* flags: each pennant is a handle for sliding its string */
+.flagline__flag{ pointer-events: auto; cursor: grab; touch-action: pan-y; }
+.flagline.is-dragging .flagline__flag{ cursor: grabbing; }
+/* the letter's motion now comes from the keyframed timeline in letter.js, not from transitions */
+.mail .letter, .mail, .env > *, .env__flap{ transition: none !important; }
+.mail.is-flap .env__flap, .mail.is-out .env > *, .mail.is-out .env__flap{ transform: none; }
+/* "Tap to open" sits above the envelope */
+.env{ top: 52px !important; }
+.mail__open{ align-items: flex-start !important; }
+.mail__open span{ margin: 4px 0 0 !important; }
+
+/* fortune cookie: hairline cracks and crumbs when it breaks */
+.crack-fx{ position: absolute; left: 50%; top: 46%; width: 0; height: 0; pointer-events: none; z-index: 3; }
+.crack-fx__lines{ position: absolute; left: -50px; top: -50px; width: 100px; height: 100px; overflow: visible; }
+.crack-fx__lines path{ fill: none; stroke: #6b3f17; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 60; stroke-dashoffset: 60; animation: crack-draw .5s ease-out forwards; }
+@keyframes crack-draw{ 0%{ stroke-dashoffset: 60; opacity: 1; } 45%{ stroke-dashoffset: 0; opacity: 1; } 100%{ stroke-dashoffset: 0; opacity: 0; } }
+.crack-fx i{ position: absolute; left: 0; top: 0; width: var(--s); height: calc(var(--s) * .7); margin: calc(var(--s) * -.35) 0 0 calc(var(--s) * -.5);
+  background: var(--c); border-radius: 30% 60% 40% 55%; box-shadow: inset -1px -1px 0 rgba(90,50,15,.35);
+  animation: crumb .8s cubic-bezier(.2,.7,.3,1) var(--t) forwards; }
+@keyframes crumb{ 0%{ transform: translate(0,0) rotate(0); opacity: 1; } 70%{ opacity: 1; } 100%{ transform: translate(var(--dx), calc(var(--dy) + 26px)) rotate(var(--r)); opacity: 0; } }
+/* bubble text sits in the middle of the cloud's body (the tail takes the lower left) */
+.joy-bubble__text{ padding: 0 0 26px 30px !important; }

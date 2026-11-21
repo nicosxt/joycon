@@ -189,9 +189,9 @@
       roll();
     }
     function roll(){
-      var off = reduced ? 0 : scrollY * SPEED;
+      var base = reduced ? 0 : scrollY * SPEED;
       lines.forEach(function(el){
-        var c = el._c, span = el._n * STEP; if (!c) return;
+        var c = el._c, span = el._n * STEP, off = base + (el._drag || 0); if (!c) return;
         el._flags.forEach(function(f, i){
           var x = ((i * STEP + off) % span + span) % span - STEP;
           f.style.transform = "translate(" + (x - FW / 2).toFixed(1) + "px," + c.y(x).toFixed(1) + "px) rotate(" + c.a(x).toFixed(2) + "deg)";
@@ -200,6 +200,17 @@
     }
     var ticking = false;
     addEventListener("scroll", function(){ if (!ticking){ ticking = true; requestAnimationFrame(function(){ ticking = false; roll(); }); } }, { passive: true });
+    /* grab any pennant and slide the whole string left or right */
+    lines.forEach(function(el){
+      var start = null;
+      el.addEventListener("pointerdown", function(e){
+        if (!e.target.closest(".flagline__flag")) return;
+        start = { x: e.clientX, d: el._drag || 0 }; el.setPointerCapture(e.pointerId); el.classList.add("is-dragging"); e.preventDefault();
+      });
+      el.addEventListener("pointermove", function(e){ if (!start) return; el._drag = start.d + (e.clientX - start.x); roll(); });
+      function end(){ start = null; el.classList.remove("is-dragging"); }
+      el.addEventListener("pointerup", end); el.addEventListener("pointercancel", end);
+    });
     var rt; addEventListener("resize", function(){ clearTimeout(rt); rt = setTimeout(build, 150); });
     build();
   })();

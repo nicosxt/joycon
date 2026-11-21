@@ -37,7 +37,7 @@
   function place(){
     if (state !== "closed") return;
     mail.style.height = (box(env).y + box(env).h + 64) + "px";
-    var p = tucked(0); letter.style.transform = p.t; letter.style.clipPath = p.clip;
+    build();
   }
 
   function burst(){
@@ -50,58 +50,92 @@
     sparks.innerHTML = html;
   }
 
-  /* One timeline, played forwards to open and backwards to close.
-     Steps (ms): flap lifts, card slides out of the pocket, envelope drops and card comes forward, text fades in. */
-  var T = reduced ? [0, 0, 0, 0] : [0, 160, 400, 560], timers = [];
-  function later(fn, ms){ timers.push(setTimeout(fn, ms)); }
-  function clearTimers(){ timers.forEach(clearTimeout); timers = []; }
+  /* ---------- frame-by-frame timeline (Web Animations), played forwards to open, backwards to close ----------
+     0.00  press: the envelope dips
+     0.08  the flap peels up a touch, then swings open; its outside darkens as it turns away, its lining lights up
+     0.30  flap passes behind the letter
+     0.30  the letter slides up out of the pocket, with a little wobble as it clears
+     0.62  the envelope drops away while the letter comes forward and settles
+     1.00  open (the words then fade in) */
+  var DUR = reduced ? 1 : 1100, anims = [], built = false;
+  var flap = env.querySelector(".env__flap"), flapOut = env.querySelector(".env__flap-out"), flapIn = env.querySelector(".env__flap-in");
+  var body = [env.querySelector(".env__inside"), env.querySelector(".env__front")];
   function openHeight(){ return (letter.offsetTop + letter.offsetHeight + 24) + "px"; }
+  function closedHeight(){ return (box(env).y + box(env).h + 64) + "px"; }
+
+  function build(){
+    anims.forEach(function(a){ a.cancel(); }); anims = [];
+    letter.style.transform = "none"; letter.style.clipPath = ""; letter.style.transition = "none";
+    var e = box(env), p = tucked(0), q = tucked(e.h * .82); letter.style.transform = ""; letter.style.clipPath = "";
+    var P = "perspective(1400px) ";
+    var opts = { duration: DUR, fill: "both" };
+    var drop = "translateY(70%) rotate(4deg)";
+    body.forEach(function(el){
+      anims.push(el.animate([
+        { offset: 0,    transform: "none", opacity: 1 },
+        { offset: .05,  transform: "translateY(3px) scale(.985)", opacity: 1, easing: "cubic-bezier(.3,1.6,.5,1)" },
+        { offset: .12,  transform: "none", opacity: 1 },
+        { offset: .62,  transform: "none", opacity: 1, easing: "cubic-bezier(.5,0,.8,.4)" },
+        { offset: .92,  transform: drop, opacity: 0 },
+        { offset: 1,    transform: drop, opacity: 0 }
+      ], opts));
+    });
+    anims.push(flap.animate([
+      { offset: 0,    transform: P + "rotateX(0deg)", zIndex: 4 },
+      { offset: .05,  transform: P + "translateY(3px) scale(.985) rotateX(0deg)", zIndex: 4 },
+      { offset: .10,  transform: P + "rotateX(-14deg)", zIndex: 4, easing: "cubic-bezier(.45,0,.2,1)" },
+      { offset: .29,  transform: P + "rotateX(180deg)", zIndex: 4 },
+      { offset: .30,  transform: P + "rotateX(180deg)", zIndex: 0 },
+      { offset: .62,  transform: P + "rotateX(180deg)", zIndex: 0, opacity: 1, easing: "cubic-bezier(.5,0,.8,.4)" },
+      { offset: .92,  transform: drop + " " + P + "rotateX(180deg)", zIndex: 0, opacity: 0 },
+      { offset: 1,    transform: drop + " " + P + "rotateX(180deg)", zIndex: 0, opacity: 0 }
+    ], opts));
+    anims.push(flapOut.animate([{ offset: 0, filter: "brightness(1)" }, { offset: .1, filter: "brightness(1)" }, { offset: .2, filter: "brightness(.72)" }, { offset: 1, filter: "brightness(.72)" }], opts));
+    anims.push(flapIn.animate([{ offset: 0, filter: "brightness(.6)" }, { offset: .2, filter: "brightness(.6)" }, { offset: .3, filter: "brightness(1)" }, { offset: 1, filter: "brightness(1)" }], opts));
+    anims.push(letter.animate([
+      { offset: 0,    transform: p.t, clipPath: p.clip },
+      { offset: .28,  transform: p.t, clipPath: p.clip, easing: "cubic-bezier(.2,.75,.3,1)" },
+      { offset: .56,  transform: q.t + " rotate(-1.6deg)", clipPath: q.clip, easing: "ease-in-out" },
+      { offset: .64,  transform: q.t + " rotate(.7deg)", clipPath: q.clip, easing: "cubic-bezier(.3,1.25,.45,1)" },
+      { offset: 1,    transform: "translate(0,0) scale(1) rotate(0deg)", clipPath: "inset(0px 0px 0px 0px)" }
+    ], opts));
+    anims.push(mail.animate([
+      { offset: 0, height: closedHeight() }, { offset: .62, height: closedHeight(), easing: "cubic-bezier(.4,0,.2,1)" }, { offset: 1, height: openHeight() }
+    ], opts));
+    anims.forEach(function(a){ a.pause(); a.currentTime = 0; });
+    built = true;
+  }
+
+  function run(dir, done){
+    var left = anims.length;
+    anims.forEach(function(a){
+      a.playbackRate = dir;
+      a.onfinish = function(){ if (--left === 0 && done) done(); };
+      a.play();
+    });
+  }
 
   function open(){
-    if (state === "open" || state === "opening") return;
-    clearTimers(); state = "opening";
-    btn.setAttribute("aria-expanded", "true"); btn.disabled = true;
+    if (state !== "closed") return;
+    if (!built) build();
+    state = "opening"; btn.setAttribute("aria-expanded", "true"); btn.disabled = true;
     mail.classList.add("is-flap"); burst();
-    later(function(){                                    // slide up out of the pocket
-      mail.classList.add("is-rising");
-      var q = tucked(box(env).h * .82), p = tucked(0);
-      letter.style.transform = p.t; letter.style.clipPath = p.clip; void letter.offsetWidth;
-      letter.style.transition = ""; letter.style.transform = q.t; letter.style.clipPath = q.clip;
-    }, T[1]);
-    later(function(){                                    // envelope drops away, card comes forward
-      mail.classList.add("is-out");
-      letter.style.transform = "none"; letter.style.clipPath = "inset(0 0 0 0)";
-      mail.style.height = openHeight();
-    }, T[2]);
-    later(function(){                                    // the words fade in
+    run(1, function(){
       state = "open"; mail.classList.add("is-open", "is-writing");
       letter.setAttribute("title", "Click to fold the letter back into its envelope");
-      later(function(){ letter.style.clipPath = ""; }, 60);
-    }, T[3]);
+    });
   }
 
   function close(){
     if (state !== "open") return;
-    clearTimers(); state = "closing";
-    letter.removeAttribute("title");
-    mail.classList.remove("is-writing", "is-open");     // the words fade out
-    // measure the in-pocket positions with the card at rest, then glide back to them
-    var q = tucked(box(env).h * .82), p = tucked(0);
-    letter.style.transform = "none"; letter.style.clipPath = "inset(0 0 0 0)"; void letter.offsetWidth;
-    letter.style.transition = "";
-    later(function(){                                    // envelope comes back, card shrinks above its pocket
-      mail.classList.remove("is-out");
-      letter.style.transform = q.t; letter.style.clipPath = q.clip;
-      mail.style.height = (box(env).y + box(env).h + 64) + "px";
-    }, reduced ? 0 : 120);
-    later(function(){                                    // card slides back into the pocket
-      letter.style.transform = p.t; letter.style.clipPath = p.clip;
-    }, reduced ? 0 : 360);
-    later(function(){ mail.classList.remove("is-rising"); }, reduced ? 0 : 600);   // flap back in front
-    later(function(){                                    // flap closes
-      mail.classList.remove("is-flap");
-      state = "closed"; btn.disabled = false; btn.setAttribute("aria-expanded", "false");
-    }, reduced ? 0 : 640);
+    state = "closing"; letter.removeAttribute("title");
+    mail.classList.remove("is-writing", "is-open");          // words fade out first
+    setTimeout(function(){
+      run(-1, function(){
+        state = "closed"; mail.classList.remove("is-flap");
+        btn.disabled = false; btn.setAttribute("aria-expanded", "false");
+      });
+    }, reduced ? 0 : 160);
   }
 
   letter.addEventListener("click", function(e){ if (state === "open" && !e.target.closest("a")) close(); });
@@ -110,6 +144,7 @@
   (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(place);
   addEventListener("load", place);
   var rt; addEventListener("resize", function(){ clearTimeout(rt); rt = setTimeout(function(){
-    if (state === "closed") place(); else if (state === "open") mail.style.height = openHeight();
+    if (state === "closed") place();
+    else if (state === "open"){ anims.forEach(function(a){ a.cancel(); }); anims = []; built = false; mail.style.height = openHeight(); }
   }, 150); });
 })();

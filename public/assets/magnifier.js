@@ -53,7 +53,28 @@
     // ids stay: some sections are styled by id, and getElementById still finds the
     // originals first because the magnifier sits at the end of <body>
     copy.setAttribute("inert", "");
-    [].forEach.call(copy.querySelectorAll("iframe"), function(f){ var d = document.createElement("div"); d.style.cssText = "width:100%;height:100%;background:var(--c-dutch)"; f.replaceWith(d); });
+    // the island lives in an iframe; snapshot its live document into a shadow root so it magnifies too
+    var origFrames = main.querySelectorAll("iframe");
+    [].forEach.call(copy.querySelectorAll("iframe"), function(f, i){
+      var d = document.createElement("div"), src = origFrames[i], doc = null;
+      d.style.cssText = "position:absolute;inset:0;transform:translateZ(0);overflow:hidden";   // transform: fixed children anchor here
+      try { doc = src && src.contentDocument; } catch (e) {}
+      if (doc && doc.body){
+        var root = d.attachShadow({ mode: "open" });
+        [].forEach.call(doc.querySelectorAll('link[rel="stylesheet"], style'), function(n){
+          var c = n.cloneNode(true); if (c.tagName === "LINK") c.href = n.href; root.appendChild(c);
+        });
+        var host = document.createElement("style");
+        host.textContent = ":host{display:block}.jc-island-snap{position:absolute;inset:0;width:100%;height:100%;overflow:hidden}";
+        root.appendChild(host);
+        var wrap = document.createElement("div"); wrap.className = "jc-island-snap " + (doc.documentElement.className || "");
+        var body = doc.body.cloneNode(true);
+        [].forEach.call(body.querySelectorAll("script"), function(s){ s.remove(); });
+        while (body.firstChild) wrap.appendChild(body.firstChild);
+        root.appendChild(wrap);
+      }
+      f.replaceWith(d);
+    });
     [].forEach.call(copy.querySelectorAll("img[loading]"), function(im){ im.loading = "eager"; });
     [].forEach.call(copy.querySelectorAll(".reveal"), function(el){ el.classList.add("in"); });
     copy.style.cssText = "position:absolute;margin:0;left:" + (r.left + scrollX) + "px;top:" + (r.top + scrollY) + "px;width:" + r.width + "px";

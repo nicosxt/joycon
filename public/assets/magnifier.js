@@ -3,6 +3,7 @@
    through an SVG displacement filter so it reads like a fisheye lens. */
 (function(){
   "use strict";
+  var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   var home = document.getElementById("mag-home"), main = document.querySelector("main");
   if (!home || !main) return;
 
@@ -38,13 +39,17 @@
   var mag = document.createElement("div");
   mag.className = "magnifier"; mag.setAttribute("aria-hidden", "true");
   mag.style.width = IMG_W + "px"; mag.style.height = IMG_H + "px";
-  mag.innerHTML =
+  mag.innerHTML = '<div class="magnifier__body">' +
     '<div class="magnifier__lens" style="left:' + (LX - R) + 'px;top:' + (LY - R) + 'px;width:' + D + 'px;height:' + D + 'px">' +
       '<div class="magnifier__fx"><div class="magnifier__view"></div></div><div class="magnifier__glass"></div>' +
     '</div>' +
-    '<img class="magnifier__img" src="assets/img/magnifier.webp" alt="" width="' + IMG_W + '" height="' + IMG_H + '" draggable="false">';
+    '<img class="magnifier__img" src="assets/img/magnifier.webp" alt="" width="' + IMG_W + '" height="' + IMG_H + '" draggable="false">' +
+    '</div>';
   document.body.appendChild(mag);
-  var view = mag.querySelector(".magnifier__view");
+  var view = mag.querySelector(".magnifier__view"), bodyEl = mag.querySelector(".magnifier__body"), fx = mag.querySelector(".magnifier__fx");
+  /* grabbing tilts the glass 10° more upright, pivoting on the end of the handle */
+  var PX = IMG_W * .955, PY = IMG_H * .955, rot = 0, rotTo = 0;
+  bodyEl.style.transformOrigin = PX + "px " + PY + "px";
 
   var copy = null, lastClone = 0;
   function reclone(){
@@ -84,8 +89,21 @@
   var x = 0, y = 0, moved = false;
   function render(){
     mag.style.transform = "translate(" + x + "px," + y + "px)";
-    var px = x + LX, py = y + LY;                    // page point under the lens centre
+    bodyEl.style.transform = "rotate(" + rot.toFixed(2) + "deg)";
+    fx.style.transform = "rotate(" + (-rot).toFixed(2) + "deg)";       // keep the magnified view upright
+    var a = rot * Math.PI / 180, dx = LX - PX, dy = LY - PY;
+    var px = x + PX + dx * Math.cos(a) - dy * Math.sin(a), py = y + PY + dx * Math.sin(a) + dy * Math.cos(a);   // page point under the lens centre
     view.style.transform = "translate(" + (R - ZOOM * px) + "px," + (R - ZOOM * py) + "px) scale(" + ZOOM + ")";
+  }
+  var spinning = false;
+  function spin(){
+    if (spinning) return; spinning = true;
+    (function step(){
+      rot += (rotTo - rot) * .28;
+      if (Math.abs(rotTo - rot) < .05) rot = rotTo;
+      render();
+      if (rot !== rotTo) requestAnimationFrame(step); else spinning = false;
+    })();
   }
   /* start with the lens over the word "you" in the heading */
   function home_(){
@@ -103,7 +121,9 @@
   mag.addEventListener("pointerdown", function(e){
     if (e.button !== 0 && e.pointerType === "mouse") return;
     reclone();                                        // always fresh: the page may have changed since
-    drag = { ox: e.pageX - x, oy: e.pageY - y }; mag.setPointerCapture(e.pointerId); mag.classList.add("is-dragging"); e.preventDefault();
+    drag = { ox: e.pageX - x, oy: e.pageY - y }; rotTo = reduced ? 0 : 10; spin();
+    try { mag.setPointerCapture(e.pointerId); } catch (err) {}
+    mag.classList.add("is-dragging"); e.preventDefault();
   });
   mag.addEventListener("pointermove", function(e){
     if (!drag) return;
@@ -111,7 +131,7 @@
     x = Math.max(-IMG_W * .3, Math.min(maxX, e.pageX - drag.ox)); y = Math.max(0, e.pageY - drag.oy);
     moved = true; render();
   });
-  function end(){ drag = null; mag.classList.remove("is-dragging"); }
+  function end(){ drag = null; mag.classList.remove("is-dragging"); rotTo = 0; spin(); }
   mag.addEventListener("pointerup", end); mag.addEventListener("pointercancel", end);
 
   function boot(){ reclone(); home_(); mag.classList.add("is-ready"); }

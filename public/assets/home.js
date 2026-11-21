@@ -238,16 +238,32 @@
     if (document.fonts) document.fonts.ready.then(placeBulbs);
   }
 
-  /* make a wish: write it, then blow out the candles (see cake.js). Nothing is stored or sent. */
+  /* make a wish: write it on the paper, tick it into the wishing box. Nothing is stored or sent. */
   (function(){
-    var form = document.getElementById("wish"), input = document.getElementById("wish-text"), count = document.getElementById("wish-count");
+    var form = document.getElementById("wish"), input = document.getElementById("wish-text"), count = document.getElementById("wish-count"), box = document.getElementById("wishbox");
     if (!form) return;
+    var n = 0, busy = false;
+    function sync(){ form.classList.toggle("is-empty", !input.value); }
+    input.addEventListener("input", sync); sync();
     form.addEventListener("submit", function(e){
       e.preventDefault();
-      if (!input.value.trim()) return;
-      input.value = "";
-      count.textContent = "Wish made. Now blow out the candles.";
-      if (window.JOY && window.JOY.relightCake) window.JOY.relightCake();
+      if (busy) return;
+      if (!input.value.trim()){ form.classList.remove("is-nudge"); void form.offsetWidth; form.classList.add("is-nudge"); input.focus(); return; }
+      busy = true; input.blur();
+      // aim the folded paper at the slot in the box's lid
+      var pr = form.getBoundingClientRect(), br = box.getBoundingClientRect();
+      form.style.setProperty("--to-x", (br.left + br.width * .52 - (pr.left + pr.width / 2)).toFixed(0) + "px");
+      form.style.setProperty("--to-y", (br.top + br.height * .2 - (pr.top + pr.height / 2)).toFixed(0) + "px");
+      form.classList.add("is-sending");
+      setTimeout(function(){ box.classList.add("is-catching"); }, reduced ? 0 : 650);
+      setTimeout(function(){
+        n++; input.value = ""; sync();
+        form.classList.remove("is-sending"); form.classList.add("is-fresh");
+        box.classList.remove("is-catching");
+        count.textContent = n === 1 ? "Your wish is in the box. Now blow out the candles." : n + " wishes in the box. Blow out the candles for luck.";
+        if (window.JOY && window.JOY.relightCake) window.JOY.relightCake();
+        setTimeout(function(){ form.classList.remove("is-fresh"); busy = false; }, 500);
+      }, reduced ? 50 : 1150);
     });
   })();
 

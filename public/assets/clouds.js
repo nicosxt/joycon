@@ -17,6 +17,10 @@
     ["cloud-1", 19.5, 3,   1.06,  88]
   ];
 
+  /* a soft blue sky from the top of the page down to the island's middle, multiplied into the paper */
+  var wash = document.createElement("div"); wash.className = "sky-wash"; wash.setAttribute("aria-hidden", "true");
+  document.body.insertBefore(wash, document.body.firstChild);
+
   var layer = document.createElement("div");
   layer.className = "sky-clouds"; layer.setAttribute("aria-hidden", "true");
   document.body.appendChild(layer);
@@ -32,6 +36,7 @@
 
   function place(){
     var r = hero.getBoundingClientRect(), top = r.top + scrollY, W = document.documentElement.clientWidth;
+    wash.style.height = Math.round(top + r.height * .5) + "px";
     items.forEach(function(it){
       it.el.style.width = (it.w / 100 * W) + "px";
       if (it.moved) return;
@@ -57,9 +62,23 @@
     it.el.addEventListener("pointerup", end); it.el.addEventListener("pointercancel", end);
   });
 
+  /* drift left to right, forever: each cloud at its own gentle speed, wrapping back in from the left */
+  var last = performance.now();
+  function drift(now){
+    var dt = Math.min(.05, (now - last) / 1000), W = document.documentElement.clientWidth; last = now;
+    if (!reduced) items.forEach(function(it, i){
+      if (it.el.classList.contains("is-dragging")) return;
+      var w = it.el.offsetWidth;
+      it.px += (10 + (i % 4) * 4) * dt; it.moved = true;
+      if (it.px > W + 20) it.px = -w - 20;
+      it.el.style.left = it.px + "px";
+    });
+    requestAnimationFrame(drift);
+  }
+
   place();
-  addEventListener("load", place);
+  addEventListener("load", function(){ var keep = items.map(function(it){ return it.moved; }); items.forEach(function(it){ it.moved = false; }); place(); });
   var rt; addEventListener("resize", function(){ clearTimeout(rt); rt = setTimeout(place, 150); });
-  if (window.ResizeObserver) new ResizeObserver(function(){ place(); }).observe(document.body);
+  requestAnimationFrame(drift);
   if (reduced) layer.classList.add("is-still");
 })();

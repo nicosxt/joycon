@@ -172,28 +172,38 @@
   </section>
 
   <section class="finale" id="finale" aria-labelledby="fin-h">
-    <div class="wrap">
-      <p class="eyebrow">A small ritual before you go</p>
-      <h2 id="fin-h">Make a wish for the weekend.</h2>
-      <p class="lede" style="margin:0 auto 26px">What joy do you want to find? Write it down, then blow out the candles. We never see it. It's just yours.</p>
-      <form class="wish" id="wish" autocomplete="off">
-        <label class="sr-only" for="wish-text">Your wish</label>
-        <input class="input wish__input" id="wish-text" maxlength="60" placeholder="I want to laugh with strangers" required>
-        <button class="btn btn--gold" type="submit">Make the wish</button>
-      </form>
-      <p class="wish__count" id="wish-count" aria-live="polite"></p>
-      <div class="cake" id="cake">
+    <div class="wrap wishrow">
+      <div class="wishrow__copy">
+        <p class="eyebrow">A small ritual before you go</p>
+        <h2 id="fin-h">Make a wish for the weekend.</h2>
+        <p class="lede">What joy do you want to find? Write it on the paper and tick it into the wishing box. Then blow out the candles below. We never see it. It's just yours.</p>
+        <p class="wish__count" id="wish-count" aria-live="polite"></p>
+        <div class="finale__cta">
+          <h3 class="finale__come">Come play.</h3>
+          <p style="margin:0 0 18px">January 16 to 17, 2027. San Francisco.</p>
+          <span data-cta="btn--big btn--ticket"></span>
+        </div>
+      </div>
+      <div class="wishrow__desk">
+        <form class="wishpaper is-empty" id="wish" autocomplete="off">
+          <label class="sr-only" for="wish-text">Your wish</label>
+          <textarea class="wishpaper__text" id="wish-text" maxlength="160" rows="5" placeholder="I want to laugh with strangers" required></textarea>
+          <span class="wishpaper__caret" aria-hidden="true"></span>
+          <button class="wishpaper__check" type="submit" aria-label="Drop the wish into the wishing box">
+            <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M10 21 l7 7 l14 -16" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </form>
+        <img class="wishbox" id="wishbox" src="assets/img/wishbox.webp" alt="A wooden wishing box" width="600" height="450" loading="lazy" decoding="async">
+      </div>
+    </div>
+    <div class="cake cake--big" id="cake">
+      <div class="cake__window">
         <div class="cake__stage">
-          <img class="cake__art" src="assets/img/cake.webp" alt="A birthday cake with candles" width="900" height="900" loading="lazy" decoding="async">
+          <img class="cake__art" src="assets/img/cake.webp" alt="A huge birthday cake covered in candles" width="1000" height="1000" decoding="async">
           <div class="cake__candles" id="cake-candles"></div>
         </div>
-        <p class="cake__hint" id="cake-hint">Move across the candles to blow them out.</p>
       </div>
-      <div class="finale__cta">
-        <h3 class="finale__come">Come play.</h3>
-        <p style="margin:0 0 18px">January 16 to 17, 2027. San Francisco.</p>
-        <span data-cta="btn--big btn--ticket"></span>
-      </div>
+      <p class="cake__hint" id="cake-hint">Move across the candles to blow them out.</p>
     </div>
   </section>
 
@@ -210,5 +220,6 @@
 <script src="assets/letter.js"></script>
 <script src="assets/cake.js"></script>
 <script src="assets/clouds.js"></script>
+<script src="assets/floaters.js"></script>
 </body>
 </html>

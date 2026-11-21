@@ -1669,3 +1669,8 @@ body[data-page="home"] .site-header.solid{ background: rgba(244,241,234,.88) !im
    ===================================================================== */
 html, body{ overflow-x: clip; }
 .letter-sec, .fridge, .finale, .hero, .wish__air, .proof, .days, .joy-teaser, .intro-strip, .section{ overflow: visible !important; }
+/* ticket: compact side stubs so SAVE A SEAT fills the face */
+.tix__print{ grid-template-columns: 12.8% 1fr 12.8%; }
+.tix__side{ font-size: .74rem; letter-spacing: .06em; }
+.tix__label{ font-size: 2.45rem; letter-spacing: -.025em; }
+@media (max-width: 420px){ .tix:not(.tix--mini) .tix__label{ font-size: 2.05rem; } .tix__side{ font-size: .64rem; } }

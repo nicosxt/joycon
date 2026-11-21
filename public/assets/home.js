@@ -200,15 +200,38 @@
     }
     var ticking = false;
     addEventListener("scroll", function(){ if (!ticking){ ticking = true; requestAnimationFrame(function(){ ticking = false; roll(); }); } }, { passive: true });
-    /* grab any pennant and slide the whole string left or right */
+    /* grab any pennant and slide the whole string left or right: the string eases after your hand,
+       and keeps gliding a little when you let go, slowing to a stop */
     lines.forEach(function(el){
-      var start = null;
+      var start = null, target = 0, vel = 0, lastX = 0, lastT = 0, running = false;
+      el._drag = el._drag || 0;
+      function loop(){
+        if (start){ el._drag += (target - el._drag) * .2; }          // follow the hand with a soft lag
+        else { target += vel; vel *= .88; el._drag += (target - el._drag) * .2; }   // coast after release
+        roll();
+        if (start || Math.abs(vel) > .05 || Math.abs(target - el._drag) > .3) requestAnimationFrame(loop);
+        else { el._drag = target; roll(); running = false; }
+      }
+      function kick(){ if (!running){ running = true; requestAnimationFrame(loop); } }
       el.addEventListener("pointerdown", function(e){
         if (!e.target.closest(".flagline__flag")) return;
-        start = { x: e.clientX, d: el._drag || 0 }; el.setPointerCapture(e.pointerId); el.classList.add("is-dragging"); e.preventDefault();
+        target = el._drag; vel = 0;
+        start = { x: e.clientX, d: el._drag }; lastX = e.clientX; lastT = performance.now();
+        try { el.setPointerCapture(e.pointerId); } catch (err) {}
+        el.classList.add("is-dragging"); e.preventDefault(); kick();
       });
-      el.addEventListener("pointermove", function(e){ if (!start) return; el._drag = start.d + (e.clientX - start.x); roll(); });
-      function end(){ start = null; el.classList.remove("is-dragging"); }
+      el.addEventListener("pointermove", function(e){
+        if (!start) return;
+        var now = performance.now(), dt = Math.max(8, now - lastT);
+        vel = vel * .6 + ((e.clientX - lastX) / dt * 16) * .4;      // px per frame, smoothed
+        lastX = e.clientX; lastT = now;
+        target = start.d + (e.clientX - start.x);
+      });
+      function end(){
+        if (!start) return; start = null; el.classList.remove("is-dragging");
+        if (performance.now() - lastT > 90) vel = 0;                  // held still before letting go: no fling
+        vel = Math.max(-24, Math.min(24, vel * .6)); kick();
+      }
       el.addEventListener("pointerup", end); el.addEventListener("pointercancel", end);
     });
     var rt; addEventListener("resize", function(){ clearTimeout(rt); rt = setTimeout(build, 150); });

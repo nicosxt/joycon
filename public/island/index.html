@@ -83,6 +83,8 @@
         box-shadow: 0 1px 0 var(--cap-deep), 0 2px 0 var(--cap-deep), 0 3px 0 var(--cap-deep), 0 4px 0 rgba(0,0,0,.35), inset 0 4px 3px rgba(255,255,255,.7), inset 0 -4px 0 rgba(0,0,0,.12) !important; }
       .jc-bar .jc-slot.is-active .jc-slot-art{ transform: translateY(-30px);
         box-shadow: 0 1px 0 var(--cap-deep), 0 2px 0 var(--cap-deep), 0 3px 0 var(--cap-deep), 0 4px 0 var(--cap-deep), 0 5px 0 var(--cap-deep), 0 6px 0 var(--cap-deep), 0 7px 0 var(--cap-deep), 0 8px 0 var(--cap-deep), 0 9px 0 var(--cap-deep), 0 10px 0 var(--cap-deep), 0 11px 0 var(--cap-deep), 0 12px 0 var(--cap-deep), 0 13px 0 var(--cap-deep), 0 14px 0 var(--cap-deep), 0 15px 0 var(--cap-deep), 0 16px 0 var(--cap-deep), 0 17px 0 var(--cap-deep), 0 18px 0 var(--cap-deep), 0 19px 0 var(--cap-deep), 0 20px 0 var(--cap-deep), 0 21px 0 var(--cap-deep), 0 22px 0 var(--cap-deep), 0 23px 0 var(--cap-deep), 0 24px 0 var(--cap-deep), 0 25px 0 var(--cap-deep), 0 26px 0 var(--cap-deep), 0 27px 0 var(--cap-deep), 0 28px 0 var(--cap-deep), 0 29px 0 var(--cap-deep), 0 30px 0 var(--cap-deep), 0 31px 0 rgba(0,0,0,.35), inset 0 4px 3px rgba(255,255,255,.9), inset 0 -6px 0 rgba(0,0,0,.1) !important; }
+      /* clouds now float on the page itself (assets/clouds.js), so they're never clipped by this frame */
+      .jc-cloud{ display: none !important; }
       @media (prefers-reduced-motion: reduce){ .jc-bar .jc-slot-art{ transition: none; } }
       /* the coaster is clickable: hovering the painted track or the cart glows the loop */
       /* the coaster gets the same sticker outline as every ride (the bundle's filter on .jc-art);

@@ -1,29 +1,35 @@
-/* Make a wish: a painted birthday cake with candles. Sweep the cursor (or a
-   finger) across a flame to blow it out. All out = your wish is on its way. */
+/* Make a wish: a painted birthday cake with JOY CON candles.
+   Sweep the cursor (or a finger) across a flame to blow it out. */
 (function(){
   "use strict";
   var stage = document.querySelector(".cake__stage"), box = document.getElementById("cake-candles"), hint = document.getElementById("cake-hint");
   if (!stage || !box) return;
   var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ~30 small candles spread over the top disc (ellipse centre, radii as % of the cake image) */
-  var CX = 47.4, CY = 20.4, RX = 18.5, RY = 9.6, SPOTS = [];
-  [[-.62, 5], [-.3, 7], [0, 8], [.3, 6], [.6, 4]].forEach(function(row){
-    var dy = row[0], n = row[1], half = Math.sqrt(1 - dy * dy) * .86;
-    for (var i = 0; i < n; i++){
-      var dx = n === 1 ? 0 : -half + 2 * half * i / (n - 1);
-      SPOTS.push([CX + dx * RX + (Math.random() - .5) * .8, CY + dy * RY + (Math.random() - .5) * .5]);
-    }
-  });
-  box.innerHTML = SPOTS.map(function(p, i){
-    return '<span class="candle" style="left:' + p[0] + '%;top:' + p[1] + '%;z-index:' + Math.round(p[1] * 10) + ';--d:' + (-i * .23).toFixed(2) + 's">' +
-      '<img class="candle__stick" src="assets/img/candle.webp" alt="" draggable="false">' +
-      '<span class="candle__flame"><img src="assets/img/flame.webp" alt="" draggable="false"></span>' +
-      '<span class="candle__smoke"></span></span>';
-  }).join("");
-  var candles = [].slice.call(box.querySelectorAll(".candle"));
+  /* Cut-out candles; left/top/width are % of the cake art; wick is % of the candle. */
+  var CANDLES = [
+    {id:"j",         file:"candle-j.webp",         left:23.1376, top:3.9695, width:4.9080, z:539, wick:71.43},
+    {id:"stripe-y",  file:"candle-stripe-y.webp",  left:29.2287, top:1.0687, width:1.7967, z:531, wick:48.78},
+    {id:"o1",        file:"candle-o1.webp",        left:30.8501, top:3.4351, width:6.5732, z:509, wick:47.33},
+    {id:"y",         file:"candle-y.webp",         left:38.2121, top:2.5954, width:4.9518, z:521, wick:18.58},
+    {id:"stripe-p1", file:"candle-stripe-p1.webp", left:45.0044, top:1.0687, width:1.7090, z:523, wick:48.72},
+    {id:"c",         file:"candle-c.webp",         left:52.4540, top:3.2061, width:6.2664, z:508, wick:55.94},
+    {id:"stripe-g",  file:"candle-stripe-g.webp",  left:59.5530, top:0.9160, width:1.7090, z:538, wick:48.72},
+    {id:"o2",        file:"candle-o2.webp",        left:60.6924, top:3.2824, width:6.8799, z:509, wick:49.68},
+    {id:"stripe-p2", file:"candle-stripe-p2.webp", left:69.9825, top:1.2214, width:1.7090, z:528, wick:48.72},
+    {id:"n",         file:"candle-n.webp",         left:71.1656, top:3.8931, width:4.2068, z:531, wick:73.96}
+  ];
 
-  /* confetti over the whole screen */
+  box.innerHTML = CANDLES.map(function(c, i){
+    return '<span class="candle candle--cut" style="left:' + c.left + '%;top:' + c.top + '%;width:' + c.width + '%;z-index:' + c.z + '">' +
+      '<img class="candle__stick" src="assets/img/candles/' + c.file + '" alt="" draggable="false">' +
+      '<span class="candle__light" style="left:' + c.wick + '%;--d:' + (-i * .23).toFixed(2) + 's">' +
+        '<span class="candle__flame"><img src="assets/img/flame.webp" alt="" draggable="false"></span>' +
+        '<span class="candle__smoke"></span></span></span>';
+  }).join("");
+
+  var lights = [].slice.call(box.querySelectorAll(".candle__light"));
+
   function rainConfetti(){
     var cv = document.createElement("canvas"); cv.className = "confetti-rain"; document.body.appendChild(cv);
     var dpr = Math.min(2, window.devicePixelRatio || 1), W = innerWidth, H = innerHeight, g = cv.getContext("2d");
@@ -48,7 +54,7 @@
     })(t0);
   }
 
-  function lit(){ return candles.filter(function(c){ return !c.classList.contains("is-out"); }); }
+  function lit(){ return lights.filter(function(c){ return !c.classList.contains("is-out"); }); }
   function blow(c){
     if (c.classList.contains("is-out")) return;
     c.classList.add("is-out");
@@ -63,18 +69,17 @@
     }
   }
   function relight(){
-    candles.forEach(function(c, i){ setTimeout(function(){ c.classList.remove("is-out"); }, reduced ? 0 : i * 30); });
+    lights.forEach(function(c, i){ setTimeout(function(){ c.classList.remove("is-out"); }, reduced ? 0 : i * 30); });
     hint.textContent = "Move across the candles to blow them out.";
   }
   window.JOY = window.JOY || {}; window.JOY.relightCake = relight;
 
-  /* a quick pass close to a flame puts it out; a slow hover just makes it lean */
   var last = null;
   stage.addEventListener("pointermove", function(e){
     var now = performance.now(), speed = 0;
     if (last){ speed = Math.hypot(e.clientX - last.x, e.clientY - last.y) / Math.max(8, now - last.t); }
     last = { x: e.clientX, y: e.clientY, t: now };
-    candles.forEach(function(c){
+    lights.forEach(function(c){
       if (c.classList.contains("is-out")) return;
       var f = c.querySelector(".candle__flame").getBoundingClientRect();
       var cx = f.left + f.width / 2, cy = f.top + f.height * .6, d = Math.hypot(e.clientX - cx, e.clientY - cy);
@@ -86,8 +91,7 @@
       } else c.style.setProperty("--lean", "0deg");
     });
   });
-  stage.addEventListener("pointerleave", function(){ last = null; candles.forEach(function(c){ c.style.setProperty("--lean", "0deg"); }); });
-  // keyboard and screen-reader friendly way to blow them all out
+  stage.addEventListener("pointerleave", function(){ last = null; lights.forEach(function(c){ c.style.setProperty("--lean", "0deg"); }); });
   stage.setAttribute("role", "button"); stage.setAttribute("tabindex", "0"); stage.setAttribute("aria-label", "Birthday cake. Press Enter to blow out the candles.");
-  stage.addEventListener("keydown", function(e){ if (e.key === "Enter" || e.key === " "){ e.preventDefault(); candles.forEach(function(c, i){ setTimeout(function(){ blow(c); }, i * 120); }); } });
+  stage.addEventListener("keydown", function(e){ if (e.key === "Enter" || e.key === " "){ e.preventDefault(); lights.forEach(function(c, i){ setTimeout(function(){ blow(c); }, i * 120); }); } });
 })();

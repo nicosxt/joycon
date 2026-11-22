@@ -1884,3 +1884,65 @@ body{ isolation: isolate; }
 /* letter: 20% wider, height follows the words (so it's shorter), clean deckled sheet */
 .mail .letter{ width: min(564px, 94vw); margin-left: calc(min(564px, 94vw) / -2); min-height: 0 !important; padding: 48px 52px 46px; }
 @media (max-width: 520px){ .mail .letter{ padding: 34px 26px 32px; } }
+/* =====================================================================
+   TWO DOORS, Wonderland: separate whimsical doors; one leaf each that
+   swings open on its hinge, the knob on the free edge
+   ===================================================================== */
+.facade2--wonder{ width: min(1100px, 96vw); margin-top: 10px; }
+.door4{ position: absolute; display: block; text-decoration: none; color: #fffaf0; perspective: 1000px; outline: none; -webkit-tap-highlight-color: transparent; --open: 22deg;
+  transition: filter .6s ease; }
+/* the room behind the door: warm dark at rest, a soft glow spilling from the gap when it opens */
+.door4__way{ position: absolute; inset: 0; -webkit-mask: var(--way) center / 100% 100% no-repeat; mask: var(--way) center / 100% 100% no-repeat;
+  background: radial-gradient(85% 60% at 50% 72%, #4b2d20 0%, #28160f 52%, #120a07 100%); overflow: hidden; }
+.door4, .door4:hover, .door4:focus, .door4:focus-visible, .door4:active, .door4:visited{ color: #fffaf0; }
+.door4--hinge-left{ --spill: 270deg; }
+.door4--hinge-right{ --spill: 90deg; }
+.door4__light{ position: absolute; inset: 0; opacity: 0; transition: opacity .6s ease;
+  background:
+    linear-gradient(var(--spill), rgba(255,196,108,.8) 0%, rgba(255,160,84,.46) 20%, rgba(255,150,80,.18) 48%, rgba(255,140,80,0) 75%),
+    radial-gradient(70% 45% at 50% 85%, rgba(255,170,100,.3), rgba(255,170,100,0)); }
+.door4__sparks{ position: absolute; inset: 0; opacity: 0; transition: opacity .5s ease;
+  background-image: radial-gradient(2px 2px at 20% 30%, #fff 50%, transparent 51%), radial-gradient(1.5px 1.5px at 70% 22%, #fff 50%, transparent 51%),
+    radial-gradient(2px 2px at 40% 70%, #fff 50%, transparent 51%), radial-gradient(1.5px 1.5px at 80% 60%, #fff 50%, transparent 51%),
+    radial-gradient(2.5px 2.5px at 55% 45%, #fffbe6 50%, transparent 51%), radial-gradient(1.5px 1.5px at 30% 85%, #fff 50%, transparent 51%);
+  animation: door-sparkle 2.4s linear infinite; }
+/* the leaf: the painted door, carrying its sign, words and knob. It swings a little way inward on its hinge. */
+.door4__leaf{ position: absolute; inset: 0; background: var(--leaf) center / 100% 100% no-repeat; transform-style: preserve-3d; backface-visibility: hidden;
+  transition: transform .75s cubic-bezier(.4,0,.2,1), filter .75s ease; }
+.door4--hinge-left .door4__leaf{ transform-origin: 0 50%; }
+.door4--hinge-right .door4__leaf{ transform-origin: 100% 50%; }
+.door4:focus-visible .door4__leaf, .door4.is-open .door4__leaf{ filter: brightness(.9) saturate(.96); }
+.door4--hinge-left:focus-visible .door4__leaf, .door4--hinge-left.is-open .door4__leaf{ transform: rotateY(var(--open)); }
+.door4--hinge-right:focus-visible .door4__leaf, .door4--hinge-right.is-open .door4__leaf{ transform: rotateY(calc(var(--open) * -1)); }
+.door4:focus-visible .door4__light, .door4.is-open .door4__light{ opacity: 1; }
+.door4:focus-visible .door4__sparks, .door4.is-open .door4__sparks{ opacity: .5; }
+.door4:focus-visible, .door4.is-open{ filter: drop-shadow(0 0 12px rgba(255,205,140,.4)); }
+@media (hover: hover){
+  .door4:hover .door4__leaf{ filter: brightness(.9) saturate(.96); }
+  .door4--hinge-left:hover .door4__leaf{ transform: rotateY(var(--open)); }
+  .door4--hinge-right:hover .door4__leaf{ transform: rotateY(calc(var(--open) * -1)); }
+  .door4:hover .door4__light{ opacity: 1; }
+  .door4:hover .door4__sparks{ opacity: .5; }
+  .door4:hover{ filter: drop-shadow(0 0 12px rgba(255,205,140,.4)); }
+  .door4:hover .door4__knob img{ transform: rotate(28deg); transition-delay: 0s; }
+  .door4:hover .door4__leaf{ transition-delay: .1s; }
+}
+/* knob on the free edge (opposite the hinge); it gives a small turn first, then the door follows */
+.door4__knob{ position: absolute; top: 56%; width: 20%; z-index: 2; }
+.door4--hinge-left .door4__knob{ right: 4%; }
+.door4--hinge-right .door4__knob{ left: 4%; transform: scaleX(-1); }
+.door4__knob img{ display: block; width: 100%; height: auto; transform-origin: 26% 50%; transition: transform .35s cubic-bezier(.3,1.3,.5,1);
+  filter: drop-shadow(1px 2px 2px rgba(42,36,32,.4)); }
+.door4:focus-visible .door4__knob img, .door4.is-open .door4__knob img{ transform: rotate(28deg); }
+/* words and the white wooden sign, painted onto the door */
+.door4__content{ position: absolute; left: 10%; right: 10%; top: 15%; display: flex; flex-direction: column; align-items: center; gap: .35em; text-align: center;
+  text-shadow: 0 1px 1px rgba(42,36,32,.6), 0 2px 8px rgba(42,36,32,.35); }
+.door4__sign{ position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: center; width: 84%; aspect-ratio: 520 / 220; transform: rotate(-2deg); }
+.door4--sun .door4__sign{ transform: rotate(2deg); }
+.door4__sign::before{ content: ""; position: absolute; inset: 0; z-index: -1; background: url("img/doors/sign.webp") center / 100% 100% no-repeat; filter: drop-shadow(0 3px 3px rgba(42,36,32,.3)); }
+.door4__sign span{ font-family: var(--f-text); font-weight: 700; font-size: clamp(.8rem, 1.9vw, 1.45rem); letter-spacing: .05em; color: #4a3626; text-shadow: none; }
+.door4__title{ font-family: var(--f-text); font-weight: 700; font-size: clamp(.78rem, 1.5vw, 1.12rem); line-height: 1.1; margin-top: .3em; }
+.door4__text{ font-size: clamp(.58rem, 1.02vw, .78rem); line-height: 1.3; }
+.door4:focus-visible .door4__sign{ outline: 3px solid var(--c-lochmara); outline-offset: 3px; }
+@media (max-width: 640px){ .door4__text{ display: none; } }
+@media (prefers-reduced-motion: reduce){ .door4, .door4__leaf, .door4__knob img, .door4__light, .door4__sparks{ transition: none !important; } .door4__leaf{ transform: none !important; } .door4__sparks{ animation: none; } }

@@ -261,6 +261,20 @@
     if (document.fonts) document.fonts.ready.then(placeBulbs);
   }
 
+  /* doors on touch screens: first tap opens the door, a second tap walks through (hover does the same on a mouse) */
+  (function(){
+    var doors = Array.prototype.slice.call(document.querySelectorAll(".door4"));
+    if (!doors.length) return;
+    function closeAll(except){ doors.forEach(function(d){ if (d !== except) d.classList.remove("is-open"); }); }
+    doors.forEach(function(d){
+      d.addEventListener("click", function(e){
+        if (!matchMedia("(hover: none)").matches) return;
+        if (!d.classList.contains("is-open")){ e.preventDefault(); closeAll(d); d.classList.add("is-open"); }
+      });
+    });
+    document.addEventListener("click", function(e){ if (!e.target.closest(".door4")) closeAll(); });
+  })();
+
   /* make a wish: write it on the paper, tick it into the wishing box. Nothing is stored or sent. */
   (function(){
     var form = document.getElementById("wish"), input = document.getElementById("wish-text"), count = document.getElementById("wish-count"), box = document.getElementById("wishbox");

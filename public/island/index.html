@@ -120,6 +120,9 @@
          it just must not shift, or the cut-out rails would slide off the painted ones */
       .jc-ride:has(.jc-track-hit) .jc-art{ transform: none !important; }
       .jc-track-hit{ stroke: transparent !important; }
+      /* the handpan player stays on her feet: a gentle sway to the music instead of the old ghost's float */
+      .jc-performer-2{ animation: jc-sway 1.6s ease-in-out infinite alternate !important; }
+      @keyframes jc-sway{ from{ transform: rotate(-3deg); } to{ transform: rotate(3deg) translateY(-2%); } }
       /* the Joy Ride is two layers (rails behind the rides, the cart's front pass on top) and the top one catches the hover,
          so light both up together with the same cream sticker outline every other ride gets, and the dark one when chosen */
       body:has(.jc-ride:hover .jc-track-hit) .jc-ride:has(.jc-track-hit) .jc-art, body:has(.jc-ride:focus-visible .jc-track-hit) .jc-ride:has(.jc-track-hit) .jc-art{

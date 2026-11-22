@@ -2186,3 +2186,52 @@ body{ isolation: isolate; }
 .cake--big .candle--wick{ width: 0; height: 0; }
 .cake--big .candle--wick .candle__light{ left: 0; top: 0; width: clamp(14px, 1.75vw, 30px); transform: translate(-50%, -97%); }
 .cake--big .candle--wick .candle__flame img{ filter: drop-shadow(0 0 6px rgba(255,190,90,.65)) drop-shadow(0 0 16px rgba(255,170,70,.35)); }
+/* footer 10% smaller: narrower frame, thinner rails, smaller type */
+.site-footer{ --fb: 43px; font-size: 90%; }
+.site-footer > .wrap{ max-width: calc((var(--max) + 2 * 48px) * .9); padding: 23px clamp(13px, 2.7vw, 36px) 16px; }
+.site-footer .footer__mark{ font-size: 2.5rem; }
+.site-footer .footer__signoff{ font-size: 1.8rem; }
+@media (max-width: 760px){ .site-footer{ --fb: 27px; } }
+
+/* =====================================================================
+   EVERY PAGE ON PAPER: no painted skies, hills, suns or gradient bands
+   behind sections; the handmade paper shows through everywhere.
+   ===================================================================== */
+.page-head, .cta-band, .finale, .rides, .proof, .section, .faq, .pack, .makers{ background: transparent !important; }
+.page-head{ padding-bottom: clamp(20px, 4vw, 40px) !important; margin-bottom: 0 !important; }
+.page-head::before, .page-head::after, .cta-band::before, .cta-band::after{ background: none !important; }
+.cta-band{ padding-bottom: clamp(48px, 8vw, 88px) !important; }
+/* the footer only rises over the cake on the homepage; elsewhere it sits below the page */
+.site-footer{ margin-top: clamp(40px, 6vw, 80px) !important; }
+body[data-page="home"] .site-footer{ margin-top: calc(-96px - clamp(70px, 10vw, 170px) - clamp(60px, 7vw, 110px)) !important; }
+/* the painted ferris wheel ornament (essay ending, empty community board) */
+.ferris{ display: block; height: auto; filter: drop-shadow(0 10px 12px rgba(42,36,32,.18)); }
+/* tilt stays a flat card tilt: no shared 3D space, so buttons inside (the letter's Tap to open) keep receiving clicks */
+.tilt{ transform-style: flat !important; }
+
+/* =====================================================================
+   SUB-PAGES IN THE LANDING PAGE'S LANGUAGE: soft painted cards on paper,
+   gentle layered shadows, no hard ink outlines or offset shadows, no dark slabs.
+   ===================================================================== */
+:root{ --card-bg: rgba(255,251,240,.78); --card-line: rgba(42,36,32,.10);
+  --card-shadow: 0 1px 2px rgba(42,36,32,.06), 0 6px 12px -4px rgba(42,36,32,.10), 0 22px 36px -14px rgba(42,36,32,.18); }
+.nav__links a[aria-current="page"]{ background: rgba(226,86,44,.12) !important; color: var(--c-cinnabar-deep) !important; box-shadow: none !important; }
+aside.spirit, .where-card, .tagcard, .checklist, .form-panel, .filters, .notice, .empty, .faq details, main details,
+.maker, .advisor, .sorter__card, .tabs, .file-drop, .ticket__main, .ticket__stub{
+  border: 1px solid var(--card-line) !important; box-shadow: var(--card-shadow) !important; border-radius: 18px; }
+aside.spirit, .where-card, .form-panel, .filters, .notice, .empty, main details, .maker, .advisor, .sorter__card, .file-drop{ background-color: var(--card-bg) !important; }
+aside.spirit{ color: var(--c-ink) !important; }
+aside.spirit *{ color: inherit; }
+.tabs{ background: rgba(255,251,240,.6) !important; padding: 5px; }
+.tab{ border: 0 !important; box-shadow: none !important; border-radius: 999px; }
+.tab[aria-selected="true"], .tab.is-active{ background: var(--c-cinnabar) !important; color: #fffaf0 !important; box-shadow: 0 6px 14px -6px rgba(167,70,40,.55) !important; }
+main details summary{ border: 0 !important; }
+.maker__photo{ border: 0 !important; border-radius: 14px; box-shadow: 0 10px 22px -10px rgba(42,36,32,.35) !important; overflow: hidden; }
+.input, .select, .textarea{ border: 1px solid rgba(42,36,32,.22) !important; box-shadow: inset 0 1px 2px rgba(42,36,32,.06) !important; border-radius: 12px !important; background: rgba(255,253,247,.9) !important; }
+.input:focus, .select:focus, .textarea:focus{ border-color: var(--c-lochmara) !important; box-shadow: 0 0 0 3px rgba(5,136,196,.18) !important; outline: none; }
+.box, .sorter__key{ border-width: 1.5px !important; border-color: rgba(42,36,32,.45) !important; box-shadow: none !important; }
+.sorter__a{ border: 1px solid var(--card-line) !important; box-shadow: 0 4px 10px -4px rgba(42,36,32,.18) !important; border-radius: 14px; background: var(--card-bg); }
+.sorter__a:hover{ box-shadow: 0 10px 20px -8px rgba(42,36,32,.28) !important; transform: translateY(-2px); }
+main li img{ border: 0 !important; }
+.how li{ border: 1px solid var(--card-line) !important; box-shadow: var(--card-shadow) !important; background-color: var(--card-bg) !important; border-radius: 18px; }
+.file-drop img{ border: 0 !important; border-radius: 12px; box-shadow: 0 8px 18px -8px rgba(42,36,32,.3); }

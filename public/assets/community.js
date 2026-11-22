@@ -37,7 +37,7 @@
       '</div></li>';
   }
 
-  var EMPTY = '<div class="empty"><img src="assets/img/rose-window.svg" alt="" width="120" height="120" style="margin:0 auto 12px">' +
+  var EMPTY = '<div class="empty"><img class="ferris" src="assets/img/ferris-wheel.webp" alt="" width="160" height="183" style="margin:0 auto 12px">' +
     '<h3>The park is still being built.</h3><p class="lede" style="margin:0 auto 22px">No rides yet. Somebody has to be first.</p><a class="btn btn--big" href="#add">Add the first ride</a></div>';
 
   function render(){

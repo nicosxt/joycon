@@ -6,25 +6,25 @@
   if (!stage || !box) return;
   var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* Cut-out candles; left/top/width are % of the cake art; wick is % of the candle. */
+  /* The candles are painted into the cake (cake.webp); these are the tips of their wicks, as % of the art. Each gets a painted flame. */
   var CANDLES = [
-    {id:"j",         file:"candle-j.webp",         left:23.1376, top:3.9695, width:4.9080, z:539, wick:71.43},
-    {id:"stripe-y",  file:"candle-stripe-y.webp",  left:29.2287, top:1.0687, width:1.7967, z:531, wick:48.78},
-    {id:"o1",        file:"candle-o1.webp",        left:30.8501, top:3.4351, width:6.5732, z:509, wick:47.33},
-    {id:"y",         file:"candle-y.webp",         left:38.2121, top:2.5954, width:4.9518, z:521, wick:18.58},
-    {id:"stripe-p1", file:"candle-stripe-p1.webp", left:45.0044, top:1.0687, width:1.7090, z:523, wick:48.72},
-    {id:"c",         file:"candle-c.webp",         left:52.4540, top:3.2061, width:6.2664, z:508, wick:55.94},
-    {id:"stripe-g",  file:"candle-stripe-g.webp",  left:59.5530, top:0.9160, width:1.7090, z:538, wick:48.72},
-    {id:"o2",        file:"candle-o2.webp",        left:60.6924, top:3.2824, width:6.8799, z:509, wick:49.68},
-    {id:"stripe-p2", file:"candle-stripe-p2.webp", left:69.9825, top:1.2214, width:1.7090, z:528, wick:48.72},
-    {id:"n",         file:"candle-n.webp",         left:71.1656, top:3.8931, width:4.2068, z:531, wick:73.96}
+    {id:"w1", left:25.4044, top:1.5625},
+    {id:"w2", left:30.6250, top:2.4089},
+    {id:"w3", left:35.1471, top:2.0833},
+    {id:"w4", left:41.7279, top:2.2135},
+    {id:"w5", left:47.6838, top:2.5391},
+    {id:"w6", left:56.0294, top:2.2786},
+    {id:"w7", left:61.8382, top:2.5391},
+    {id:"w8", left:66.8382, top:2.0182},
+    {id:"w9", left:72.4632, top:2.1484},
+    {id:"w10", left:75.0735, top:2.7344},
+    {id:"w11", left:79.0441, top:2.2135}
   ];
 
   box.innerHTML = CANDLES.map(function(c, i){
-    return '<span class="candle candle--cut" style="left:' + c.left + '%;top:' + c.top + '%;width:' + c.width + '%;z-index:' + c.z + '">' +
-      '<img class="candle__stick" src="assets/img/candles/' + c.file + '?v=2" alt="" draggable="false">' +
-      '<span class="candle__light" style="left:' + c.wick + '%;--d:' + (-i * .23).toFixed(2) + 's">' +
-        '<span class="candle__flame"><img src="assets/img/flame.webp" alt="" draggable="false"></span>' +
+    return '<span class="candle candle--cut candle--wick" style="left:' + c.left + '%;top:' + c.top + '%">' +
+      '<span class="candle__light" style="--d:' + (-i * .23).toFixed(2) + 's">' +
+        '<span class="candle__flame"><img src="assets/img/flame.webp?v=3" alt="" draggable="false"></span>' +
         '<span class="candle__smoke"></span></span></span>';
   }).join("");
 

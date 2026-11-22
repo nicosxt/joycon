@@ -1994,3 +1994,153 @@ body{ isolation: isolate; }
 .door4:focus-visible .door4__sign{ outline: 3px solid var(--c-lochmara); outline-offset: 3px; }
 @media (max-width: 640px){ .door4__text{ display: none; } }
 @media (prefers-reduced-motion: reduce){ .door4, .door4__leaf, .door4__knob img, .door4__light, .door4__sparks{ transition: none !important; } .door4__leaf{ transform: none !important; } .door4__sparks{ animation: none; } }
+
+/* =====================================================================
+   FOOTER: a painted gilt frame with a cream marble panel (no hills).
+   The frame is 9-sliced so it stretches to any width; the scallop shell
+   is its own piece so it never stretches with the top rail.
+   ===================================================================== */
+.site-footer{ --fb: 48px; background: transparent !important; color: var(--c-ink); padding: 96px 0 56px; margin-top: 24px; }
+.site-footer::before{ display: none !important; }
+.site-footer > .wrap{ position: relative; max-width: calc(var(--max) + 2 * var(--fb));
+  border: var(--fb) solid transparent; border-image: url("img/footer-frame.webp") 150 fill / var(--fb) stretch;
+  padding: 26px clamp(14px, 3vw, 40px) 18px; filter: drop-shadow(0 4px 4px rgba(42,36,32,.16)) drop-shadow(0 18px 24px rgba(42,36,32,.14)); }
+.site-footer > .wrap::after{ content: ""; position: absolute; left: 50%; top: calc(-1 * var(--fb) - var(--fb) * .667);
+  width: calc(var(--fb) * 2.08); aspect-ratio: 312 / 238; transform: translateX(-50%);
+  background: url("img/footer-shell.webp") center / 100% 100% no-repeat; pointer-events: none; }
+.site-footer a{ color: var(--c-cinnabar-deep); text-decoration-color: rgba(167,70,40,.45); }
+.site-footer a:hover{ color: var(--c-cinnabar); }
+.site-footer .footer__mark{ color: var(--c-cinnabar); text-shadow: 1px 2px 0 rgba(255,250,240,.7); }
+.site-footer .footer__signoff{ color: var(--c-lochmara); }
+.site-footer .footer__h{ color: var(--c-ink-soft); }
+.site-footer .footer__fine{ color: var(--c-ink-soft); border-top-color: rgba(42,36,32,.22); }
+@media (max-width: 760px){ .site-footer{ --fb: 30px; padding-top: 72px; } .site-footer > .wrap{ margin-inline: 10px; width: auto; } }
+
+/* magnifier over "Find your joy": the magnified button runs a rainbow in the balloon colours, with white sparkles */
+.magnifier.is-joy .magnifier__view .joy-teaser a[href="/joy"]{
+  background: linear-gradient(90deg, #f2879f, #f7a65c, #f7d25e, #96d08c, #8fc6ea, #b294e0, #f2879f, #f7a65c, #f7d25e, #96d08c, #8fc6ea, #b294e0, #f2879f) 0 50% / 200% 100% !important;
+  animation: joy-rainbow 2.6s linear infinite; }
+@keyframes joy-rainbow{ to{ background-position: 100% 50%; } }
+.magnifier__sparkles{ position: absolute; pointer-events: none; z-index: 3; opacity: 0; transition: opacity .35s ease; }
+.magnifier.is-joy .magnifier__sparkles{ opacity: 1; }
+.magnifier__sparkles i{ position: absolute; width: var(--s); height: var(--s); margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2); background: #fff;
+  clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+  filter: drop-shadow(0 0 3px rgba(255,255,255,.95)) drop-shadow(0 0 6px rgba(255,236,200,.8));
+  animation: mag-twinkle var(--d) ease-in-out infinite; }
+@keyframes mag-twinkle{ 0%, 100%{ transform: scale(.15) rotate(0deg); opacity: 0; } 45%{ transform: scale(1) rotate(25deg); opacity: 1; } 70%{ transform: scale(.6) rotate(40deg); opacity: .7; } }
+@media (prefers-reduced-motion: reduce){ .magnifier.is-joy .magnifier__view .joy-teaser a[href="/joy"]{ animation: none; } .magnifier__sparkles i{ animation: none; opacity: .9; transform: scale(.8); } }
+
+/* cake sits higher: just enough room above the stage for the flames, and no extra gap under the wishing desk */
+.cake--big{ margin-top: 0; }
+.cake--big .cake__window{ padding-top: clamp(30px, 4.7vw, 68px); }
+
+/* cursor tilt (assets/tilt.js): eases toward the pointer and back */
+.tilt{ transition: transform .3s ease-out; will-change: transform; transform-style: preserve-3d; }
+/* the framed footer rises over the bottom of the cake */
+.site-footer{ position: relative; z-index: 5; margin-top: calc(-96px - clamp(70px, 10vw, 170px)) !important; }
+
+/* =====================================================================
+   DOORS: the climbing plants are their own painted layers, swaying in a
+   gusty breeze from their roots; each flower nods on its own.
+   ===================================================================== */
+.facade2__plants{ position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.plant{ position: absolute; display: block; will-change: transform;
+  animation: plant-sway var(--dur, 5s) ease-in-out var(--delay, 0s) infinite; }
+.plant img{ display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
+.plant--vine{ transform-origin: 50% 100%; }
+.plant--vine:has(img[src*="-top."]){ transform-origin: 30% 100%; }
+.plant--bloom{ transform-origin: 50% 55%; animation-name: bloom-nod; }
+/* a breeze from the left: a push, a give back, a smaller second gust, settle */
+@keyframes plant-sway{
+  0%, 100%{ transform: rotate(0deg) skewX(0deg); }
+  18%{ transform: rotate(var(--amp)) skewX(calc(var(--amp) * -.4)); }
+  34%{ transform: rotate(calc(var(--amp) * -.35)) skewX(calc(var(--amp) * .15)); }
+  52%{ transform: rotate(calc(var(--amp) * .7)) skewX(calc(var(--amp) * -.25)); }
+  70%{ transform: rotate(calc(var(--amp) * -.15)); }
+  85%{ transform: rotate(calc(var(--amp) * .25)); }
+}
+@keyframes bloom-nod{
+  0%, 100%{ transform: rotate(0deg) translate(0, 0) scale(1); }
+  20%{ transform: rotate(var(--amp)) translate(1.5%, -1%) scale(1.02); }
+  38%{ transform: rotate(calc(var(--amp) * -.45)) translate(-.5%, .5%) scale(.99); }
+  58%{ transform: rotate(calc(var(--amp) * .6)) translate(1%, -.5%) scale(1.01); }
+  78%{ transform: rotate(calc(var(--amp) * -.2)) translate(0, 0); }
+}
+/* open doors: the breeze picks up as the light pours out */
+.facade2:has(.door4:hover, .door4.is-open, .door4:focus-visible) .plant{ animation-duration: calc(var(--dur, 5s) * .7); }
+@media (prefers-reduced-motion: reduce){ .plant{ animation: none; } }
+
+/* =====================================================================
+   DOORS: behind each door, a bright magical room. White-gold light at the
+   centre, a soft pastel shimmer in the balloon colours, slow turning rays,
+   and a glow that pours out over the arch and down the steps.
+   ===================================================================== */
+.door4{ --open: 30deg; }
+.door4__way{ background:
+    radial-gradient(60% 46% at 50% 58%, #fffef6 0%, #fff6d8 26%, rgba(255,233,180,.95) 46%, rgba(255,214,150,.9) 70%, #ffc98a 100%); }
+.door4__light{ background: none; mix-blend-mode: normal; }
+.door4__light::before{ content: ""; position: absolute; left: -60%; top: -30%; width: 220%; height: 160%;
+  background: repeating-conic-gradient(from 0deg at 50% 62%, rgba(255,255,255,.55) 0deg 7deg, rgba(255,255,255,0) 7deg 22deg);
+  animation: door-rays 22s linear infinite; mix-blend-mode: soft-light; }
+.door4__light::after{ content: ""; position: absolute; inset: 0;
+  background: linear-gradient(115deg, rgba(242,135,159,.38), rgba(247,210,94,.3) 28%, rgba(150,208,140,.28) 52%, rgba(143,198,234,.32) 74%, rgba(178,148,224,.38));
+  background-size: 260% 260%; animation: door-shimmer 7s ease-in-out infinite alternate; mix-blend-mode: soft-light; }
+@keyframes door-rays{ to{ transform: rotate(360deg); } }
+@keyframes door-shimmer{ from{ background-position: 0% 50%; } to{ background-position: 100% 50%; } }
+.door4__sparks{ background-image:
+    radial-gradient(3px 3px at 20% 30%, #fff 50%, transparent 51%), radial-gradient(2px 2px at 70% 22%, #fff 50%, transparent 51%),
+    radial-gradient(3px 3px at 40% 70%, #fff 50%, transparent 51%), radial-gradient(2px 2px at 80% 60%, #fff 50%, transparent 51%),
+    radial-gradient(3.5px 3.5px at 55% 45%, #fffbe6 50%, transparent 51%), radial-gradient(2px 2px at 30% 85%, #fff 50%, transparent 51%),
+    radial-gradient(2.5px 2.5px at 62% 82%, #fff 50%, transparent 51%), radial-gradient(2px 2px at 15% 55%, #fffbe6 50%, transparent 51%); }
+/* the glow that escapes the doorway: over the stones, onto the steps and the paper around it */
+.door4::before{ content: ""; position: absolute; left: -45%; right: -45%; top: -18%; bottom: -26%; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(42% 46% at 50% 52%, rgba(255,250,228,.85) 0%, rgba(255,238,196,.5) 38%, rgba(255,224,170,.18) 64%, rgba(255,220,160,0) 82%),
+    radial-gradient(38% 16% at 50% 96%, rgba(255,240,205,.75), rgba(255,240,205,0) 80%);
+  mix-blend-mode: screen; opacity: 0; transform: scale(.85); transition: opacity .7s ease, transform .9s cubic-bezier(.2,.8,.3,1); }
+.door4:focus-visible::before, .door4.is-open::before{ opacity: 1; transform: scale(1); }
+.door4:focus-visible .door4__sparks, .door4.is-open .door4__sparks{ opacity: .95; }
+.door4:focus-visible, .door4.is-open{ filter: drop-shadow(0 0 18px rgba(255,236,190,.85)) drop-shadow(0 0 46px rgba(255,214,150,.55)); }
+.door4:focus-visible .door4__leaf, .door4.is-open .door4__leaf{ filter: brightness(1.02) saturate(1); }
+@media (hover: hover){
+  .door4:hover::before{ opacity: 1; transform: scale(1); }
+  .door4:hover .door4__sparks{ opacity: .95; }
+  .door4:hover{ filter: drop-shadow(0 0 18px rgba(255,236,190,.85)) drop-shadow(0 0 46px rgba(255,214,150,.55)); }
+  .door4:hover .door4__leaf{ filter: brightness(1.02) saturate(1); }
+}
+@media (prefers-reduced-motion: reduce){ .door4__light::before, .door4__light::after{ animation: none; } }
+/* stronger light: reads on light paper (normal blending, golden halo) */
+.door4__way{ background:
+    radial-gradient(48% 38% at 50% 60%, #ffffff 0%, #fffbe8 22%, rgba(255,236,170,1) 48%, rgba(255,200,110,1) 78%, #ffb36b 100%); }
+.door4__light::before{ background: repeating-conic-gradient(from 0deg at 50% 62%, rgba(255,255,255,.75) 0deg 6deg, rgba(255,255,255,0) 6deg 20deg); mix-blend-mode: normal; opacity: .7; }
+.door4::before{ mix-blend-mode: normal; left: -55%; right: -55%; top: -22%; bottom: -30%;
+  background:
+    radial-gradient(40% 44% at 50% 50%, rgba(255,226,150,.7) 0%, rgba(255,210,130,.42) 34%, rgba(255,196,120,.18) 60%, rgba(255,196,120,0) 80%),
+    radial-gradient(36% 14% at 50% 97%, rgba(255,222,150,.7), rgba(255,222,150,0) 80%); }
+.door4:focus-visible, .door4.is-open{ filter: drop-shadow(0 0 10px rgba(255,236,170,.95)) drop-shadow(0 0 34px rgba(255,196,100,.7)); }
+@media (hover: hover){ .door4:hover{ filter: drop-shadow(0 0 10px rgba(255,236,170,.95)) drop-shadow(0 0 34px rgba(255,196,100,.7)); } }
+.door4::before{ background:
+    radial-gradient(40% 44% at 50% 50%, rgba(255,222,140,.9) 0%, rgba(255,205,120,.55) 34%, rgba(255,190,110,.22) 60%, rgba(255,190,110,0) 80%),
+    radial-gradient(36% 14% at 50% 97%, rgba(255,218,140,.85), rgba(255,218,140,0) 80%); }
+
+/* "Find your joy": a misty painted cloud like the ones drifting in the sky, floating slowly, words dead centre.
+   The mist (blur, feathered edge, translucency) lives on the cloud layer only, so the text stays crisp. */
+.joy-bubble{ animation: joy-float 7s ease-in-out infinite; transform-origin: 50% 50%; }
+.joy-bubble__text{ width: 270px; aspect-ratio: 900 / 532; padding: 7% 0 0 !important; box-sizing: border-box; justify-content: center; align-items: center; text-align: center; }
+.joy-bubble .joy-bubble__text::before{ background: url("img/cloud-3.webp") center / 100% 100% no-repeat; opacity: .9;
+  filter: blur(1.6px) drop-shadow(0 14px 18px rgba(140,130,150,.14));
+  -webkit-mask-image: radial-gradient(ellipse 52% 50% at 50% 52%, #000 55%, rgba(0,0,0,.55) 78%, transparent 100%);
+          mask-image: radial-gradient(ellipse 52% 50% at 50% 52%, #000 55%, rgba(0,0,0,.55) 78%, transparent 100%);
+  animation: joy-puff 9s ease-in-out infinite; }
+.joy-bubble:hover .joy-bubble__text, .joy-bubble:focus-visible .joy-bubble__text{ transform: scale(1.05); }
+@keyframes joy-float{
+  0%, 100%{ transform: translate(0, 0) rotate(-1.5deg); }
+  25%{ transform: translate(6px, -12px) rotate(0deg); }
+  50%{ transform: translate(12px, -18px) rotate(1.5deg); }
+  75%{ transform: translate(4px, -8px) rotate(.5deg); }
+}
+@keyframes joy-puff{ 0%, 100%{ transform: scale(1, 1); } 50%{ transform: scale(1.035, .975); } }
+.joy-bubble--say .joy-bubble__text{ width: 250px; }
+@media (prefers-reduced-motion: reduce){ .joy-bubble, .joy-bubble .joy-bubble__text::before{ animation: none; } }
+/* footer frame sits ~20% of its height higher over the cake */
+.site-footer{ margin-top: calc(-96px - clamp(70px, 10vw, 170px) - clamp(60px, 7vw, 110px)) !important; }

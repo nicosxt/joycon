@@ -9,13 +9,9 @@
   var CLOUDS = [
     ["cloud-1", 28.5, 1,   -0.30, 70],    // above the island, in the left margin beside the joy teaser
     ["cloud-2", 19.5, 82,  -0.40, 85],    // above, right margin
-    ["cloud-3", 25.5, 44,  -0.06, 95],    // just over the island's sky
-    ["cloud-4", 18.0, 86,  0.10,  75],
-    ["cloud-5", 24.0, -3,  0.30,  90],
-    ["cloud-2", 15.0, 17,  0.04,  80],
-    ["cloud-3", 22.5, 80,  0.62,  100],
-    ["cloud-1", 19.5, 3,   1.06,  88]
+    ["cloud-3", 25.5, 44,  -0.12, 95]     // just over the top of the island
   ];
+  /* only the clouds above the island: nothing drifts across the island itself */
 
   /* a soft blue sky from the top of the page down to the island's middle, multiplied into the paper */
   var wash = document.createElement("div"); wash.className = "sky-wash"; wash.setAttribute("aria-hidden", "true");

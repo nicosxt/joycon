@@ -22,7 +22,7 @@
 
   box.innerHTML = CANDLES.map(function(c, i){
     return '<span class="candle candle--cut" style="left:' + c.left + '%;top:' + c.top + '%;width:' + c.width + '%;z-index:' + c.z + '">' +
-      '<img class="candle__stick" src="assets/img/candles/' + c.file + '" alt="" draggable="false">' +
+      '<img class="candle__stick" src="assets/img/candles/' + c.file + '?v=2" alt="" draggable="false">' +
       '<span class="candle__light" style="left:' + c.wick + '%;--d:' + (-i * .23).toFixed(2) + 's">' +
         '<span class="candle__flame"><img src="assets/img/flame.webp" alt="" draggable="false"></span>' +
         '<span class="candle__smoke"></span></span></span>';

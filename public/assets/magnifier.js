@@ -44,7 +44,18 @@
       '<div class="magnifier__fx"><div class="magnifier__view"></div></div><div class="magnifier__glass"></div>' +
     '</div>' +
     '<img class="magnifier__img" src="assets/img/magnifier.webp" alt="" width="' + IMG_W + '" height="' + IMG_H + '" draggable="false">' +
+    '<div class="magnifier__sparkles" style="left:' + (LX - R * 1.35) + 'px;top:' + (LY - R * 1.35) + 'px;width:' + (R * 2.7) + 'px;height:' + (R * 2.7) + 'px">' + sparkles() + '</div>' +
     '</div>';
+  /* white sparkles that twinkle in and around the lens while it is over "Find your joy" */
+  function sparkles(){
+    var h = "", n = 22;
+    for (var i = 0; i < n; i++){
+      var a = i * 2.399, r = i % 3 ? 14 + (i * 23) % 34 : 40 + (i * 11) % 12;     // most inside the glass, every third one out past the rim
+      var sz = 12 + (i * 7) % 16;
+      h += '<i style="left:' + (50 + r * Math.cos(a)).toFixed(1) + '%;top:' + (50 + r * Math.sin(a)).toFixed(1) + '%;--s:' + sz + 'px;--d:' + (1.1 + (i % 5) * .25).toFixed(2) + 's;animation-delay:' + (-(i * .37) % 1.6).toFixed(2) + 's"></i>';
+    }
+    return h;
+  }
   document.body.appendChild(mag);
   var view = mag.querySelector(".magnifier__view"), bodyEl = mag.querySelector(".magnifier__body"), fx = mag.querySelector(".magnifier__fx");
   /* grabbing tilts the glass 10° more upright, pivoting on the end of the handle */
@@ -94,6 +105,15 @@
     var a = rot * Math.PI / 180, dx = LX - PX, dy = LY - PY;
     var px = x + PX + dx * Math.cos(a) - dy * Math.sin(a), py = y + PY + dx * Math.sin(a) + dy * Math.cos(a);   // page point under the lens centre
     view.style.transform = "translate(" + (R - ZOOM * px) + "px," + (R - ZOOM * py) + "px) scale(" + ZOOM + ")";
+    joyCheck(px, py);
+  }
+  /* is the lens over the "Find your joy" button? then the magnified button turns rainbow and sparkles */
+  var joyBtn = document.querySelector('.joy-teaser a[href="/joy"]');
+  function joyCheck(px, py){
+    if (!joyBtn) return;
+    var b = joyBtn.getBoundingClientRect(), l = b.left + scrollX, t = b.top + scrollY, rr = R / ZOOM * 1.1;
+    var nx = Math.max(l, Math.min(px, l + b.width)), ny = Math.max(t, Math.min(py, t + b.height));
+    mag.classList.toggle("is-joy", b.width > 0 && Math.hypot(px - nx, py - ny) < rr);
   }
   var spinning = false;
   function spin(){

@@ -120,6 +120,12 @@
          it just must not shift, or the cut-out rails would slide off the painted ones */
       .jc-ride:has(.jc-track-hit) .jc-art{ transform: none !important; }
       .jc-track-hit{ stroke: transparent !important; }
+      /* the Joy Ride is two layers (rails behind the rides, the cart's front pass on top) and the top one catches the hover,
+         so light both up together with the same cream sticker outline every other ride gets, and the dark one when chosen */
+      body:has(.jc-ride:hover .jc-track-hit) .jc-ride:has(.jc-track-hit) .jc-art, body:has(.jc-ride:focus-visible .jc-track-hit) .jc-ride:has(.jc-track-hit) .jc-art{
+        filter: drop-shadow(2px 0 0 #fbf3df) drop-shadow(-2px 0 0 #fbf3df) drop-shadow(0 2px 0 #fbf3df) drop-shadow(0 -2px 0 #fbf3df) !important; opacity: 1 !important; }
+      body:has(.jc-ride[aria-pressed="true"] .jc-track-hit) .jc-ride:has(.jc-track-hit) .jc-art{
+        filter: drop-shadow(3px 0 0 #fbf3df) drop-shadow(-3px 0 0 #fbf3df) drop-shadow(0 3px 0 #fbf3df) drop-shadow(0 -3px 0 #fbf3df) drop-shadow(2px 0 0 #42434b) drop-shadow(-2px 0 0 #42434b) drop-shadow(0 2px 0 #42434b) drop-shadow(0 -2px 0 #42434b) !important; opacity: 1 !important; }
     </style>
     <script src="./coaster.js?v=8"></script>
     <script type="module" crossorigin src="./assets/index-CZZgIBHB.js"></script>

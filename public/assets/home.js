@@ -194,9 +194,36 @@
         var c = el._c, span = el._n * STEP, off = base + (el._drag || 0); if (!c) return;
         el._flags.forEach(function(f, i){
           var x = ((i * STEP + off) % span + span) % span - STEP;
-          f.style.transform = "translate(" + (x - FW / 2).toFixed(1) + "px," + c.y(x).toFixed(1) + "px) rotate(" + c.a(x).toFixed(2) + "deg)";
+          f.style.transform = "translate(" + (x - FW / 2).toFixed(1) + "px," + c.y(x).toFixed(1) + "px) rotate(" + (c.a(x) + (f._th || 0)).toFixed(2) + "deg)";
         });
+        el._off = off;
       });
+      if (!reduced && !inSwing) swingWake();
+    }
+    /* gravity: each pennant hangs from the string like a little pendulum. When the string speeds up it lags
+       behind, while it moves the air pushes it back into a lean, and when it stops it swings through and settles.
+       Every pennant gets its own slightly different stiffness so they don't swing in lockstep. */
+    var swingOn = false, inSwing = false, K = .05, DAMP = .085, LEAN = 1.1, KICK = .7, MAX = 60;
+    function swingWake(){ if (!swingOn){ swingOn = true; requestAnimationFrame(swingStep); } }
+    function swingStep(){
+      var busy = false;
+      lines.forEach(function(el){
+        if (!el._flags || el._off == null) return;
+        if (el._pOff == null){ el._pOff = el._off; el._pV = 0; }
+        var v = el._off - el._pOff, a = v - el._pV;
+        if (Math.abs(v) > 400) v = a = 0;                               // a rebuild or a wrap, not real motion
+        a = Math.max(-30, Math.min(30, a)); el._pOff = el._off; el._pV = v;
+        var lean = Math.max(-MAX, Math.min(MAX, v * LEAN));
+        el._flags.forEach(function(f, i){
+          if (f._k == null){ f._k = K * (.8 + ((i * 37) % 11) / 25); f._th = 0; f._w = 0; }
+          f._w += -f._k * (f._th - lean) + a * KICK - DAMP * f._w;      // spring toward the air-drag lean, kicked by acceleration
+          f._th = Math.max(-MAX, Math.min(MAX, f._th + f._w));
+          if (Math.abs(f._th) > .05 || Math.abs(f._w) > .05) busy = true; else { f._th = 0; f._w = 0; }
+        });
+        if (Math.abs(v) > .01) busy = true;
+      });
+      inSwing = true; roll(); inSwing = false;                          // draw without re-waking
+      if (busy) requestAnimationFrame(swingStep); else swingOn = false;
     }
     var ticking = false;
     addEventListener("scroll", function(){ if (!ticking){ ticking = true; requestAnimationFrame(function(){ ticking = false; roll(); }); } }, { passive: true });

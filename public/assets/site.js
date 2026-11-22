@@ -333,7 +333,7 @@
         var t = joyType(b.joy);
         var parts = String(b.time).split(" to ");
         var stub = parts.length > 1 ? '<span class="ticket__time">' + esc(parts[0]) + '</span><span>to</span><span class="ticket__time">' + esc(parts[1]) + '</span>' : '<span class="ticket__time">' + esc(b.time) + '</span>';
-        return '<li class="ticket ticket--left reveal">' +
+        return '<li class="ticket ticket--left reveal" style="--stub:' + esc(t.color) + '">' +
           '<div class="ticket__stub" style="--stub:' + esc(t.color) + '">' + stub + '</div>' +
           '<div class="ticket__main"><h3 class="ticket__title">' + esc(b.title) + '</h3><p class="ticket__desc">' + esc(b.desc) + '</p>' +
           '<div class="ticket__meta"><span class="pin">' + esc(b.where) + '</span>' + tagHTML(b.joy) + '</div>' +

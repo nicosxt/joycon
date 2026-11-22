@@ -2235,3 +2235,61 @@ main details summary{ border: 0 !important; }
 main li img{ border: 0 !important; }
 .how li{ border: 1px solid var(--card-line) !important; box-shadow: var(--card-shadow) !important; background-color: var(--card-bg) !important; border-radius: 18px; }
 .file-drop img{ border: 0 !important; border-radius: 12px; box-shadow: 0 8px 18px -8px rgba(42,36,32,.3); }
+
+/* doors closed: no seam. Behind each closed door is its own painted colour, so any hairline gap around the
+   leaf reads as the door's edge; the white light only fills the doorway once the door opens. */
+.door4__way::before{ content: ""; position: absolute; inset: 0; z-index: 2; transition: opacity .35s ease .05s; }
+.door4--sat .door4__way::before{ background: radial-gradient(80% 60% at 50% 50%, #c33103, #a32100); }
+.door4--sun .door4__way::before{ background: radial-gradient(80% 60% at 50% 50%, #0257a0, #004589); }
+.door4:focus-visible .door4__way::before, .door4.is-open .door4__way::before{ opacity: 0; transition-delay: 0s; }
+@media (hover: hover){ .door4:hover .door4__way::before{ opacity: 0; transition-delay: 0s; } }
+
+/* =====================================================================
+   THE WEEKEND: each activity is an old printed ticket. Notched corners,
+   a thin inner frame, a perforated tear line, a gingham stub in the ride's
+   joy colour and a warm aged-paper body tinted with the same colour.
+   ===================================================================== */
+.sched .ticket{ --tk-paper: #f8efdc; --tk-line: rgba(113,82,52,.55); --notch: 13px;
+  display: grid; grid-template-columns: 150px 1fr; gap: 0; background: none !important; border: 0 !important; box-shadow: none !important;
+  filter: drop-shadow(0 1px 1px rgba(42,36,32,.10)) drop-shadow(0 10px 16px rgba(42,36,32,.14));
+  transition: transform .25s cubic-bezier(.3,1.4,.5,1), filter .25s ease; }
+.sched .ticket:hover, .sched .ticket:focus-within{ transform: translateY(-3px) rotate(-.3deg); filter: drop-shadow(0 2px 2px rgba(42,36,32,.12)) drop-shadow(0 16px 22px rgba(42,36,32,.18)); }
+/* both halves get four inverted corners: the outer ones round the ticket, the inner ones make the notches at the tear line */
+.sched .ticket__stub, .sched .ticket__main{ position: relative; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; transform: none !important;
+  -webkit-mask:
+    radial-gradient(circle at 0 0, transparent var(--notch), #000 calc(var(--notch) + .5px)) top left / 51% 51% no-repeat,
+    radial-gradient(circle at 100% 0, transparent var(--notch), #000 calc(var(--notch) + .5px)) top right / 51% 51% no-repeat,
+    radial-gradient(circle at 0 100%, transparent var(--notch), #000 calc(var(--notch) + .5px)) bottom left / 51% 51% no-repeat,
+    radial-gradient(circle at 100% 100%, transparent var(--notch), #000 calc(var(--notch) + .5px)) bottom right / 51% 51% no-repeat;
+          mask:
+    radial-gradient(circle at 0 0, transparent var(--notch), #000 calc(var(--notch) + .5px)) top left / 51% 51% no-repeat,
+    radial-gradient(circle at 100% 0, transparent var(--notch), #000 calc(var(--notch) + .5px)) top right / 51% 51% no-repeat,
+    radial-gradient(circle at 0 100%, transparent var(--notch), #000 calc(var(--notch) + .5px)) bottom left / 51% 51% no-repeat,
+    radial-gradient(circle at 100% 100%, transparent var(--notch), #000 calc(var(--notch) + .5px)) bottom right / 51% 51% no-repeat; }
+.sched .ticket__stub::before, .sched .ticket__stub::after{ display: none !important; }
+/* stub: soft gingham in the joy colour, a printed time on a cream label */
+.sched .ticket--left .ticket__stub{ order: -1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 22px 14px;
+  background:
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--stub) 34%, transparent) 0 12px, transparent 12px 24px),
+    repeating-linear-gradient(0deg, color-mix(in srgb, var(--stub) 34%, transparent) 0 12px, transparent 12px 24px),
+    color-mix(in srgb, var(--stub) 22%, var(--tk-paper)) !important; }
+.sched .ticket__stub > *{ position: relative; z-index: 1; }
+.sched .ticket--left .ticket__time{ display: inline-block; padding: 4px 10px; border-radius: 6px; background: var(--tk-paper); color: var(--c-ink);
+  font-family: var(--f-text); font-weight: 700; font-size: 1.05rem; box-shadow: 0 1px 0 rgba(113,82,52,.25); }
+.sched .ticket__stub > span:not(.ticket__time){ font-family: var(--f-text); font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: rgba(42,36,32,.7); }
+/* body: aged cream with a whisper of the joy colour */
+.sched .ticket__main{ padding: 24px 28px 22px 30px !important;
+  background: radial-gradient(120% 140% at 85% 20%, color-mix(in srgb, var(--stub, #e9809c) 10%, var(--tk-paper)), var(--tk-paper) 70%) !important; }
+/* thin printed inner frame on both halves */
+.sched .ticket__stub::after, .sched .ticket__main::after{ content: ""; display: block !important; position: absolute; inset: 7px; pointer-events: none;
+  border: 1.5px solid var(--tk-line); border-radius: 10px; }
+/* the perforation */
+.sched .ticket__main::before{ content: ""; position: absolute; left: -1px; top: calc(var(--notch) + 4px); bottom: calc(var(--notch) + 4px);
+  border-left: 2px dashed rgba(113,82,52,.6); }
+@media (max-width: 700px){
+  .sched .ticket{ grid-template-columns: 1fr; }
+  .sched .ticket--left .ticket__stub{ flex-direction: row; padding: 16px 20px; }
+  .sched .ticket__main::before{ left: calc(var(--notch) + 4px); right: calc(var(--notch) + 4px); top: -1px; bottom: auto; border-left: 0; border-top: 2px dashed rgba(113,82,52,.6); }
+}
+/* makers: just the round portrait, no square behind it */
+.maker__photo{ border-radius: 50% !important; background: transparent !important; box-shadow: 0 10px 20px -10px rgba(42,36,32,.35) !important; }

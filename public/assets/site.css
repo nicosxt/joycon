@@ -1627,8 +1627,8 @@ body::after{ content: ""; position: absolute; inset: 0; z-index: 9990; pointer-e
 .island-hero, .intro-strip, .section, .letter-sec, .proof, .rides, .days, .joy-teaser, .site-header.solid{ background: transparent !important; }
 body[data-page="home"] .site-header.solid{ background: rgba(244,241,234,.88) !important; }
 /* letter: the deckled handmade sheet */
-.mail .letter{ background: url("img/letter-paper.webp?v=2") center / 100% 100% no-repeat; box-shadow: none; border-radius: 0;
-  filter: drop-shadow(0 2px 2px rgba(42,36,32,.16)) drop-shadow(0 18px 22px rgba(42,36,32,.22));
+.mail .letter{ background: url("img/letter-paper.webp?v=3") center / 100% 100% no-repeat; box-shadow: none; border-radius: 0;
+  filter: drop-shadow(0 1px 1px rgba(42,36,32,.10)) drop-shadow(0 10px 16px rgba(42,36,32,.12));
   min-height: calc(min(470px, 92vw) * 1402 / 1100); padding: 44px 42px 44px; }
 .mail.is-open .letter{ cursor: pointer; }
 .mail .letter{ transition: transform .24s cubic-bezier(.4,0,.2,1), clip-path .24s cubic-bezier(.4,0,.2,1); }
@@ -1817,39 +1817,53 @@ html, body{ overflow-x: clip; }
 .wishrow__copy h2{ text-align: left; }
 .wishrow__copy .lede{ margin: 0 0 14px !important; max-width: 26em; }
 .finale .finale__cta{ margin: 26px 0 0; border-top: 2px dashed rgba(42,36,32,.25); padding-top: 22px; max-width: none; text-align: left; }
-.wishrow__desk{ position: relative; display: flex; flex-direction: column; align-items: center; gap: 18px; }
-.wishpaper{ --lh: 2.1rem; position: relative; width: min(420px, 100%); aspect-ratio: 1100 / 1402; padding: 64px 40px 40px 58px; margin: 0;
+.wishrow__desk{ --wish-w: min(340px, 100%); position: relative; display: flex; flex-direction: column; align-items: center; gap: 22px; }
+.wishpaper{ --lh: 1.75rem; position: relative; z-index: 2; width: var(--wish-w); aspect-ratio: 1100 / 1402; padding: 52px 32px 34px 48px; margin: 0;
   background:
-    linear-gradient(90deg, transparent 44px, rgba(226,86,44,.45) 44px, rgba(226,86,44,.45) 46px, transparent 46px),
-    repeating-linear-gradient(180deg, transparent 0 calc(var(--lh) - 1px), rgba(5,136,196,.28) calc(var(--lh) - 1px) var(--lh)) 0 64px / 100% calc(100% - 100px) no-repeat,
+    linear-gradient(90deg, transparent 36px, rgba(226,86,44,.45) 36px, rgba(226,86,44,.45) 38px, transparent 38px),
+    repeating-linear-gradient(180deg, transparent 0 calc(var(--lh) - 1px), rgba(5,136,196,.28) calc(var(--lh) - 1px) var(--lh)) 0 52px / 100% calc(100% - 84px) no-repeat,
     linear-gradient(rgba(255,220,95,.62), rgba(255,200,70,.55)),
-    url("img/letter-paper.webp?v=2") center / 100% 100% no-repeat;
+    url("img/letter-paper.webp?v=3") center / 100% 100% no-repeat;
   background-blend-mode: normal, multiply, multiply, normal;
   filter: drop-shadow(0 2px 2px rgba(42,36,32,.15)) drop-shadow(0 16px 20px rgba(42,36,32,.2)); transform: rotate(-1.5deg);
   transition: transform .5s cubic-bezier(.5,0,.75,0), opacity .4s ease; }
 .wishpaper__text{ display: block; width: 100%; height: 100%; resize: none; border: 0; outline: none; background: transparent; padding: 0;
-  font-family: var(--f-letter); font-size: 1.6rem; line-height: var(--lh); color: #1f3e5a; caret-color: #1f3e5a; }
+  font-family: var(--f-letter); font-size: 1.35rem; line-height: var(--lh); color: #1f3e5a; caret-color: #1f3e5a; }
 .wishpaper__text::placeholder{ color: rgba(42,36,32,.32); }
 /* a blinking cursor waiting at the start of the first line */
-.wishpaper__caret{ position: absolute; left: 58px; top: 70px; width: 2px; height: 1.5rem; background: #1f3e5a; opacity: 0; pointer-events: none; }
+.wishpaper__caret{ position: absolute; left: 48px; top: 56px; width: 2px; height: 1.25rem; background: #1f3e5a; opacity: 0; pointer-events: none; }
 .wishpaper.is-empty:not(:focus-within) .wishpaper__caret{ animation: caret-blink 1.05s steps(1) infinite; }
 @keyframes caret-blink{ 0%, 49%{ opacity: .85; } 50%, 100%{ opacity: 0; } }
-.wishpaper__check{ position: absolute; right: 24px; bottom: 26px; width: 54px; height: 54px; border-radius: 50%; border: 0; cursor: pointer;
-  color: #fff; background: radial-gradient(circle at 38% 32%, #6fd39a, #35a468 55%, #1d6a40); box-shadow: 0 4px 0 #1d6a40, 0 8px 12px rgba(42,36,32,.25);
-  transition: transform .15s ease, box-shadow .15s ease; }
-.wishpaper__check svg{ width: 60%; height: 60%; display: block; margin: auto; }
-.wishpaper__check:hover{ transform: translateY(-2px) scale(1.05); }
-.wishpaper__check:active{ transform: translateY(3px); box-shadow: 0 1px 0 #1d6a40, 0 3px 6px rgba(42,36,32,.25); }
-.wishpaper__check:focus-visible{ outline: 3px solid var(--c-lochmara); outline-offset: 4px; }
+.wishpaper__check{ position: absolute; right: 18px; bottom: 20px; width: 62px; height: 62px; padding: 0; border: 0; border-radius: 50%; cursor: pointer; background: none; color: #2a2420;
+  filter: drop-shadow(1px 3px 0 rgba(42,36,32,.22)); transform: rotate(-3deg); transition: transform .22s cubic-bezier(.3,1.5,.5,1), filter .2s ease; }
+.wishpaper__check svg{ width: 100%; height: 100%; display: block; overflow: visible; }
+/* hand-drawn: crayon fill that doesn't quite meet the pencil line, a doubled inked outline, a thick inked tick */
+.chk__shade{ fill: #1d7a47; opacity: .85; }
+.chk__fill{ fill: #4cbd7d; }
+.chk__hatch path{ fill: none; stroke: #8fe0ab; stroke-width: 2.2; stroke-linecap: round; opacity: .55; }
+.chk__ink{ fill: none; stroke: #2a2420; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.chk__ink--2{ stroke-width: 1.1; opacity: .55; }
+.chk__tick-ink{ fill: none; stroke: #2a2420; stroke-width: 10; stroke-linecap: round; stroke-linejoin: round; }
+.chk__tick{ fill: none; stroke: #fffaf0; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 60; stroke-dashoffset: 0; }
+.wishpaper__check:hover{ transform: rotate(-7deg) scale(1.07); filter: drop-shadow(1px 4px 0 rgba(42,36,32,.2)); }
+.wishpaper__check:hover .chk__tick{ animation: chk-draw .4s ease-out; }
+.wishpaper__check:active{ transform: translateY(2px) rotate(-2deg) scale(.94); filter: drop-shadow(0 1px 0 rgba(42,36,32,.25)); transition-duration: .08s; }
+.wishpaper__check:focus-visible{ outline: 3px solid var(--c-lochmara); outline-offset: 4px; border-radius: 50%; }
+@keyframes chk-draw{ from{ stroke-dashoffset: 60; } to{ stroke-dashoffset: 0; } }
 .wishpaper.is-nudge{ animation: paper-nudge .4s ease; }
 @keyframes paper-nudge{ 25%{ transform: rotate(-1.5deg) translateX(-8px); } 75%{ transform: rotate(-1.5deg) translateX(8px); } }
-/* sending: fold small, fly into the slot, disappear */
-.wishpaper.is-sending{ transform: translate(var(--to-x), var(--to-y)) rotate(8deg) scale(.08, .05); opacity: 0;
-  transition: transform .9s cubic-bezier(.45,0,.3,1), opacity .3s ease .62s; }
+/* sending: the letter folds narrow, tilts in 3D and slides down the slot (animated in home.js); the front of the box is redrawn over it so it passes behind the lip */
+.wishpaper.is-sending{ pointer-events: none; transition: none; will-change: transform; }
 .wishpaper.is-fresh{ animation: paper-fresh .5s ease both; }
 @keyframes paper-fresh{ from{ opacity: 0; transform: rotate(-1.5deg) translateY(-16px); } to{ opacity: 1; transform: rotate(-1.5deg); } }
-.wishbox{ width: min(240px, 60%); height: auto; filter: drop-shadow(0 12px 14px rgba(42,36,32,.2)); transition: transform .25s cubic-bezier(.3,1.6,.5,1), filter .3s ease; }
-.wishbox.is-catching{ transform: translateY(4px) scale(1.04); filter: drop-shadow(0 0 18px rgba(255,214,120,.9)) drop-shadow(0 12px 14px rgba(42,36,32,.2)); }
+.wishbox{ position: relative; width: var(--wish-w); }
+.wishbox__img{ position: relative; z-index: 1; display: block; width: 100%; height: auto; filter: drop-shadow(0 12px 14px rgba(42,36,32,.2)); transform-origin: 50% 90%; }
+.wishbox__front{ position: absolute; inset: 0; z-index: 3; width: 100%; height: 100%; opacity: 0; pointer-events: none; transform-origin: 50% 90%;
+  clip-path: polygon(0 11.7%, 100% 35.7%, 100% 100%, 0 100%); }
+.wishbox.is-receiving .wishbox__front{ opacity: 1; }
+.wishbox.is-catching .wishbox__img, .wishbox.is-catching .wishbox__front{ animation: box-catch .55s cubic-bezier(.3,1.4,.5,1); }
+.wishbox.is-catching .wishbox__img{ filter: drop-shadow(0 0 18px rgba(255,214,120,.9)) drop-shadow(0 12px 14px rgba(42,36,32,.2)); }
+@keyframes box-catch{ 0%{ transform: none; } 30%{ transform: translateY(5px) scale(1.035, .965); } 65%{ transform: translateY(-2px) scale(.99, 1.01); } 100%{ transform: none; } }
 /* the cake: wider than the screen, only the top half shows */
 .cake--big{ margin-top: clamp(30px, 5vw, 70px); text-align: center; }
 .cake--big .cake__hint{ position: relative; z-index: 2; margin: 0 0 10px; }
@@ -1860,6 +1874,7 @@ html, body{ overflow-x: clip; }
 .cake--big .candle__flame{ width: 240%; }
 .cake--big .cake__hint{ order: -1; }
 .cake--big{ display: flex; flex-direction: column; }
+
 .confetti-rain{ position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 9995; pointer-events: none; }
 @media (max-width: 820px){ .wishrow{ grid-template-columns: 1fr; } }
 
@@ -1884,6 +1899,7 @@ body{ isolation: isolate; }
 /* letter: 20% wider, height follows the words (so it's shorter), clean deckled sheet */
 .mail .letter{ width: min(564px, 94vw); margin-left: calc(min(564px, 94vw) / -2); min-height: 0 !important; padding: 48px 52px 46px; }
 @media (max-width: 520px){ .mail .letter{ padding: 34px 26px 32px; } }
+
 /* =====================================================================
    TWO DOORS, Wonderland: separate whimsical doors; one leaf each that
    swings open on its hinge, the knob on the free edge

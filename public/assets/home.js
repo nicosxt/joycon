@@ -287,20 +287,35 @@
       if (busy) return;
       if (!input.value.trim()){ form.classList.remove("is-nudge"); void form.offsetWidth; form.classList.add("is-nudge"); input.focus(); return; }
       busy = true; input.blur();
-      // aim the folded paper at the slot in the box's lid
-      var pr = form.getBoundingClientRect(), br = box.getBoundingClientRect();
-      form.style.setProperty("--to-x", (br.left + br.width * .52 - (pr.left + pr.width / 2)).toFixed(0) + "px");
-      form.style.setProperty("--to-y", (br.top + br.height * .2 - (pr.top + pr.height / 2)).toFixed(0) + "px");
-      form.classList.add("is-sending");
-      setTimeout(function(){ box.classList.add("is-catching"); }, reduced ? 0 : 650);
-      setTimeout(function(){
+      var anim = null;
+      function done(){
         n++; input.value = ""; sync();
+        if (anim){ anim.cancel(); anim = null; }
+        form.style.transformOrigin = "";
         form.classList.remove("is-sending"); form.classList.add("is-fresh");
-        box.classList.remove("is-catching");
+        box.classList.remove("is-receiving");
         count.textContent = n === 1 ? "Your wish is in the box. Now blow out the candles." : n + " wishes in the box. Blow out the candles for luck.";
         if (window.JOY && window.JOY.relightCake) window.JOY.relightCake();
-        setTimeout(function(){ form.classList.remove("is-fresh"); busy = false; }, 500);
-      }, reduced ? 50 : 1150);
+        setTimeout(function(){ form.classList.remove("is-fresh"); box.classList.remove("is-catching"); busy = false; }, 600);
+      }
+      if (reduced){ form.classList.add("is-sending"); setTimeout(done, 50); return; }
+      /* the letter folds narrow, tips back in 3D and sinks into the slot; the front of the box is redrawn over it, so it goes in behind the lip */
+      var pr = form.getBoundingClientRect(), br = box.getBoundingClientRect();
+      var sx = br.left + br.width * .52, sy = br.top + br.height * .245;       // centre of the slot's front lip (art: 312/600, 114/470)
+      var s = Math.min(.42, br.width * .44 / pr.width);                         // narrow enough for the slot
+      var dx = sx - (pr.left + pr.width / 2), dyAbove = (sy - 26) - pr.bottom;
+      var dyIn = (sy + pr.height * s * .5 + 26) - pr.bottom;                    // top edge sunk below the lip
+      function T(x, y, rx, sc, rot){ return "translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px) perspective(900px) rotateX(" + rx + "deg) rotate(" + rot + "deg) scale(" + sc.toFixed(3) + ")"; }
+      form.classList.add("is-sending"); box.classList.add("is-receiving");
+      form.style.transformOrigin = "50% 100%";
+      anim = form.animate([
+        { offset: 0,   transform: "rotate(-1.5deg)" },
+        { offset: .14, transform: T(dx * .05, -16, 0, 1.02, -2.5), easing: "cubic-bezier(.45,0,.2,1)" },   // small lift
+        { offset: .5,  transform: T(dx, dyAbove, 28, s, 8), easing: "cubic-bezier(.4,0,.5,1)" },           // folds narrow, tips back over the slot
+        { offset: .58, transform: T(dx, dyAbove + 6, 28, s, 10), easing: "cubic-bezier(.5,0,.8,.6)" },
+        { offset: 1,   transform: T(dx, dyIn, 22, s, 10) }                                                  // slides down inside
+      ], { duration: 1500, fill: "forwards" });
+      anim.onfinish = function(){ box.classList.add("is-catching"); setTimeout(done, 160); };
     });
   })();
 

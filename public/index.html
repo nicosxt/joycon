@@ -190,10 +190,27 @@
           <textarea class="wishpaper__text" id="wish-text" maxlength="160" rows="5" placeholder="I want to laugh with strangers" required></textarea>
           <span class="wishpaper__caret" aria-hidden="true"></span>
           <button class="wishpaper__check" type="submit" aria-label="Drop the wish into the wishing box">
-            <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M10 21 l7 7 l14 -16" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+              <defs>
+                <filter id="wobble-ink" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.6"/></filter>
+                <clipPath id="wobble-clip"><path d="M33 7 C47 5 59 16 58 32 C57 48 46 59 31 58 C16 57 6 47 7 32 C8 17 19 8 33 7 Z"/></clipPath>
+              </defs>
+              <g filter="url(#wobble-ink)">
+                <path class="chk__shade" d="M35 9 C49 9 60 19 59 35 C58 50 47 60 32 60 C17 60 8 50 9 35 C10 22 20 10 35 9 Z"/>
+                <path class="chk__fill" d="M33 7 C47 5 59 16 58 32 C57 48 46 59 31 58 C16 57 6 47 7 32 C8 17 19 8 33 7 Z"/>
+                <g clip-path="url(#wobble-clip)" class="chk__hatch"><path d="M4 22 L30 4 M4 34 L46 4 M4 46 L58 8 M8 58 L60 20 M20 62 L62 32 M34 62 L62 44"/></g>
+                <path class="chk__ink" d="M32 6.5 C47 4.5 60 15 59 32 C58.5 49 46 60 30.5 59 C15 58 5.5 47 6.5 31.5 C7.5 16 18 8 32 6.5 Z"/>
+                <path class="chk__ink chk__ink--2" d="M35 8 C49 8 58 19 57.5 33 C57 48 45 58 31 57.5 C18 57 9 46.5 8.5 33 C8 20 20 9 35 8 Z"/>
+                <path class="chk__tick-ink" d="M17 33.5 C21 37 24.5 41 27 45.5 C33 34.5 41 24 49.5 17"/>
+                <path class="chk__tick" d="M17 33.5 C21 37 24.5 41 27 45.5 C33 34.5 41 24 49.5 17"/>
+              </g>
+            </svg>
           </button>
         </form>
-        <img class="wishbox" id="wishbox" src="assets/img/wishbox.webp" alt="A wooden wishing box" width="600" height="450" loading="lazy" decoding="async">
+        <div class="wishbox" id="wishbox">
+          <img class="wishbox__img" src="assets/img/wishbox.webp" alt="A wooden wishing box" width="600" height="470" loading="lazy" decoding="async">
+          <img class="wishbox__front" src="assets/img/wishbox.webp" alt="" aria-hidden="true" width="600" height="470" decoding="async">
+        </div>
       </div>
     </div>
     <div class="cake cake--big" id="cake">

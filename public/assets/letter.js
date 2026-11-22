@@ -97,7 +97,7 @@
       { offset: .28,  transform: p.t, clipPath: p.clip, easing: "cubic-bezier(.2,.75,.3,1)" },
       { offset: .56,  transform: q.t + " rotate(-1.6deg)", clipPath: q.clip, easing: "ease-in-out" },
       { offset: .64,  transform: q.t + " rotate(.7deg)", clipPath: q.clip, easing: "cubic-bezier(.3,1.25,.45,1)" },
-      { offset: 1,    transform: "translate(0,0) scale(1) rotate(0deg)", clipPath: "inset(0px 0px 0px 0px)" }
+      { offset: 1,    transform: "translate(0,0) scale(1) rotate(0deg)", clipPath: "inset(-80px -80px -120px -80px)" }   // open: clip reaches past the sheet so its shadow is never cut into a box
     ], opts));
     anims.push(mail.animate([
       { offset: 0, height: closedHeight() }, { offset: .62, height: closedHeight(), easing: "cubic-bezier(.4,0,.2,1)" }, { offset: 1, height: openHeight() }
@@ -119,11 +119,23 @@
     if (state !== "closed") return;
     if (!built) build();
     state = "opening"; btn.setAttribute("aria-expanded", "true"); btn.disabled = true;
+    centreLetter();
     mail.classList.add("is-flap"); burst();
     run(1, function(){
       state = "open"; mail.classList.add("is-open", "is-writing");
       letter.setAttribute("title", "Click to fold the letter back into its envelope");
     });
+  }
+
+
+  /* glide so the open letter sits in the middle of the window (both ways), clear of the sticky header if it is tall */
+  function centreLetter(){
+    var m = mail.getBoundingClientRect(), vw = document.documentElement.clientWidth, vh = innerHeight;
+    var h = letter.offsetHeight, w = letter.offsetWidth;
+    var topDoc = scrollY + m.top + letter.offsetTop, leftDoc = scrollX + m.left + letter.offsetLeft;
+    var y = topDoc + h / 2 - vh / 2, x = leftDoc + w / 2 - vw / 2;
+    if (h + 120 > vh) y = topDoc - 84;
+    scrollTo({ top: Math.max(0, y), left: Math.max(0, x), behavior: reduced ? "auto" : "smooth" });
   }
 
   function close(){

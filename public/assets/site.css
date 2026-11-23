@@ -2468,3 +2468,8 @@ main li img{ border: 0 !important; }
 
 .wishsmoke-img{ width: 118%; top: -3%; }
 @media (max-width: 760px){ .wishsmoke-img{ width: 112%; } }
+
+/* the smoke leaves the lantern by its spout: the thin tail of the plume starts at the mouth and billows up and over behind the notepad */
+.wishbox .wishsmoke-img{ position: absolute; left: -62.5%; top: -219%; width: 150%; max-width: none; height: auto; transform-origin: 45% 97%; transform: rotate(21deg); z-index: 0; pointer-events: none; user-select: none; }
+.wishbox__img{ z-index: 1; }
+@media (max-width: 760px){ .wishbox .wishsmoke-img{ width: 128%; left: -52%; top: -186%; } }

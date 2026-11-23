@@ -341,23 +341,40 @@
         setTimeout(function(){ form.classList.remove("is-fresh"); box.classList.remove("is-catching"); busy = false; }, 600);
       }
       if (reduced){ form.classList.add("is-sending"); setTimeout(done, 50); return; }
-      /* the letter folds narrow, tips back in 3D and sinks into the slot; the front of the lantern is redrawn over it, so it goes in behind the lip */
-      var pr = form.getBoundingClientRect(), br = box.getBoundingClientRect();
-      var sx = br.left + br.width * .52, sy = br.top + br.height * .245;       // centre of the slot's front lip (art: 312/600, 114/470)
-      var s = Math.min(.42, br.width * .44 / pr.width);                         // narrow enough for the slot
-      var dx = sx - (pr.left + pr.width / 2), dyAbove = (sy - 26) - pr.bottom;
-      var dyIn = (sy + pr.height * s * .5 + 26) - pr.bottom;                    // top edge sunk below the lip
-      function T(x, y, rx, sc, rot){ return "translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px) perspective(900px) rotateX(" + rx + "deg) rotate(" + rot + "deg) scale(" + sc.toFixed(3) + ")"; }
-      form.classList.add("is-sending"); box.classList.add("is-receiving");
-      form.style.transformOrigin = "50% 100%";
+      /* the wish disintegrates: the letter spins a little and zooms down to nothing while sparkles burst out of it */
+      var pr = form.getBoundingClientRect();
+      var COLORS = ["#fff", "#fff6d6", "#f7d25e", "#f2879f", "#8fc6ea", "#b294e0", "#96d08c"];
+      var layer = document.createElement("div"); layer.style.cssText = "position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:70;overflow:visible";
+      document.body.appendChild(layer);
+      function sparkle(cx, cy, spread, big){
+        var star = Math.random() < .55, sz = (star ? 10 : 4) + Math.random() * (star ? 16 : 7);
+        var el = document.createElement("span"); el.className = "sky-spark" + (star ? " is-star" : "");
+        el.style.left = cx + "px"; el.style.top = cy + "px"; el.style.color = COLORS[(Math.random() * COLORS.length) | 0]; el.style.setProperty("--sz", sz + "px");
+        if (star) el.style.filter = "drop-shadow(0 0 4px rgba(255,255,255,.95)) drop-shadow(0 0 8px rgba(255,214,150,.9))";
+        layer.appendChild(el);
+        var a = Math.random() * Math.PI * 2, d = spread * (.35 + Math.random() * .9), dur = 650 + Math.random() * 650;
+        var dx = Math.cos(a) * d, dy = Math.sin(a) * d - 20;
+        var an = el.animate([
+          { transform: "translate(-50%,-50%) scale(.2) rotate(0deg)", opacity: 0 },
+          { transform: "translate(-50%,-50%) translate(" + dx * .35 + "px," + dy * .35 + "px) scale(1.2) rotate(" + (star ? 90 : 0) + "deg)", opacity: 1, offset: .25 },
+          { transform: "translate(-50%,-50%) translate(" + dx + "px," + (dy + 40) + "px) scale(.1) rotate(" + (star ? 240 : 0) + "deg)", opacity: 0 }
+        ], { duration: dur, easing: "cubic-bezier(.2,.7,.3,1)", fill: "forwards" });
+        an.onfinish = function(){ el.remove(); };
+      }
+      function wave(n, frac){      // sparks born across the paper, then closer to its centre as it shrinks
+        for (var i = 0; i < n; i++){
+          var cx = pr.left + pr.width / 2 + (Math.random() - .5) * pr.width * frac, cy = pr.top + pr.height / 2 + (Math.random() - .5) * pr.height * frac;
+          sparkle(cx, cy, Math.max(pr.width, pr.height) * .55 * (.4 + frac * .6));
+        }
+      }
+      form.classList.add("is-sending"); form.style.transformOrigin = "50% 50%";
+      wave(34, .95); setTimeout(function(){ wave(30, .6); }, 260); setTimeout(function(){ wave(24, .25); }, 560);
       anim = form.animate([
-        { offset: 0,   transform: "rotate(-1.5deg)" },
-        { offset: .14, transform: T(dx * .05, -16, 0, 1.02, -2.5), easing: "cubic-bezier(.45,0,.2,1)" },   // small lift
-        { offset: .5,  transform: T(dx, dyAbove, 28, s, 8), easing: "cubic-bezier(.4,0,.5,1)" },           // folds narrow, tips back over the slot
-        { offset: .58, transform: T(dx, dyAbove + 6, 28, s, 10), easing: "cubic-bezier(.5,0,.8,.6)" },
-        { offset: 1,   transform: T(dx, dyIn, 22, s, 10) }                                                  // slides down inside
-      ], { duration: 1500, fill: "forwards" });
-      anim.onfinish = function(){ box.classList.add("is-catching"); setTimeout(done, 160); };
+        { offset: 0,   transform: "rotate(-1.5deg) scale(1)", opacity: 1 },
+        { offset: .2,  transform: "rotate(3deg) scale(1.05)", opacity: 1, easing: "cubic-bezier(.5,0,.8,.4)" },
+        { offset: 1,   transform: "rotate(-14deg) scale(0)", opacity: 0 }
+      ], { duration: 950, fill: "forwards" });
+      anim.onfinish = function(){ box.classList.add("is-catching"); setTimeout(function(){ layer.remove(); }, 1400); setTimeout(done, 180); };
     });
   })();
 

@@ -2459,3 +2459,12 @@ main li img{ border: 0 !important; }
 .smk--h{ --w: 340px; left: 0%; }
 .smk--i{ --w: 400px; left: 36%; }
 .smk--j{ --w: 320px; left: 58%; }
+
+/* the genie's smoke: one inked illustration sitting behind the notepad (no animation) */
+.wishsmoke, .wishsmoke *{ display: none !important; }
+.wishsmoke-img{ position: absolute; left: 50%; top: -9%; width: 156%; max-width: none; height: auto; transform: translateX(-50%); z-index: 0; pointer-events: none; user-select: none; }
+.wishrow__desk{ isolation: isolate; }
+@media (max-width: 760px){ .wishsmoke-img{ width: 128%; } }
+
+.wishsmoke-img{ width: 118%; top: -3%; }
+@media (max-width: 760px){ .wishsmoke-img{ width: 112%; } }

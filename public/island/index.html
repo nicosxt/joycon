@@ -13,7 +13,7 @@
          (2) when embedded on the homepage, the site nav carries the title card, so hide the island's copy -->
     <style>html.jc-embedded .jc-head { display: none !important; }</style>
     <style>/* nine ride cards: swipe the row instead of spilling off small screens */ .jc-bar{ justify-content: safe center !important; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; } .jc-bar::-webkit-scrollbar{ display: none; } .jc-bar > *{ flex-shrink: 0; }</style>
-        <style>/* ride keys sit lower so they never cover the island or the pier table */ .jc-bar{ transform: translateY(clamp(20px, 3.6vh, 34px)); }</style>
+        <style>/* ride keys sit lower so they never cover the island or the pier table */ .jc-bar{ padding-bottom: 34px !important; overflow-y: visible; }</style>
     <script>if (window.top !== window.self) document.documentElement.classList.add("jc-embedded");</script>
     <style>/* ride cards as lit arcade buttons: a dark bezel, a glossy glowing cap with the icon, and the chosen one pops up taller */
       .jc-bar .jc-slot{ --cap:#e2562c; --cap-deep:#9c3215; --glow:rgba(226,86,44,.55);

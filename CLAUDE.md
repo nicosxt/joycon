@@ -4,20 +4,21 @@ Static site in `public/` (plain HTML/CSS/JS, no build). Run locally with `npm st
 
 ## Image style (use for EVERY generated image asset)
 
-All illustrated assets (the island, rides, people, props, flags, bubbles, icons) share one look. Prepend this style block to every image prompt, then describe the object:
+All illustrated assets (the island, rides, people, props, flags, bubbles, icons, doors, footer) share one look: **Moebius ligne claire**, inked and flat. Prepend this style block to every image prompt, then describe the object, and pass a current island screenshot as the style reference (`public/island/images/island.webp` works):
 
-> STYLE: whimsical early-1990s animated-film concept painting, gouache and oil on board, visible confident brushstrokes, soft painted edges with no ink outlines, rich saturated color with warm glowing highlights and cool bounce light in the shadows, toy-like chunky forms, playful storybook charm, painted by a film visual-development artist.
-> VIEW: very clean orthographic isometric projection, true 30-degree isometric, no perspective distortion, parallel edges stay parallel, structurally accurate, anatomically accurate figures with correct proportions.
-> LIGHT: warm late-afternoon light from the upper left, shadows falling to the lower right.
-> OUTPUT: single isolated object on a transparent background, no text (unless the asset needs a specific word), no extra ground beyond the object's own base.
+> STYLE: Jean Giraud / Moebius clean ligne claire, thin confident dark ink contours (ink color about #391420), flat vibrant color fills, fine stipple dot shading, warm pastel palette (peach, sage, coral, gold, sky blue, lilac), matte, no painterly rendering, no glow, no gradients.
+> VIEW: very clean isometric projection where it is a building or prop, structurally accurate, anatomically accurate figures.
+> OUTPUT: single isolated object on a flat pure magenta (#FF00FF) background (or green #00FF00 for pink objects), no text unless needed, no ground, no shadows. Key the background out afterwards.
+
+Outline weight: the island's line weight is the standard (about 1.5 board px at 1600 px board width). Every other asset gets its outline sized for how big it is on screen, so lines look the same weight everywhere; tiny figures are capped a little lighter.
 
 How to generate:
-- Use Krea `openai/gpt-image-2.6-flare` with `background: "transparent"`.
-- When repainting an existing asset, pass the current image as `image_urls` and say "same shape, layout, proportions, camera angle and composition" so it still fits its spot.
-- After generating, crop to the art and fit it into the original image's bounding box (bottom-centre anchored) so positions in the island bundle don't shift.
-- Island assets live in `public/island/images/`; bump the `ie="?v=N"` cache key in `public/island/assets/index-*.js` after replacing them.
+- Krea `google/nano-banana-pro` (accepts people and image references; no 2:1 or 1:2 ratio, use 21:9 or 9:16) or Higgsfield `gpt_image_2_6` (rejects some inputs with a false "nsfw" flag, e.g. the footer frame).
+- When repainting an existing asset, pass the current image plus the style reference and say "same shape, layout, proportions, camera angle and composition".
+- After generating, key out the background, fit into the original image's bounding box (bottom-centre anchored) so positions in the island bundle don't shift, then re-encode to webp at the real display size (about 2.2 to 3 times the on-screen size).
+- Island assets live in `public/island/images/`; bump the `ie="?v=N"` cache key in `public/island/assets/index-*.js` after replacing them, and the `?v=` on `coaster.js` images.
 
-Photos (Proof of Joy polaroids) are the exception: realistic candid instant-film photos, not paintings.
+Photos (Proof of Joy polaroids) are the exception: realistic candid instant-film photos, not drawings.
 
 ## Page surface
 

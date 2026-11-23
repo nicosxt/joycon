@@ -5,7 +5,7 @@
   "use strict";
   var frame = document.querySelector("#island iframe"); if (!frame) return;
   var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var SRC = { balloon: "island/images/balloon.webp?v=9", cluster: "island/images/balloon-cluster.webp?v=9", kite: "island/images/kite.webp?v=9", hotair: "island/images/hot-air-balloon.webp?v=9" };
+  var SRC = { balloon: "island/images/balloon.webp?v=12", cluster: "island/images/balloon-cluster.webp?v=12", kite: "island/images/kite.webp?v=12", hotair: "island/images/hot-air-balloon.webp?v=12" };
 
   var layer = document.createElement("div"); layer.className = "sky-floaters"; document.body.appendChild(layer);
   var items = [];
@@ -31,10 +31,31 @@
     placed = true;
   }
 
+  var SPARK_COLORS = ["#f79c09", "#e9806a", "#d4658f", "#7a5aa8", "#3f8f87", "#0588c4", "#f2d15c"];
+  function burst(x, y, size){
+    var n = 18;
+    for (var i = 0; i < n; i++){
+      var a = (i / n) * Math.PI * 2 + Math.random() * .5, d = size * (1.1 + Math.random() * 1.5), star = i % 3 === 0;
+      var el = document.createElement("span"); el.className = "sky-spark" + (star ? " is-star" : "");
+      el.style.left = x + "px"; el.style.top = y + "px"; el.style.color = SPARK_COLORS[(Math.random() * SPARK_COLORS.length) | 0];
+      el.style.setProperty("--sz", (star ? 12 : 5) + Math.random() * (star ? 8 : 5) + "px");
+      layer.appendChild(el);
+      var dx = Math.cos(a) * d, dy = Math.sin(a) * d, dur = 520 + Math.random() * 380;
+      if (el.animate && !reduced){
+        var an = el.animate([
+          { transform: "translate(-50%,-50%) translate(0,0) scale(.3) rotate(0deg)", opacity: 1 },
+          { transform: "translate(-50%,-50%) translate(" + dx * .75 + "px," + dy * .75 + "px) scale(1.15) rotate(" + (star ? 160 : 0) + "deg)", opacity: 1, offset: .6 },
+          { transform: "translate(-50%,-50%) translate(" + dx + "px," + (dy + size * .5) + "px) scale(.2) rotate(" + (star ? 300 : 0) + "deg)", opacity: 0 }
+        ], { duration: dur, easing: "cubic-bezier(.15,.7,.3,1)", fill: "forwards" });
+        an.onfinish = function(e){ return function(){ e.remove(); }; }(el);
+      } else setTimeout(function(e){ return function(){ e.remove(); }; }(el), 300);
+    }
+    var ring = document.createElement("span"); ring.className = "sky-ring"; ring.style.left = x + "px"; ring.style.top = y + "px"; ring.style.width = ring.style.height = size * .9 + "px"; layer.appendChild(ring);
+    setTimeout(function(){ ring.remove(); }, 450);
+  }
   function pop(it){
     if (it.popped) return; it.popped = true; it.el.style.opacity = "0";
-    var b = document.createElement("span"); b.className = "sky-pop"; b.style.left = it.x + "px"; b.style.top = (it.y + it.size * .4) + "px"; layer.appendChild(b);
-    setTimeout(function(){ b.remove(); }, 700);
+    burst(it.x, it.y + it.size * .4, it.size);
     setTimeout(function(){ var f = frameBox(); it.popped = false; it.x = f.x + Math.random() * f.w; it.y = f.y + f.h + 40; it.el.style.opacity = ""; }, 3500);
   }
   function bind(it){

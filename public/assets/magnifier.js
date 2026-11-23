@@ -95,7 +95,27 @@
     [].forEach.call(copy.querySelectorAll(".reveal"), function(el){ el.classList.add("in"); });
     copy.style.cssText = "position:absolute;margin:0;left:" + (r.left + scrollX) + "px;top:" + (r.top + scrollY) + "px;width:" + r.width + "px";
     view.replaceChildren(copy); lastClone = Date.now();
+    // balloons, kites and the hot-air balloon live outside <main>: bring copies under the glass too
+    bl = document.createElement("div"); bl.className = "magnifier__balloons"; blPairs = [];
+    [].forEach.call(document.querySelectorAll(".sky-floaters .sky-floater"), function(o){
+      var c = o.cloneNode(true); c.removeAttribute("style"); bl.appendChild(c); blPairs.push([o, c]);
+    });
+    view.appendChild(bl);
   }
+  var bl = null, blPairs = [], lensX = 0, lensY = 0;
+  /* keep the balloon copies glued to the real ones, and let the glass cover the real ones beneath it */
+  (function sync(){
+    if (bl){
+      for (var i = 0; i < blPairs.length; i++){
+        var o = blPairs[i][0], c = blPairs[i][1];
+        c.style.width = o.style.width; c.style.transform = o.style.transform; c.style.opacity = o.style.opacity === "0" ? "0" : "1";
+        var r = o.getBoundingClientRect(), cx = r.left + scrollX + r.width / 2, cy = r.top + scrollY + r.height / 2;
+        var under = Math.hypot(cx - lensX, cy - lensY) < R * .9;
+        o.style.visibility = under && mag.classList.contains("is-ready") ? "hidden" : "";
+      }
+    }
+    requestAnimationFrame(sync);
+  })();
 
   var x = 0, y = 0, moved = false;
   function render(){
@@ -104,6 +124,7 @@
     fx.style.transform = "rotate(" + (-rot).toFixed(2) + "deg)";       // keep the magnified view upright
     var a = rot * Math.PI / 180, dx = LX - PX, dy = LY - PY;
     var px = x + PX + dx * Math.cos(a) - dy * Math.sin(a), py = y + PY + dx * Math.sin(a) + dy * Math.cos(a);   // page point under the lens centre
+    lensX = px; lensY = py;
     view.style.transform = "translate(" + (R - ZOOM * px) + "px," + (R - ZOOM * py) + "px) scale(" + ZOOM + ")";
     joyCheck(px, py);
   }

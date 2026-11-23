@@ -13,6 +13,7 @@
          (2) when embedded on the homepage, the site nav carries the title card, so hide the island's copy -->
     <style>html.jc-embedded .jc-head { display: none !important; }</style>
     <style>/* nine ride cards: swipe the row instead of spilling off small screens */ .jc-bar{ justify-content: safe center !important; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; } .jc-bar::-webkit-scrollbar{ display: none; } .jc-bar > *{ flex-shrink: 0; }</style>
+        <style>/* ride keys sit lower so they never cover the island or the pier table */ .jc-bar{ transform: translateY(clamp(20px, 3.6vh, 34px)); }</style>
     <script>if (window.top !== window.self) document.documentElement.classList.add("jc-embedded");</script>
     <style>/* ride cards as lit arcade buttons: a dark bezel, a glossy glowing cap with the icon, and the chosen one pops up taller */
       .jc-bar .jc-slot{ --cap:#e2562c; --cap-deep:#9c3215; --glow:rgba(226,86,44,.55);
@@ -84,11 +85,11 @@
       .jc-bar .jc-slot.is-active .jc-slot-art{ transform: translateY(-30px);
         box-shadow: 0 1px 0 var(--cap-deep), 0 2px 0 var(--cap-deep), 0 3px 0 var(--cap-deep), 0 4px 0 var(--cap-deep), 0 5px 0 var(--cap-deep), 0 6px 0 var(--cap-deep), 0 7px 0 var(--cap-deep), 0 8px 0 var(--cap-deep), 0 9px 0 var(--cap-deep), 0 10px 0 var(--cap-deep), 0 11px 0 var(--cap-deep), 0 12px 0 var(--cap-deep), 0 13px 0 var(--cap-deep), 0 14px 0 var(--cap-deep), 0 15px 0 var(--cap-deep), 0 16px 0 var(--cap-deep), 0 17px 0 var(--cap-deep), 0 18px 0 var(--cap-deep), 0 19px 0 var(--cap-deep), 0 20px 0 var(--cap-deep), 0 21px 0 var(--cap-deep), 0 22px 0 var(--cap-deep), 0 23px 0 var(--cap-deep), 0 24px 0 var(--cap-deep), 0 25px 0 var(--cap-deep), 0 26px 0 var(--cap-deep), 0 27px 0 var(--cap-deep), 0 28px 0 var(--cap-deep), 0 29px 0 var(--cap-deep), 0 30px 0 var(--cap-deep), 0 31px 0 rgba(0,0,0,.35), inset 0 4px 3px rgba(255,255,255,.9), inset 0 -6px 0 rgba(0,0,0,.1) !important; }
       /* ride buttons, take five: painted 3D keycaps (one Krea gouache keycap per ride), a squishy press */
-      .jc-bar .jc-slot:nth-child(1){ --key: url(images/keys/key-1.webp?v=1); } .jc-bar .jc-slot:nth-child(2){ --key: url(images/keys/key-2.webp?v=1); }
-      .jc-bar .jc-slot:nth-child(3){ --key: url(images/keys/key-3.webp?v=1); } .jc-bar .jc-slot:nth-child(4){ --key: url(images/keys/key-4.webp?v=1); }
-      .jc-bar .jc-slot:nth-child(5){ --key: url(images/keys/key-5.webp?v=1); } .jc-bar .jc-slot:nth-child(6){ --key: url(images/keys/key-6.webp?v=1); }
-      .jc-bar .jc-slot:nth-child(7){ --key: url(images/keys/key-7.webp?v=1); } .jc-bar .jc-slot:nth-child(8){ --key: url(images/keys/key-8.webp?v=1); }
-      .jc-bar .jc-slot:nth-child(9){ --key: url(images/keys/key-9.webp?v=1); }
+      .jc-bar .jc-slot:nth-child(1){ --key: url(images/keys/key-1.webp?v=4); } .jc-bar .jc-slot:nth-child(2){ --key: url(images/keys/key-2.webp?v=4); }
+      .jc-bar .jc-slot:nth-child(3){ --key: url(images/keys/key-3.webp?v=4); } .jc-bar .jc-slot:nth-child(4){ --key: url(images/keys/key-4.webp?v=4); }
+      .jc-bar .jc-slot:nth-child(5){ --key: url(images/keys/key-5.webp?v=4); } .jc-bar .jc-slot:nth-child(6){ --key: url(images/keys/key-6.webp?v=4); }
+      .jc-bar .jc-slot:nth-child(7){ --key: url(images/keys/key-7.webp?v=4); } .jc-bar .jc-slot:nth-child(8){ --key: url(images/keys/key-8.webp?v=4); }
+      .jc-bar .jc-slot:nth-child(9){ --key: url(images/keys/key-9.webp?v=4); }
       .jc-bar{ gap: clamp(6px, 1vw, 16px) !important; padding: 26px 16px 14px !important; }
       .jc-bar .jc-slot, .jc-bar .jc-slot.is-active{ --kw: clamp(72px, 11.5vh, 112px); width: var(--kw) !important; height: calc(var(--kw) * .967) !important; }
       .jc-bar .jc-slot-art{ position: absolute !important; inset: 0; width: 100% !important; height: 100% !important; border-radius: 0 !important; overflow: visible;

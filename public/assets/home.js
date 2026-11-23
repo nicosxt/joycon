@@ -288,6 +288,21 @@
     if (document.fonts) document.fonts.ready.then(placeBulbs);
   }
 
+
+  /* sparkles that twinkle round a door while it is open */
+  (function(){
+    Array.prototype.forEach.call(document.querySelectorAll(".door4"), function(d){
+      var w = document.createElement("span"); w.className = "door4__sparkles"; w.setAttribute("aria-hidden", "true");
+      var h = "", n = 26;
+      for (var i = 0; i < n; i++){
+        var a = i * 2.399, r = i % 4 ? 8 + (i * 17) % 36 : 44 + (i * 7) % 8;       // most inside the door, every fourth one out on the rim
+        var sz = 10 + (i * 7) % 18;
+        h += '<i style="left:' + (50 + r * Math.cos(a)).toFixed(1) + '%;top:' + (50 + r * Math.sin(a)).toFixed(1) + '%;--s:' + sz + 'px;--d:' + (1.2 + (i % 5) * .3).toFixed(2) + 's;--w:' + (-(i * .23) % 2).toFixed(2) + 's"></i>';
+      }
+      w.innerHTML = h; d.appendChild(w);
+    });
+  })();
+
   /* doors on touch screens: first tap opens the door, a second tap walks through (hover does the same on a mouse) */
   (function(){
     var doors = Array.prototype.slice.call(document.querySelectorAll(".door4"));
@@ -302,7 +317,7 @@
     document.addEventListener("click", function(e){ if (!e.target.closest(".door4")) closeAll(); });
   })();
 
-  /* make a wish: write it on the paper, tick it into the wishing box. Nothing is stored or sent. */
+  /* make a wish: write it on the paper, tick it into the genie lantern. Nothing is stored or sent. */
   (function(){
     var form = document.getElementById("wish"), input = document.getElementById("wish-text"), count = document.getElementById("wish-count"), box = document.getElementById("wishbox");
     if (!form) return;
@@ -321,12 +336,12 @@
         form.style.transformOrigin = "";
         form.classList.remove("is-sending"); form.classList.add("is-fresh");
         box.classList.remove("is-receiving");
-        count.textContent = n === 1 ? "Your wish is in the box. Now blow out the candles." : n + " wishes in the box. Blow out the candles for luck.";
+        count.textContent = n === 1 ? "Your wish is in the lantern. Now blow out the candles." : n + " wishes in the lantern. Blow out the candles for luck.";
         if (window.JOY && window.JOY.relightCake) window.JOY.relightCake();
         setTimeout(function(){ form.classList.remove("is-fresh"); box.classList.remove("is-catching"); busy = false; }, 600);
       }
       if (reduced){ form.classList.add("is-sending"); setTimeout(done, 50); return; }
-      /* the letter folds narrow, tips back in 3D and sinks into the slot; the front of the box is redrawn over it, so it goes in behind the lip */
+      /* the letter folds narrow, tips back in 3D and sinks into the slot; the front of the lantern is redrawn over it, so it goes in behind the lip */
       var pr = form.getBoundingClientRect(), br = box.getBoundingClientRect();
       var sx = br.left + br.width * .52, sy = br.top + br.height * .245;       // centre of the slot's front lip (art: 312/600, 114/470)
       var s = Math.min(.42, br.width * .44 / pr.width);                         // narrow enough for the slot
